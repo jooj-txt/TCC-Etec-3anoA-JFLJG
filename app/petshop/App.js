@@ -5,8 +5,8 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Pressable} from 'react
 export default function App() {
   return (
     <View style={styles.container}>
-      <Image source={require('./imgs/1.png')} style={styles.logo} />
-      <Image source={require('./imgs/5.png')} style={{width: 200,
+      <Image source={require('./imgs/logo_Inicio.png')} style={styles.logo} />
+      <Image source={require('./imgs/logo_Inicio2.png')} style={{width: 200,
     height: 200}}/>
 
       <View style={styles.buttonsContainer}>
@@ -19,11 +19,21 @@ export default function App() {
       </View>
 
       <View style={styles.divider}>
-        <View style={styles.line}></View>
-        <View style={styles.line}></View>
-        <View style={styles.line}></View>
-        <View style={styles.line}></View>
-        <View style={styles.line}></View>
+        <View style={{width:35,
+    height: 3,
+    backgroundColor: '#2163D3', marginHorizontal: '4px',  }}></View>
+        <View style={{width:35,
+    height: 3,
+    backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
+        <View style={{width:35,
+    height: 3,
+    backgroundColor: '#2163D3',  marginHorizontal: '4px'}}></View>
+        <View style={{width:35,
+    height: 3,
+    backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
+        <View style={{width:35,
+    height: 3,
+    backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
       </View>
     </View>
   );
@@ -32,7 +42,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFAE2E', // Cor de fundo branca
+    backgroundColor: 'white', // Cor de fundo branca
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -61,8 +71,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   line: {
-    flex: 1,
-    height: 1,
+    width:20,
+    height: 5,
     backgroundColor: '#2163D3', // Cor dos traços azul
     marginHorizontal: 2,
   },
