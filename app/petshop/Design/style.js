@@ -8,9 +8,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     logo: {
-      width: 200,
-      height: 200,
-      marginBottom:-30
+      width: '35%',
+      height: '25%',
+      marginBottom:-25
+    },
+    logo2: {
+      width: '38%',
+      height: '25%',
+      marginBottom:10
     },
     buttonsContainer: {
       flexDirection: 'row',
@@ -22,6 +27,9 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
       borderRadius: 8,
       marginHorizontal: 10,
+
+      height:'100%',
+      width:'55%'
     },
     buttonText: {
       color: '#FFFFFF',

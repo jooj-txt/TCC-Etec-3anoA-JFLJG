@@ -7,8 +7,7 @@ export default function Inicio({navigation}) {
   return (
     <View style={styles.container}>
       <Image source={require('../imgs/logo_Inicio.png')} style={styles.logo} />
-      <Image source={require('../imgs/logo_Inicio2.png')} style={{width: 200,
-    height: 200}}/>
+      <Image source={require('../imgs/logo_Inicio2.png')} style={styles.logo2}/>
 
       <View style={styles.buttonsContainer}>
         <Pressable style={styles.button}>
