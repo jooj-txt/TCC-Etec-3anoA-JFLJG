@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet, Picker } from 'react-native';
 
 const PessoaFisicaCadastroScreen = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
-  const [sexo, setSexo] = useState('');
+  const [genero, setGenero] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [cep, setCep] = useState('');
   const [endereco, setEndereco] = useState('');
@@ -18,81 +18,92 @@ const PessoaFisicaCadastroScreen = () => {
 
   const handleCadastro = () => {
     // Lógica de cadastro aqui
-    console.log('Dados de cadastro:', nome, cpf, email, celular, sexo, dataNascimento, cep, endereco, cidade, estado);
+    console.log('Dados de cadastro:', nome, cpf, email, celular, genero, dataNascimento, cep, endereco, cidade, estado);
   };
+
+  const itemStyles = [
+    {borderColor: '#2163D3' },
+    {borderColor: '#FFAE2E' }
+  ];
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Cadastro Pessoa Física</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[0]]}
         placeholder="Nome"
         value={nome}
         onChangeText={setNome}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="CPF"
         value={cpf}
         onChangeText={setCpf}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[0]]}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="Celular"
         value={celular}
         onChangeText={setCelular}
       />
+
+      <Picker
+        style={styles.picker}
+        selectedValue={genero}
+        onValueChange={(itemValue) => setGenero(itemValue)}
+      >
+        <Picker.Item label="Selecione o gênero" value="" />
+        <Picker.Item label="Masculino" value="masculino" />
+        <Picker.Item label="Feminino" value="feminino" />
+        <Picker.Item label="Outro" value="outro" />
+      </Picker>
+
       <TextInput
-        style={styles.input}
-        placeholder="Sexo"
-        value={sexo}
-        onChangeText={setSexo}
-      />
-      <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="Data de Nascimento"
         value={dataNascimento}
         onChangeText={setDataNascimento}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[0]]}
         placeholder="CEP"
         value={cep}
         onChangeText={setCep}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="Endereço"
         value={endereco}
         onChangeText={setEndereco}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[0]]}
         placeholder="Cidade"
         value={cidade}
         onChangeText={setCidade}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="Estado"
         value={estado}
         onChangeText={setEstado}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[0]]}
         placeholder="Senha"
         secureTextEntry
         value={senha}
         onChangeText={setSenha}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input,itemStyles[1]]}
         placeholder="Confirmar Senha"
         secureTextEntry
         value={confirmarSenha}
@@ -125,7 +136,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: '#2163D3',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -142,6 +152,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+picker: {
+  height: 40,
+  borderColor: '#2163D3',
+  borderWidth: 1,
+  borderRadius: 8,
+  marginBottom: 10,
+},
 });
 
 export default PessoaFisicaCadastroScreen;
