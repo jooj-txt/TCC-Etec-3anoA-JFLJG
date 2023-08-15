@@ -55,14 +55,14 @@ const PessoaFisicaCadastroScreen = () => {
       />
 
       <Picker
-        style={styles.picker}
+        style={[styles.picker, itemStyles[0]]}
         selectedValue={genero}
         onValueChange={(itemValue) => setGenero(itemValue)}
       >
-        <Picker.Item label="Selecione o gênero" value="" />
-        <Picker.Item label="Masculino" value="masculino" />
-        <Picker.Item label="Feminino" value="feminino" />
-        <Picker.Item label="Outro" value="outro" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Masculino" value="masculino" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Feminino" value="feminino" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Outro" value="outro" />
       </Picker>
 
       <TextInput
@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
 
 picker: {
   height: 40,
-  borderColor: '#2163D3',
   borderWidth: 1,
   borderRadius: 8,
   marginBottom: 10,
