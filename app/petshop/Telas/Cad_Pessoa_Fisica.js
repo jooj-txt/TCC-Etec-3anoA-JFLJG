@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet, Picker } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 const PessoaFisicaCadastroScreen = () => {
   const [nome, setNome] = useState('');

@@ -8,14 +8,14 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     logo: {
-      width: '12em',
-      height: '10em',
-      marginBottom:-19
+      width:220, 
+      height: 220, 
+      marginBottom: -10
     },
     logo2: {
-      width: '12em',
-      height: '12em',
-      marginBottom:10
+      width:220, 
+      height: 220, 
+      marginBottom: 10
     },
     buttonsContainer: {
       flexDirection: 'row',
@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     },
     button: {
       backgroundColor: '#2163D3', // Cor dos botões azul
-      paddingHorizontal: 20,
-      paddingVertical: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 15,
       borderRadius: 8,
       marginHorizontal: 10,
-      height:'3em',
-      width:'10em'
+      height:50,
+      width:150
     },
     buttonText: {
       color: '#FFFFFF',

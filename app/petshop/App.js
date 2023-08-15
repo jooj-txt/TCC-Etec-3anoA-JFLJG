@@ -12,7 +12,7 @@ export default function App() {
       <Stack.Screen
           name="Cad_Fisica"
           options={{ headerShown:false }}
-          component={PessoaFisicaCadastroScreen}
+          component={Inicio}
         />
        
     </Stack.Navigator>
