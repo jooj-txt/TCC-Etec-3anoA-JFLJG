@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Pressable} from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image} from 'react-native';
 import styles from '../Design/style.js';
 
 

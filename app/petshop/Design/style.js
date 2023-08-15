@@ -8,13 +8,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     logo: {
-      width: '35%',
-      height: '25%',
-      marginBottom:-25
+      width: '12em',
+      height: '10em',
+      marginBottom:-19
     },
     logo2: {
-      width: '38%',
-      height: '25%',
+      width: '12em',
+      height: '12em',
       marginBottom:10
     },
     buttonsContainer: {
@@ -27,13 +27,13 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
       borderRadius: 8,
       marginHorizontal: 10,
-
-      height:'100%',
-      width:'55%'
+      height:'3em',
+      width:'10em'
     },
     buttonText: {
       color: '#FFFFFF',
       fontSize: 16,
+      textAlign:'center'
     },
     divider: {
       flexDirection: 'row',

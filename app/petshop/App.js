@@ -1,9 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import Inicio from './Telas/Inicio';
-
-
+import {Inicio,PessoaFisicaCadastroScreen} from './Telas/index';
 
 const Stack = createStackNavigator();
 
@@ -12,9 +10,9 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen
-          name="Inicio"
+          name="Cad_Fisica"
           options={{ headerShown:false }}
-          component={Inicio}
+          component={PessoaFisicaCadastroScreen}
         />
        
     </Stack.Navigator>
