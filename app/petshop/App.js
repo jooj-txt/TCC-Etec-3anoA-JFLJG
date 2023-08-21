@@ -1,7 +1,7 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 
-import {Inicio,PessoaFisicaCadastroScreen} from './Telas/index';
+import {Inicio,PessoaFisicaCadastro} from './Telas/index';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +12,7 @@ export default function App() {
       <Stack.Screen
           name="Cad_Fisica"
           options={{ headerShown:false }}
-          component={Inicio}
+          component={PessoaFisicaCadastro}
         />
        
     </Stack.Navigator>

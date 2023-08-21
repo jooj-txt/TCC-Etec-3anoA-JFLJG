@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
-const PessoaFisicaCadastroScreen = () => {
+const PessoaFisicaCadastro = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
   const [genero, setGenero] = useState('');
-  const [dataNascimento, setDataNascimento] = useState('');
   const [cep, setCep] = useState('');
   const [endereco, setEndereco] = useState('');
   const [cidade, setCidade] = useState('');
@@ -16,6 +15,22 @@ const PessoaFisicaCadastroScreen = () => {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [aceitarTermos, setAceitarTermos] = useState(false);
+  const [dataNascimento, setDataNascimento] = useState('');
+
+  const handleDateChange = (text) => {
+    const numericText = text.replace(/\D/g, ''); // Removendo caracteres não numéricos
+    let formattedDate = '';
+
+    if (numericText.length <= 2) {
+      formattedDate = numericText;
+    } else if (numericText.length <= 4) {
+      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2)}`;
+    } else if (numericText.length <= 8) {
+      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2, 4)}/${numericText.slice(4, 8)}`;
+    }
+
+    setDataNascimento(formattedDate);
+  };
 
   const handleCadastro = () => {
     // Lógica de cadastro aqui
@@ -26,6 +41,7 @@ const PessoaFisicaCadastroScreen = () => {
     {borderColor: '#2163D3' },
     {borderColor: '#FFAE2E' }
   ];
+
 
   return (
     <View style={styles.container}>
@@ -70,7 +86,7 @@ const PessoaFisicaCadastroScreen = () => {
         style={[styles.input,itemStyles[1]]}
         placeholder="Data de Nascimento"
         value={dataNascimento}
-        onChangeText={setDataNascimento}
+        onChangeText={handleDateChange}
       />
       <TextInput
         style={[styles.input,itemStyles[0]]}
@@ -162,4 +178,4 @@ picker: {
 },
 });
 
-export default PessoaFisicaCadastroScreen;
+export default PessoaFisicaCadastro;
