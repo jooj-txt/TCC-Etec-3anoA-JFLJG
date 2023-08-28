@@ -4,7 +4,7 @@ import {Picker} from '@react-native-picker/picker';
 
 const PessoaFisicaCadastro = () => {
   const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
+  const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
   const [genero, setGenero] = useState('');
@@ -32,10 +32,25 @@ const PessoaFisicaCadastro = () => {
     setDataNascimento(formattedDate);
   };
 
+  const handleCPFChange = (text) => {
+    const numericText = text.replace(/\D/g, ''); // Removendo caracteres não numéricos
+
+    if (numericText.length <= 3) {
+      setCPF(numericText);
+    } else if (numericText.length <= 6) {
+      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3)}`);
+    } else if (numericText.length <= 9) {
+      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3, 6)}.${numericText.slice(6)}`);
+    } else if (numericText.length <= 11) {
+      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3, 6)}.${numericText.slice(6, 9)}-${numericText.slice(9)}`);
+    }
+  };
+
   const handleCadastro = () => {
     // Lógica de cadastro aqui
     console.log('Dados de cadastro:', nome, cpf, email, celular, genero, dataNascimento, cep, endereco, cidade, estado);
   };
+  
 
   const itemStyles = [
     {borderColor: '#2163D3' },
@@ -56,7 +71,7 @@ const PessoaFisicaCadastro = () => {
         style={[styles.input,itemStyles[1]]}
         placeholder="CPF"
         value={cpf}
-        onChangeText={setCpf}
+        onChangeText={handleCPFChange}
       />
       <TextInput
         style={[styles.input,itemStyles[0]]}
