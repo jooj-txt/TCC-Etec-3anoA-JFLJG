@@ -11,60 +11,39 @@ import logo2 from '../imgs/logo_Inicio2.png';
 export default function Inicio({navigation}) {
   
   const [showModal, setShowModal] = useState(false);
-  const [isButtonsVisible, setButtonsVisible] = useState(true);
+  
 
-  const handlePessoaJuridicaPress = () => {
-    setButtonsVisible(false);
-    setShowModal(true);
-  };
-
-  const handlePessoaFisicaPress = () => {
-    setButtonsVisible(false);
-    setShowModal(true);
-  };
+ 
 
 
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
-
-      {isButtonsVisible && (
-        <View style={styles.container}>
-          <Image source={logo2} style={styles.logo2} />
+      <Image source={logo2} style={styles.logo2} />
 
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.button} onPress={handlePessoaJuridicaPress}>
+            <Pressable style={styles.button} onPress={() => setShowModal(true)}>
               <Text style={styles.buttonText}>Pessoa Jurídica</Text>
             </Pressable>
-            <Pressable style={styles.button} onPress={handlePessoaFisicaPress}>
+            <Pressable style={styles.button} onPress={() => setShowModal(true)}>
               <Text style={styles.buttonText}>Pessoa Física</Text>
             </Pressable>
           </View>
-        </View>
-      )}
-
+        
       <View style={styles.divider}>
-        <View style={{width:35,
-    height: 3,
-    backgroundColor: '#FFAE2E', marginHorizontal: '4px',  }}></View>
-        <View style={{width:35,
-    height: 3,
-    backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
-        <View style={{width:35,
-    height: 3,
-    backgroundColor: '#FFAE2E',  marginHorizontal: '4px'}}></View>
-        <View style={{width:35,
-    height: 3,
-    backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
-        <View style={{width:35,
-    height: 3,
-    backgroundColor: '#FFAE2E', marginHorizontal: '4px'}}></View>
+        <View style={{width:35,height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px',  }}></View>
+        <View style={{width:35,  height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
+        <View style={{width:35,  height: 3,backgroundColor: '#FFAE2E',  marginHorizontal: '4px'}}></View>
+        <View style={{width:35,   height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
+        <View style={{width:35, height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px'}}></View>
       </View>
-
-
 
 {showModal && (
   <Modal animationType="slide" transparent={true} visible={showModal}>
+    <View style={styles.container}>
+    <Image source={logo} style={styles.logo} />
+
+
       <View style={estilo.buttonsContainer}>
         <Pressable style={estilo.button}>
           <Text style={estilo.buttonText}>Login</Text>
@@ -73,6 +52,8 @@ export default function Inicio({navigation}) {
           <Text style={estilo.buttonText}>Cadastrar-se</Text>
         </Pressable>
       </View>
+
+    </View>
   </Modal>
 )}
     </View>
@@ -95,8 +76,6 @@ const estilo = StyleSheet.create({
     },
 
     buttonsContainer: {
-      marginTop: 150,
-      marginLeft:180
     },
 
 
