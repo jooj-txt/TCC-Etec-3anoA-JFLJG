@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 
 
@@ -46,6 +47,12 @@ const PessoaFisicaCadastro = () => {
     } else if (numericText.length <= 11) {
       setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3, 6)}.${numericText.slice(6, 9)}-${numericText.slice(9)}`);
     }
+  };
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxToggle = () => {
+    setIsChecked(!isChecked);
   };
 
   const handleCadastro = () => {
@@ -143,13 +150,17 @@ const PessoaFisicaCadastro = () => {
         value={confirmarSenha}
         onChangeText={setConfirmarSenha}
       />
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={aceitarTermos}
-          onValueChange={setAceitarTermos}
-        />
-        <Text style={styles.checkboxLabel}>Aceitar termos e condições</Text>
-      </View>
+     
+      <CheckBox
+        title="ACEITAR TERMOS DE CONDIÇÕes"
+        checked={isChecked}
+        onPress={handleCheckboxToggle}
+        containerStyle={styles.checkboxContainer}
+        textStyle={styles.checkboxLabel}
+        checkedColor="#2163D3"
+      />
+        <Text style={styles.checkboxLabel}>{isChecked ? 'Termos aceitados' : 'Termos não aceitados'}</Text>
+
       <TouchableOpacity style={styles.button} onPress={handleCadastro}>
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
@@ -172,6 +183,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
+    width:280,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 10,
@@ -192,6 +204,7 @@ const styles = StyleSheet.create({
 
 picker: {
   height: 40,
+  width:280,
   borderWidth: 1,
   borderRadius: 8,
   marginBottom: 10,

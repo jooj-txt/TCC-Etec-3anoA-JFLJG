@@ -43,7 +43,10 @@ export default function Inicio({navigation}) {
       <View style={estilo.buttonsContainer}>
         <TouchableOpacity
           style={estilo.button}
-          
+          onPress={() => {
+            navigation.navigate('Login');
+            setShowModal(false);
+          }}   
         >
           <Text style={estilo.buttonText}
           

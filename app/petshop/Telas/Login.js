@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput} from 'react-native';
 
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -50,10 +50,11 @@ const styles = StyleSheet.create({
    
     input: {
       height: 40,
+      width:280,
       borderWidth: 1,
       borderRadius: 8,
       paddingHorizontal: 10,
-      marginBottom: 10,
+      marginBottom:5,
     },
     button: {
       backgroundColor: '#2163D3',
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       alignItems: 'center',
       width:100,
+      margin:20,
     },
     buttonText: {
       color: '#FFFFFF',
