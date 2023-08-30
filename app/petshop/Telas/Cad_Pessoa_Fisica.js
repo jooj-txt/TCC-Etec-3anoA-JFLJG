@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, CheckBox, StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 
+
+
 const PessoaFisicaCadastro = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCPF] = useState('');
@@ -158,8 +160,10 @@ const PessoaFisicaCadastro = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'white', // Cor de fundo branca
+    alignItems: 'center',
+    justifyContent: 'center',
+
   },
   heading: {
     fontSize: 20,
@@ -178,6 +182,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
+    width:100,
   },
   buttonText: {
     color: '#FFFFFF',

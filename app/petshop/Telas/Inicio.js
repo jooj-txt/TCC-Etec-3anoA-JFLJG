@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Pressable, Image, Modal} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import styles from '../Design/style.js';
 
 import logo from '../imgs/logo_Inicio.png';
@@ -12,22 +12,19 @@ export default function Inicio({navigation}) {
   
   const [showModal, setShowModal] = useState(false);
   
-
- 
-
-
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
 
           <View style={styles.buttonsContainer}>
-            <Pressable style={styles.button} onPress={() => setShowModal(true)}>
+            <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
               <Text style={styles.buttonText}>Pessoa Jurídica</Text>
-            </Pressable>
-            <Pressable style={styles.button} onPress={() => setShowModal(true)}>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
               <Text style={styles.buttonText}>Pessoa Física</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         
       <View style={styles.divider}>
@@ -41,21 +38,32 @@ export default function Inicio({navigation}) {
 {showModal && (
   <Modal animationType="slide" transparent={true} visible={showModal}>
     <View style={styles.container}>
-    <Image source={logo} style={styles.logo} />
-
+      <Image source={logo} style={styles.logo} />
 
       <View style={estilo.buttonsContainer}>
-        <Pressable style={estilo.button}>
-          <Text style={estilo.buttonText}>Login</Text>
-        </Pressable>
-        <Pressable style={estilo.button}>
-          <Text style={estilo.buttonText}>Cadastrar-se</Text>
-        </Pressable>
-      </View>
+        <TouchableOpacity
+          style={estilo.button}
+          
+        >
+          <Text style={estilo.buttonText}
+          
+          >Login</Text>
+        </TouchableOpacity>
 
+        <TouchableOpacity
+          style={estilo.button}
+          onPress={() => {
+            navigation.navigate('PessoaFisicaCadastro');
+            setShowModal(false);
+          }}
+        >
+          <Text style={estilo.buttonText}>Cadastrar-se</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   </Modal>
 )}
+
     </View>
   );
 }
