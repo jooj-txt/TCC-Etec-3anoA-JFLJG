@@ -7,6 +7,12 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    containerModal: {
+      flex:1,
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
     logo: {
       width:220, 
       height: 220, 

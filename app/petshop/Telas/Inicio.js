@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
-import styles from '../Design/style.js';
+import { BlurView } from 'expo-blur';
 
+
+import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 
@@ -11,21 +13,34 @@ import logo2 from '../imgs/logo_Inicio2.png';
 export default function Inicio({navigation}) {
   
   const [showModal, setShowModal] = useState(false);
+  const [isButtonsVisible, setButtonsVisible] = useState(true);
+
+  
+  const handlePessoaJuridicaPress = () => {
+    setButtonsVisible(false);
+    setShowModal(true);
+  };
+
+
   
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
 
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
-              <Text style={styles.buttonText}>Pessoa Jurídica</Text>
-            </TouchableOpacity>
+         
 
-            <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
-              <Text style={styles.buttonText}>Pessoa Física</Text>
-            </TouchableOpacity>
-          </View>
+          {isButtonsVisible && (
+         <View style={styles.buttonsContainer}>
+         <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
+           <Text style={styles.buttonText}>Pessoa Jurídica</Text>
+         </TouchableOpacity>
+
+         <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
+           <Text style={styles.buttonText}>Pessoa Física</Text>
+         </TouchableOpacity>
+       </View>
+      )}
         
       <View style={styles.divider}>
         <View style={{width:35,height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px',  }}></View>
@@ -36,9 +51,8 @@ export default function Inicio({navigation}) {
       </View>
 
 {showModal && (
-  <Modal animationType="slide" transparent={true} visible={showModal}>
-    <View style={styles.container}>
-      <Image source={logo} style={styles.logo} />
+  <Modal animationType="slide" visible={showModal} transparent={true}>
+    <BlurView style={styles.containerModal} intensity={35} tint="light">
 
       <View style={estilo.buttonsContainer}>
         <TouchableOpacity
@@ -63,7 +77,7 @@ export default function Inicio({navigation}) {
           <Text style={estilo.buttonText}>Cadastrar-se</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </BlurView>
   </Modal>
 )}
 
@@ -87,6 +101,7 @@ const estilo = StyleSheet.create({
     },
 
     buttonsContainer: {
+      marginTop:200
     },
 
 
