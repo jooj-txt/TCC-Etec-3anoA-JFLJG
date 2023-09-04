@@ -152,7 +152,7 @@ const PessoaFisicaCadastro = () => {
       />
      
       <CheckBox
-        title="ACEITAR TERMOS DE CONDIÇÕes"
+        title="ACEITAR TERMOS DE CONDIÇÕES"
         checked={isChecked}
         onPress={handleCheckboxToggle}
         containerStyle={styles.checkboxContainer}
