@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../services/firebaseConfig';
 
 
-
-const PessoaFisicaCadastro = () => {
-  const [nome, setNome] = useState('');
-  const [cpf, setCPF] = useState('');
-  const [email, setEmail] = useState('');
-  const [celular, setCelular] = useState('');
-  const [genero, setGenero] = useState('');
-  const [cep, setCep] = useState('');
-  const [endereco, setEndereco] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [estado, setEstado] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
+const PessoaFisicaCadastro = ({setUser}) => {
+  const [nome, setNome] = useState();
+  const [cpf, setCPF] = useState();
+  const [email, setEmail] = useState();
+  const [celular, setCelular] = useState();
+  const [genero, setGenero] = useState();
+  const [cep, setCep] = useState();
+  const [endereco, setEndereco] = useState();
+  const [cidade, setCidade] = useState();
+  const [estado, setEstado] = useState();
+  const [senha, setSenha] = useState();
+  const [confirmarSenha, setConfirmarSenha] = useState();
   const [aceitarTermos, setAceitarTermos] = useState(false);
-  const [dataNascimento, setDataNascimento] = useState('');
+  const [dataNascimento, setDataNascimento] = useState();
+
+
 
   const handleDateChange = (text) => {
     const numericText = text.replace(/\D/g, ''); // Removendo caracteres não numéricos
@@ -55,16 +58,25 @@ const PessoaFisicaCadastro = () => {
     setIsChecked(!isChecked);
   };
 
-  const handleCadastro = () => {
-    // Lógica de cadastro aqui
-    console.log('Dados de cadastro:', nome, cpf, email, celular, genero, dataNascimento, cep, endereco, cidade, estado);
-  };
-  
-
   const itemStyles = [
     {borderColor: '#2163D3' },
     {borderColor: '#FFAE2E' }
   ];
+
+  const handleCad = () => {
+    createUserWithEmailAndPassword(auth, email, senha)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    console.log(user);
+    setUser(user);
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    
+    console.log(errorMessage);
+  });
+  }
 
 
   return (
@@ -161,7 +173,9 @@ const PessoaFisicaCadastro = () => {
       />
         <Text style={styles.checkboxLabel}>{isChecked ? 'Termos aceitados' : 'Termos não aceitados'}</Text>
 
-      <TouchableOpacity style={styles.button} onPress={handleCadastro}>
+      <TouchableOpacity style={styles.button}   onPress={() => {
+            handleCad();
+          }}   >
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
     </View>

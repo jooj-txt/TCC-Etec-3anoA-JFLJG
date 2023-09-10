@@ -33,11 +33,16 @@ export default function Inicio({navigation}) {
           {isButtonsVisible && (
          <View style={styles.buttonsContainer}>
          <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
-           <Text style={styles.buttonText}>Pessoa Jurídica</Text>
+           <Text style={styles.buttonText}>ONG ou Petshop</Text>
          </TouchableOpacity>
 
          <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
-           <Text style={styles.buttonText}>Pessoa Física</Text>
+           <Text style={styles.buttonText}>Adotante ou Doador</Text>
+         </TouchableOpacity>
+
+         
+         <TouchableOpacity style={styles.button} >
+           <Text style={styles.buttonText}>GOOGLE</Text>
          </TouchableOpacity>
        </View>
       )}
