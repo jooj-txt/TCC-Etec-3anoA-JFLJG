@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     containerModal: {
-      flex:1,
+      flex: 1,
       padding: 20,
       borderRadius: 10,
       alignItems: 'center',
@@ -28,18 +28,20 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     button: {
-      backgroundColor: '#2163D3', // Cor dos botões azul
-      paddingHorizontal: 10,
-      paddingVertical: 15,
+      backgroundColor: '#2163D3',
+      textAlign: 'center',
+      paddingVertical:15,
       borderRadius: 8,
       marginHorizontal: 10,
-      height:50,
-      width:150
+      height: 50,
+      width: 200,
     },
     buttonText: {
       color: '#FFFFFF',
       fontSize: 16,
-      textAlign:'center'
+      textAlign: 'center',
+      fontFamily:'Verdana',
+      fontWeight:'bold'
     },
     divider: {
       flexDirection: 'row',
@@ -54,3 +56,5 @@ const styles = StyleSheet.create({
   });
   
   export default styles;
+
+  

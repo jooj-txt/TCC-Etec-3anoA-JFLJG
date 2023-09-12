@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebaseConfig';
+import { auth } from '../Services/firebaseConfig';
 
 
 const PessoaFisicaCadastro = ({setUser}) => {
@@ -18,8 +18,9 @@ const PessoaFisicaCadastro = ({setUser}) => {
   const [estado, setEstado] = useState();
   const [senha, setSenha] = useState();
   const [confirmarSenha, setConfirmarSenha] = useState();
-  const [aceitarTermos, setAceitarTermos] = useState(false);
   const [dataNascimento, setDataNascimento] = useState();
+  const [aceitarTermos, setAceitarTermos] = useState(false);
+
 
 
 
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    width:100,
+    width:150,
   },
   buttonText: {
     color: '#FFFFFF',

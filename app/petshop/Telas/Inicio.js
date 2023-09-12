@@ -40,10 +40,6 @@ export default function Inicio({navigation}) {
            <Text style={styles.buttonText}>Adotante ou Doador</Text>
          </TouchableOpacity>
 
-         
-         <TouchableOpacity style={styles.button} >
-           <Text style={styles.buttonText}>GOOGLE</Text>
-         </TouchableOpacity>
        </View>
       )}
         
@@ -103,10 +99,11 @@ const estilo = StyleSheet.create({
       paddingVertical:12,
       textAlign:'center',
       alignSelf:'center',
+      
     },
 
     buttonsContainer: {
-      marginTop:200
+      marginTop:320
     },
 
 
