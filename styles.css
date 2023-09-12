@@ -1,0 +1,60 @@
+.navbar {
+    background-color: #FFAE2E;
+}
+.text-navbar{
+    color: white;
+    font-weight: bold;
+}
+.button-navbar{
+    display: inline-block;
+    background-color: #ff9000;
+    margin-right: 3%;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "Anonymous Pro", monospace;
+    cursor: pointer; 
+    border-width: 4px;
+    border-color:  #D26C00 ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: transform 0.2s ease;
+}
+.button-navbar:hover{
+    transform: scale(1.1);
+}
+.animacao-header{
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.titulo-header{
+    position: absolute; 
+    top: 15%; 
+    left: 5%; 
+    padding: 10px; 
+    font-size: 40px;
+    font-weight: bold;
+    
+}
+.text-header{
+    position: absolute; 
+    left: 5%; 
+    top: 35%;
+    padding: 10px; 
+    font-size: 16px;
+}
+.text-header-second {
+    top: 45%;
+}
+.text-header-terciary {
+    top: 55%;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
