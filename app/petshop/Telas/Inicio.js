@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import { BlurView } from 'expo-blur';
-
+import { AntDesign } from '@expo/vector-icons'; 
 
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
@@ -36,7 +36,7 @@ export default function Inicio({navigation}) {
            <Text style={styles.buttonText}>ONG ou Petshop</Text>
          </TouchableOpacity>
 
-         <TouchableOpacity style={styles.button} onPress={() => setShowModal(true)}>
+         <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
            <Text style={styles.buttonText}>Adotante ou Doador</Text>
          </TouchableOpacity>
 
@@ -63,9 +63,7 @@ export default function Inicio({navigation}) {
             setShowModal(false);
           }}   
         >
-          <Text style={estilo.buttonText}
-          
-          >Login</Text>
+          <Text style={estilo.buttonText}>Login</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -73,10 +71,23 @@ export default function Inicio({navigation}) {
           onPress={() => {
             navigation.navigate('PessoaFisicaCadastro');
             setShowModal(false);
+            
           }}
         >
           <Text style={estilo.buttonText}>Cadastrar-se</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={estilo.button}
+          onPress={() => {
+            setButtonsVisible(true);
+            setShowModal(false);
+          }}
+        >
+         <AntDesign style={estilo.seta} name="back" size={36} color="#FFAE2" />
+        </TouchableOpacity>
+
+
       </View>
     </BlurView>
   </Modal>
@@ -99,12 +110,20 @@ const estilo = StyleSheet.create({
       paddingVertical:12,
       textAlign:'center',
       alignSelf:'center',
+      fontFamily:'Verdana',
+      fontWeight:'bold'
       
     },
 
     buttonsContainer: {
       marginTop:320
     },
+
+    seta: {
+      fontWeight:'bold',
+
+
+    }
 
 
 
