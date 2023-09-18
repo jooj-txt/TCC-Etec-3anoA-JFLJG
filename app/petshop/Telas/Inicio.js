@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import { BlurView } from 'expo-blur';
 import { AntDesign } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons'; 
+
 
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
@@ -78,13 +80,22 @@ export default function Inicio({navigation}) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={estilo.button}
+          style={{ 
+          backgroundColor: 'transparent',
+          height:60,
+          width:60,
+          margin:15,
+          marginLeft:50,
+          borderColor:'#2163D3',
+          borderWidth:5,
+          borderRadius:'100%',
+          alignItems:'center'}}
           onPress={() => {
             setButtonsVisible(true);
             setShowModal(false);
           }}
         >
-         <AntDesign style={estilo.seta} name="back" size={36} color="#FFAE2" />
+          <Ionicons name="ios-arrow-back-sharp" size={45} color="#FFAE2E" />
         </TouchableOpacity>
 
 
@@ -119,12 +130,7 @@ const estilo = StyleSheet.create({
       marginTop:320
     },
 
-    seta: {
-      fontWeight:'bold',
-
-
-    }
-
+    
 
 
 })
