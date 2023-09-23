@@ -1,3 +1,8 @@
+.body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 /*navbar*/
 .navbar {
     background-color: #FFAE2E;
@@ -24,7 +29,6 @@
 .button-navbar:hover{
     transform: scale(1.1);
 }
-
 /*header*/
 .animacao-header{
     animation-name: fadeIn;
@@ -35,10 +39,10 @@
     position: absolute; 
     top: 15%; 
     left: 5%; 
-    padding: 10px; 
-    font-size: 40px;
     font-weight: bold;
-    
+}
+.titulo-header-size{
+    font-size: 40px;
 }
 .text-header{
     position: absolute; 
@@ -53,6 +57,90 @@
 .text-header-terciary {
     top: 55%;
 }
+
+/*1part*/
+.body-1part{
+    background-color: #FFAE2E;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    padding: 60px;
+    padding-top: 40px;
+}
+.titleAnimation-1part{
+    animation-name: titleAnimation;
+    animation-timing-function:ease;
+    animation-duration: 5s;
+    animation-fill-mode: backwards;
+
+}
+.titleAnimation-1part-text{
+    animation-delay: 0.5s; 
+}
+.titulo-1part-size{
+    left: 20px;
+    font-weight: bold;
+    font-size: 60px;
+    margin: auto;
+    font: 700 normal 4em/1.5 'Montserrat',sans-serif;
+}
+.conteudo-horizontal-1part{
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    margin: 7%;
+}
+.titulo-1part-text{
+    margin-right: 5%; 
+    font-size: 28px;
+    font-weight: bold;
+}
+.button-1part{
+    display: inline-block;
+    background-color: #2163d3;
+    border-radius: 10px;
+    font-size: 20px;
+    margin: 10px;
+    font-family: "Anonymous Pro", monospace;
+    cursor: pointer; 
+    border-width: 4px;
+    border-color:  #204F99 ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: transform 0.2s ease;
+}
+.button-1part:hover{
+    transform: scale(1.1);
+}
+.text-1part {
+    margin-right: 5%; 
+    font-size: 18px;
+    color: #7e3e15;
+
+}
+.img-1part {
+    margin-left: 10%;
+    width: 700px;
+    height: 400px;  
+    top: 30px;
+}
+.borda-1part{
+    position: absolute;
+    align-self: center;
+    border:2px solid #2163d3;
+    top: 0;
+    bottom: 0;
+}
+.bordaLeft1-1part{
+    left: 10px;
+}
+.bordaLeft2-1part{
+    right: 10px;
+}
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -61,59 +149,13 @@
         opacity: 1;
     }
 }
-.titulo-header{
-    position: absolute;
-    top: 15%;
-    left: 5%;
-    padding: 10px;
-    font-weight: bold;
-}
-
-.text-header{
-    position: absolute;
-    left: 5%;
-    top: 35%;
-    padding: 10px;
-    font-size: 16px;
-}
-
-.text-header-second {
-    top: 45%;
-}
-
-.text-header-terciary {
-    top: 55%;
-}
-
-/*1part*/
-.body-1part{
-    width: 100%;
-    height: 100%;
-    background-color: #FFAE2E;
-    align-items: center;
-    justify-content: center;
-}
-/*.borda-1part{
-    position: absolute;
-    align-self: center;
-    border:1px solid #2163d3;
-    top: 0;
-    bottom: 0;
-}*/
-.bordaLeft1-1part{
-    left: 2%;
-}
-.bordaLeft2-1part{
-    right: 2%;
-}
-.titulo-1part-size{
-    font-size: 60px;
-    top: 75%; 
-}
-.conteudo-1part{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
+@keyframes titleAnimation {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      20% {
+        transform: translateY(0);
+        opacity: 1;
+      }
 }
