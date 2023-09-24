@@ -1,0 +1,35 @@
+.animacao-header{
+    animation-name: fadeIn;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+.titulo-header{
+    position: absolute; 
+    top: 15%; 
+    left: 5%; 
+    font-weight: bold;
+}
+.titulo-header-size{
+    font-size: 40px;
+}
+.text-header{
+    position: absolute; 
+    left: 5%; 
+    top: 35%;
+    padding: 10px; 
+    font-size: 16px;
+}
+.text-header-second {
+    top: 45%;
+}
+.text-header-terciary {
+    top: 55%;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

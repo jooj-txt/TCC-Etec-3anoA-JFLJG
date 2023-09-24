@@ -1,0 +1,28 @@
+.body-2part{
+    background-color: #2163D3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+}
+.titulo-2part-size{
+    left: 20px;
+    font-weight: bold;
+    font-size: 70px;
+    margin: auto;
+    font: 700 normal 4em/1.5 'Montserrat',sans-serif;
+    color:#FFAE2E;
+    text-align: right;
+    padding: 2%;
+    margin-right: 60px;
+}
+.img-2part {
+    margin-left: 10%;
+    width: 700px;
+    height: 400px;  
+    top: 30px;
+}
+.titulo-2part{
+    position: absolute; 
+    font-weight: bold;
+}

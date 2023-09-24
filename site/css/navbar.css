@@ -1,0 +1,30 @@
+.body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.navbar {
+    background-color: #FFAE2E;
+}
+.text-navbar{
+    color: white;
+    font-weight: bold;
+}
+.button-navbar{
+    display: inline-block;
+    background-color: #ff9000;
+    margin-right: 3%;
+    border-radius: 10px;
+    font-size: 20px;
+    font-family: "Anonymous Pro", monospace;
+    cursor: pointer; 
+    border-width: 4px;
+    border-color:  #D26C00 ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: transform 0.2s ease;
+}
+.button-navbar:hover{
+    transform: scale(1.1);
+}

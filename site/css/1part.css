@@ -1,70 +1,8 @@
-.body{
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-/*navbar*/
-.navbar {
-    background-color: #FFAE2E;
-}
-.text-navbar{
-    color: white;
-    font-weight: bold;
-}
-.button-navbar{
-    display: inline-block;
-    background-color: #ff9000;
-    margin-right: 3%;
-    border-radius: 10px;
-    font-size: 20px;
-    font-family: "Anonymous Pro", monospace;
-    cursor: pointer; 
-    border-width: 4px;
-    border-color:  #D26C00 ;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    transition: transform 0.2s ease;
-}
-.button-navbar:hover{
-    transform: scale(1.1);
-}
-/*header*/
-.animacao-header{
-    animation-name: fadeIn;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-}
-.titulo-header{
-    position: absolute; 
-    top: 15%; 
-    left: 5%; 
-    font-weight: bold;
-}
-.titulo-header-size{
-    font-size: 40px;
-}
-.text-header{
-    position: absolute; 
-    left: 5%; 
-    top: 35%;
-    padding: 10px; 
-    font-size: 16px;
-}
-.text-header-second {
-    top: 45%;
-}
-.text-header-terciary {
-    top: 55%;
-}
-
-/*1part*/
 .body-1part{
     background-color: #FFAE2E;
     width: 100%;
     display: flex;
     flex-direction: column;
-    position: absolute;
     padding: 60px;
     padding-top: 40px;
 }
@@ -73,7 +11,6 @@
     animation-timing-function:ease;
     animation-duration: 5s;
     animation-fill-mode: backwards;
-
 }
 .titleAnimation-1part-text{
     animation-delay: 0.5s; 
@@ -120,34 +57,12 @@
     margin-right: 5%; 
     font-size: 18px;
     color: #7e3e15;
-
 }
 .img-1part {
     margin-left: 10%;
     width: 700px;
     height: 400px;  
     top: 30px;
-}
-.borda-1part{
-    position: absolute;
-    align-self: center;
-    border:2px solid #2163d3;
-    top: 0;
-    bottom: 0;
-}
-.bordaLeft1-1part{
-    left: 10px;
-}
-.bordaLeft2-1part{
-    right: 10px;
-}
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 @keyframes titleAnimation {
     0% {
