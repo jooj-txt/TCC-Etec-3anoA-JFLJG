@@ -88,7 +88,7 @@ export default function Inicio({navigation}) {
           marginLeft:50,
           borderColor:'#2163D3',
           borderWidth:5,
-          borderRadius:'100%',
+          borderRadius:200,
           alignItems:'center'}}
           onPress={() => {
             setButtonsVisible(true);
@@ -110,7 +110,7 @@ export default function Inicio({navigation}) {
 const estilo = StyleSheet.create({
   button: {
       backgroundColor: '#2163D3', // Cor dos botões azul
-      borderRadius: 8,
+      borderRadius: 10,
       height:50,
       width:150,
       margin:15,
