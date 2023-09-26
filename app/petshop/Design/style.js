@@ -33,14 +33,13 @@ const styles = StyleSheet.create({
       paddingVertical:15,
       borderRadius: 8,
       marginHorizontal: 10,
-      height: 50,
-      width: 200,
+      height: '100%',
+      width: '40%',
     },
     buttonText: {
       color: '#FFFFFF',
       fontSize: 16,
       textAlign: 'center',
-      fontFamily:'Verdana',
       fontWeight:'bold'
     },
     divider: {
