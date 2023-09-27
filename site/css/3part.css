@@ -1,0 +1,51 @@
+.body-3part {
+    background-color: #FFAE2E;
+    width: 100%;
+    display: flex;
+    flex-direction: row; 
+    align-items: center; 
+    justify-content: space-between;
+}
+.content-3part {
+    width: 100%;
+    display: flex;
+    flex-direction: row; 
+}
+.titulo-3part {
+    width: 50%;
+    padding: 20px;
+    margin: auto;
+    font: 700 normal 4em/1.5 'Montserrat',sans-serif;
+    text-align: center;
+}
+.text-3part{
+    font-size: 24px;
+    text-align: center;
+    margin: 30px;
+    color: #7e3e15;
+}
+.div-img-3part {
+    width: 50%;
+}
+.img-3part {
+    height: 100%;
+    width: 100%;
+}
+.button-3part{
+    display: inline-block;
+    background-color: #2163d3;
+    border-radius: 10px;
+    font-size: 20px;
+    margin: 10px;
+    font-family: "Anonymous Pro", monospace;
+    cursor: pointer; 
+    border-width: 4px;
+    border-color:  #204F99 ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: transform 0.2s ease;
+}
+.button-3part:hover{
+    transform: scale(1.1);
+}

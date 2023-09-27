@@ -4,7 +4,6 @@
     display: flex;
     flex-direction: column;
     padding-top: 40px;
-   
 }
 .titulo-2part-size{
     left: 20px;
@@ -18,29 +17,26 @@
     margin-right: 60px;
 }
 .img-2part {
-    margin-left: 10%;
-    width: 700px;
-    height: 400px;  
-    top: 30px;
+    width: 100%;
 }
 .titulo-2part-header{
     position: absolute; 
     font-weight: bold;
-    top: 305%; 
+    top: 315%; 
     left: 5%; 
     font-size: 40px;
 }
 .text-2part{
     position: absolute; 
     left: 5%; 
-    top: 320%;
+    top: 325%;
     font-size: 16px;
     text-align: center;
 }
 .button-2part{
     position: absolute;
-    top: 339%;
-    left: 11%;
+    top: 345%;
+    left: 15%;
     background-color: #FFAE2E;
     border-radius: 10px;
     font-size: 20px;
