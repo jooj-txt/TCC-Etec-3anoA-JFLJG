@@ -6,15 +6,6 @@
     padding: 60px;
     padding-top: 40px;
 }
-.titleAnimation-1part{
-    animation-name: titleAnimation;
-    animation-timing-function:ease;
-    animation-duration: 5s;
-    animation-fill-mode: backwards;
-}
-.titleAnimation-1part-text{
-    animation-delay: 0.5s; 
-}
 .titulo-1part-size{
     left: 20px;
     font-weight: bold;
@@ -63,14 +54,4 @@
     width: 700px;
     height: 400px;  
     top: 30px;
-}
-@keyframes titleAnimation {
-    0% {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      20% {
-        transform: translateY(0);
-        opacity: 1;
-      }
 }

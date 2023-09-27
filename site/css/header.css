@@ -1,8 +1,4 @@
-.animacao-header{
-    animation-name: fadeIn;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
-}
+
 .titulo-header{
     position: absolute; 
     top: 15%; 
@@ -24,12 +20,4 @@
 }
 .text-header-terciary {
     top: 55%;
-}
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }

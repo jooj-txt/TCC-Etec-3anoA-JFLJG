@@ -4,11 +4,12 @@
     display: flex;
     flex-direction: column;
     padding-top: 40px;
+   
 }
 .titulo-2part-size{
     left: 20px;
     font-weight: bold;
-    font-size: 70px;
+    font-size: 80px;
     margin: auto;
     font: 700 normal 4em/1.5 'Montserrat',sans-serif;
     color:#FFAE2E;
@@ -22,7 +23,37 @@
     height: 400px;  
     top: 30px;
 }
-.titulo-2part{
+.titulo-2part-header{
     position: absolute; 
     font-weight: bold;
+    top: 305%; 
+    left: 5%; 
+    font-size: 40px;
+}
+.text-2part{
+    position: absolute; 
+    left: 5%; 
+    top: 320%;
+    font-size: 16px;
+    text-align: center;
+}
+.button-2part{
+    position: absolute;
+    top: 339%;
+    left: 11%;
+    background-color: #FFAE2E;
+    border-radius: 10px;
+    font-size: 20px;
+    margin: 10px;
+    font-family: "Anonymous Pro", monospace;
+    cursor: pointer; 
+    border-width: 4px;
+    border-color:  #D26C00 ;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    transition: transform 0.2s ease;
+}
+.button-2part:hover{
+    transform: scale(1.1);
 }
