@@ -86,7 +86,9 @@ export default function Inicio({navigation}) {
           marginLeft:50,
           backgroundColor:'#2163D3',
           borderRadius:200,
-          alignItems:'center'}}
+          alignItems:'center',
+          justifyContent:"center"
+        }}
           onPress={() => {
             setButtonsVisible(true);
             setShowModal(false);

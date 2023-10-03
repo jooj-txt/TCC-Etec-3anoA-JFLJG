@@ -18,14 +18,17 @@ export default function Login({navigation}) {
           marginLeft:-200,
           backgroundColor:'#2163D3',
           borderRadius:200,
-          alignItems:'center'}}
+          alignItems:'center',
+          justifyContent:"center"
+        
+        }}
           onPress={() => {
             navigation.navigate('Inicio');
           }}
 
        
         >
-          <Ionicons name="ios-arrow-back-sharp" size={25} color="#FFAE2E" />
+          <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E"/>
         </TouchableOpacity>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
