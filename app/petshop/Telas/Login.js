@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput} from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; 
 
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -9,6 +10,23 @@ export default function Login({navigation}) {
   
   return (
     <View style={styles.container}>
+       <TouchableOpacity
+          style={{ 
+          height:40,
+          width:40,
+          margin:15,
+          marginLeft:-200,
+          backgroundColor:'#2163D3',
+          borderRadius:200,
+          alignItems:'center'}}
+          onPress={() => {
+            navigation.navigate('Inicio');
+          }}
+
+       
+        >
+          <Ionicons name="ios-arrow-back-sharp" size={25} color="#FFAE2E" />
+        </TouchableOpacity>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
 

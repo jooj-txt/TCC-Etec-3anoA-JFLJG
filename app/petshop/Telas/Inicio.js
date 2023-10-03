@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import { BlurView } from 'expo-blur';
-import { AntDesign } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
 
 
@@ -62,8 +61,8 @@ export default function Inicio({navigation}) {
           style={estilo.button}
           onPress={() => {
             navigation.navigate('Login');
-            setShowModal(false);
-          }}   
+            setButtonsVisible(true);
+            setShowModal(false);          }}   
         >
           <Text style={estilo.buttonText}>Login</Text>
         </TouchableOpacity>
@@ -72,8 +71,8 @@ export default function Inicio({navigation}) {
           style={estilo.button}
           onPress={() => {
             navigation.navigate('PessoaFisicaCadastro');
-            setShowModal(false);
-            
+            setButtonsVisible(true);
+            setShowModal(false);            
           }}
         >
           <Text style={estilo.buttonText}>Cadastrar-se</Text>
@@ -81,13 +80,11 @@ export default function Inicio({navigation}) {
 
         <TouchableOpacity
           style={{ 
-          backgroundColor: 'transparent',
           height:60,
           width:60,
           margin:15,
           marginLeft:50,
-          borderColor:'#2163D3',
-          borderWidth:5,
+          backgroundColor:'#2163D3',
           borderRadius:200,
           alignItems:'center'}}
           onPress={() => {

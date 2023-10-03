@@ -53,10 +53,9 @@ const PessoaFisicaCadastro = ({setUser}) => {
     }
   };
 
-  const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxToggle = () => {
-    setIsChecked(!isChecked);
+    setAceitarTermos(!setAceitarTermos);
   };
 
   const itemStyles = [
@@ -171,9 +170,8 @@ const PessoaFisicaCadastro = ({setUser}) => {
         containerStyle={styles.checkboxContainer}
         textStyle={styles.checkboxLabel}
         checkedColor="#2163D3"
+        value={aceitarTermos}
       />
-        <Text style={styles.checkboxLabel}>{isChecked ? 'Termos aceitados' : 'Termos não aceitados'}</Text>
-
       <TouchableOpacity style={styles.button}   onPress={() => {
             handleCad();
           }}   >
