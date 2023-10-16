@@ -55,7 +55,7 @@ const PessoaFisicaCadastro = ({setUser}) => {
 
 
   const handleCheckboxToggle = () => {
-    setAceitarTermos(!setAceitarTermos);
+    setAceitarTermos(!aceitarTermos);
   };
 
   const itemStyles = [
@@ -165,12 +165,12 @@ const PessoaFisicaCadastro = ({setUser}) => {
      
       <CheckBox
         title="ACEITAR TERMOS DE CONDIÇÕES"
-        checked={isChecked}
+        checked={aceitarTermos}
         onPress={handleCheckboxToggle}
         containerStyle={styles.checkboxContainer}
         textStyle={styles.checkboxLabel}
         checkedColor="#2163D3"
-        value={aceitarTermos}
+        value={setAceitarTermos}
       />
       <TouchableOpacity style={styles.button}   onPress={() => {
             handleCad();
