@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
-import { Avatar, Button, Card, Text  } from 'react-native-paper';
+import { Button, Menu, Divider, Provider , Card, Text, Searchbar   } from 'react-native-paper';
+import {MenuOutlined} from '@ant-design/icons';
+
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
-    <Card.Cover source={animal.image} />
+    <Card.Cover style={styles.animalImage} source={animal.image} />
     <Card.Content>
-
-      <Text variant="titleLarge">{animal.name}</Text>
-      <Text>{animal.age}</Text>
-      <Text  variant="bodyMedium">{animal.breed}</Text>
-      <Text>{animal.color}</Text>
+      <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
+      <Text style={styles.animalText}>{animal.age}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
+      <Text style={styles.animalText}>{animal.color}</Text>
     </Card.Content>
   </Card>
 );
@@ -19,11 +20,16 @@ const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
+  const [visible, setVisible] = React.useState(false);
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
+
 
   const animalData = [
     { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', color: 'Branco', image: require('../imgs/cat.jpg') },
     { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', color: 'Dourado', image: require('../imgs/dog.jpg') },
     { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', color: 'Amarelo', image: require('../imgs/bird.jpg') },
+    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', color: 'Branco', image: require('../imgs/hamster.jpeg') },
     // Add more animals as needed
   ];
 
@@ -35,48 +41,47 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Pesquisar animais"
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-        />
-        <TouchableOpacity
-          style={styles.menuButton}
-          onPress={() => setShowMenu(!showMenu)}
-        >
-          <Text>Menu</Text>
-        </TouchableOpacity>
-      </View>
-
-      {showMenu && (
-        // Implement your menu component here
-        <View style={styles.menu}>
-          <Text>Menu Content</Text>
-          {/* Add your filter options and logic here */}
+    <Provider>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View>
+            <Menu
+              visible={visible}
+              onDismiss={closeMenu}
+              anchor={<Button onPress={openMenu}><MenuOutlined/></Button> }>
+              <Menu.Item onPress={() => {}} title="Item 1" />
+              <Menu.Item onPress={() => {}} title="Item 2" />
+              <Divider />
+              <Menu.Item onPress={() => {}} title="Item 3" />
+            </Menu>
+          </View>
+          <Searchbar
+            style={styles.searchInput}
+            placeholder="Pesquisar animais"
+            value={searchText}
+            onChangeText={(text) => setSearchText(text)}
+          />
         </View>
-      )}
 
-      <ScrollView style={styles.animalList}>
-  
-        <FlatList
-          data={filterAnimals()}
-          numColumns={2}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <AnimalCard animal={item} />
-          )}
-        />
-      </ScrollView>
-    </View>
+        <ScrollView style={styles.animalList}>
+          <FlatList
+            data={filterAnimals()}
+            numColumns={2}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <AnimalCard animal={item} />
+            )}
+          />
+        </ScrollView>
+      </View>
+    </Provider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5'
   },
   header: {
     flexDirection: 'row',
@@ -87,6 +92,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     borderWidth: 1,
+    backgroundColor: '#F5F5F5',
     padding: 10,
   },
   menuButton: {
@@ -105,12 +111,15 @@ const styles = StyleSheet.create({
     margin: 10,
     borderWidth: 1,
     padding: 10,
-    borderRadius: 10, // Round the corners for card effect
+    borderRadius: 10, 
+    backgroundColor: 'white',
+  },
+  animalText: {
+    color:'black',
   },
   animalImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
+
+    marginBottom: 20,
   },
 });
 
