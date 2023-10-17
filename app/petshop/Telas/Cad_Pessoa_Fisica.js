@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Services/firebaseConfig';
-
 
 const PessoaFisicaCadastro = ({setUser}) => {
   const [nome, setNome] = useState();
@@ -64,19 +63,32 @@ const PessoaFisicaCadastro = ({setUser}) => {
   ];
 
   const handleCad = () => {
+    // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
-  .then((userCredential) => {
-    const user = userCredential.user;
-    console.log(user);
-    setUser(user);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    
-    console.log(errorMessage);
-  });
-  }
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log('Usuário criado:', user);
+
+        // Faça o login do usuário recém-criado
+        signInWithEmailAndPassword(auth, email, senha)
+          .then((userCredential) => {
+            const loggedInUser = userCredential.user;
+            console.log('Usuário logado:', loggedInUser);
+
+            // Defina o usuário no estado
+            setUser(loggedInUser);
+          })
+          .catch((error) => {
+            console.error('Erro ao fazer login:', error);
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('Erro ao criar usuário:', errorMessage);
+      });
+  };
+
 
 
   return (

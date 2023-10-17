@@ -15,7 +15,7 @@ export default function App() {
       <Stack.Screen
           name="Inicio"
           options={{ headerShown:false }}
-          component={HomeScreen}
+          component={Inicio}
         />
 
         <Stack.Screen
@@ -28,6 +28,12 @@ export default function App() {
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}
           component={PessoaFisicaCadastro}
+        />
+
+        <Stack.Screen
+          name="Home"
+          options={{ headerShown:false }}
+          component={HomeScreen}
         />
 
        
