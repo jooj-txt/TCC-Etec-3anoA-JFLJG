@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
+import { Avatar, Button, Card, Text  } from 'react-native-paper';
+
+const AnimalCard = ({ animal }) => (
+  <Card style={styles.animalCard}>
+    <Card.Cover source={animal.image} />
+    <Card.Content>
+
+      <Text variant="titleLarge">{animal.name}</Text>
+      <Text>{animal.age}</Text>
+      <Text  variant="bodyMedium">{animal.breed}</Text>
+      <Text>{animal.color}</Text>
+    </Card.Content>
+  </Card>
+);
 
 const HomeScreen = () => {
-  
   const [searchText, setSearchText] = useState('');
   const [showMenu, setShowMenu] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
 
   const animalData = [
-    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', color: 'Branco' },
-    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', color: 'Dourado' },
-    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', color: 'Amarelo' },
+    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', color: 'Branco', image: require('../imgs/cat.jpg') },
+    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', color: 'Dourado', image: require('../imgs/dog.jpg') },
+    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', color: 'Amarelo', image: require('../imgs/bird.jpg') },
     // Add more animals as needed
   ];
 
@@ -47,17 +60,13 @@ const HomeScreen = () => {
       )}
 
       <ScrollView style={styles.animalList}>
+  
         <FlatList
           data={filterAnimals()}
           numColumns={2}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.animalItem}>
-              <Text>{item.name}</Text>
-              <Text>{item.age}</Text>
-              <Text>{item.breed}</Text>
-              <Text>{item.color}</Text>
-            </View>
+            <AnimalCard animal={item} />
           )}
         />
       </ScrollView>
@@ -91,12 +100,19 @@ const styles = StyleSheet.create({
   animalList: {
     // Add styles for the animal list here
   },
-  animalItem: {
+  animalCard: {
     flex: 1,
     margin: 10,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 10, // Round the corners for card effect
+  },
+  animalImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
   },
 });
+
 
 export default HomeScreen;
