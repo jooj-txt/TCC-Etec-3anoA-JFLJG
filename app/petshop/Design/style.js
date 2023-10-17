@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     button: {
-      backgroundColor: '#2163D3',
+      backgroundColor: '#2163D3', //Azul
       textAlign: 'center',
       paddingVertical:15,
       borderRadius: 8,
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     line: {
       width:20,
       height: 5,
-      backgroundColor: '#2163D3', // Cor dos traços azul
+      backgroundColor: '#2163D3',
       marginHorizontal: 2,
     },
   });

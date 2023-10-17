@@ -11,49 +11,35 @@ const itemStyles = [
 ]; // Cor das linhas(apenas decoração)
 
 
-const PessoaFisicaCadastro = ({setUser}) => {
+const PessoaJuridicaCadastro = ({setUser}) => {
   const [nome, setNome] = useState();
-  const [cpf, setCPF] = useState();
+  const [cnpj, setCNPJ] = useState();
   const [email, setEmail] = useState();
   const [celular, setCelular] = useState();
-  const [genero, setGenero] = useState();
   const [cep, setCep] = useState();
   const [endereco, setEndereco] = useState();
   const [cidade, setCidade] = useState();
   const [estado, setEstado] = useState();
   const [senha, setSenha] = useState();
   const [confirmarSenha, setConfirmarSenha] = useState();
-  const [dataNascimento, setDataNascimento] = useState();
   const [aceitarTermos, setAceitarTermos] = useState(false);
   // Armazenando os dados de cadstro para posteriormente serem guardados no BD
 
 
-  const handleDateChange = (text) => {
-    const numericText = text.replace(/\D/g, ''); 
-    let formattedDate = '';
+
+  const handleCNPJChange = (text) => {
+    const numericText = text.replace(/\D/g, ''); // Remover caracteres não numéricos
 
     if (numericText.length <= 2) {
-      formattedDate = numericText;
-    } else if (numericText.length <= 4) {
-      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2)}`;
+      setCNPJ(numericText);
+    } else if (numericText.length <= 5) {
+      setCNPJ(`${numericText.slice(0, 2)}.${numericText.slice(2)}`);
     } else if (numericText.length <= 8) {
-      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2, 4)}/${numericText.slice(4, 8)}`;
-    }
-    setDataNascimento(formattedDate);
-  };
-  // Formatando o formato do dado data
-
-
-  const handleCPFChange = (text) => {
-    const numericText = text.replace(/\D/g, ''); 
-     if (numericText.length <= 3) {
-      setCPF(numericText);
-    } else if (numericText.length <= 6) {
-      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3)}`);
-    } else if (numericText.length <= 9) {
-      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3, 6)}.${numericText.slice(6)}`);
-    } else if (numericText.length <= 11) {
-      setCPF(`${numericText.slice(0, 3)}.${numericText.slice(3, 6)}.${numericText.slice(6, 9)}-${numericText.slice(9)}`);
+      setCNPJ(`${numericText.slice(0, 2)}.${numericText.slice(2, 5)}.${numericText.slice(5)}`);
+    } else if (numericText.length <= 12) {
+      setCNPJ(`${numericText.slice(0, 2)}.${numericText.slice(2, 5)}.${numericText.slice(5, 8)}/${numericText.slice(8)}`);
+    } else if (numericText.length <= 14) {
+      setCNPJ(`${numericText.slice(0, 2)}.${numericText.slice(2, 5)}.${numericText.slice(5, 8)}/${numericText.slice(8, 12)}-${numericText.slice(12)}`);
     }
   };
     // Formatando o formato do dado CPF
@@ -104,10 +90,9 @@ const PessoaFisicaCadastro = ({setUser}) => {
       />
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="CPF"
-        value={cpf}
-        onChangeText={handleCPFChange}
-      />
+        placeholder="CNPJ"
+        value={cnpj} 
+        onChangeText={handleCNPJChange}     />
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="Email"
@@ -121,23 +106,6 @@ const PessoaFisicaCadastro = ({setUser}) => {
         onChangeText={setCelular}
       />
 
-      <Picker
-        style={[styles.picker, itemStyles[0]]}
-        selectedValue={genero}
-        onValueChange={(itemValue) => setGenero(itemValue)}
-      >
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Masculino" value="masculino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Feminino" value="feminino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Outro" value="outro" />
-      </Picker>
-
-      <TextInput
-        style={[styles.input,itemStyles[1]]}
-        placeholder="Data de Nascimento"
-        value={dataNascimento}
-        onChangeText={handleDateChange}
-      />
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="CEP"
@@ -238,4 +206,4 @@ picker: {
 },
 });
 
-export default PessoaFisicaCadastro;
+export default PessoaJuridicaCadastro;

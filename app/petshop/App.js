@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
 
-import {Inicio,PessoaFisicaCadastro,Login,HomeScreen} from './Telas/index';
+import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro} from './Telas/index';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +15,7 @@ export default function App() {
       <Stack.Screen
           name="Inicio"
           options={{ headerShown:false }}
-          component={HomeScreen}
+          component={PessoaJuridicaCadastro}
         />
 
         <Stack.Screen
