@@ -12,7 +12,7 @@ import logo2 from '../imgs/logo_Inicio2.png';
 
 
 
-export default function Inicio({navigation}) {
+export default function Config({navigation}) {
 
 
   const [showModal, setShowModal] = useState(false);

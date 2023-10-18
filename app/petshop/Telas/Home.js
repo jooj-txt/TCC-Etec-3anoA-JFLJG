@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet } from 'react-native';
-import { Button, Menu, Divider, Provider , Card, Text, Searchbar   } from 'react-native-paper';
+import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet, Modal } from 'react-native';
+import { Button, Menu, Divider, Provider , Card, Text, Searchbar } from 'react-native-paper';
 import {MenuOutlined} from '@ant-design/icons';
 
 const AnimalCard = ({ animal }) => (
@@ -17,12 +17,12 @@ const AnimalCard = ({ animal }) => (
 
 const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
-  const [showMenu, setShowMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
-  const [visible, setVisible] = React.useState(false);
-  const openMenu = () => setVisible(true);
-  const closeMenu = () => setVisible(false);
 
+  const modalV = () => {
+    setShowModal(true);
+  };
 
   const animalData = [
     { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', color: 'Branco', image: require('../imgs/cat.jpg') },
@@ -44,16 +44,18 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View>
-            <Menu
-              visible={visible}
-              onDismiss={closeMenu}
-              anchor={<Button onPress={openMenu}><MenuOutlined/></Button> }>
-              <Menu.Item onPress={() => {}} title="Item 1" />
-              <Menu.Item onPress={() => {}} title="Item 2" />
-              <Divider />
-              <Menu.Item onPress={() => {}} title="Item 3" />
-            </Menu>
+           <TouchableOpacity onPress={modalV}> <MenuOutlined/> </TouchableOpacity> 
           </View>
+          {showModal && (
+  <Modal animationType="slide" visible={showModal} transparent={true}>
+    <View  style={styles.modalContent}>
+   <Text>CONDIGURSDASFSJHJDSVHD </Text>
+   <Button title="Fechar" onPress={() => setShowModal(false)} />
+
+    </View>
+   
+  </Modal>
+)}
           <Searchbar
             style={styles.searchInput}
             placeholder="Pesquisar animais"
@@ -119,6 +121,16 @@ const styles = StyleSheet.create({
   animalImage: {
 
     marginBottom: 20,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    width:"40%", 
+    height:"100%", 
+    backgroundColor:'white',
+    
   },
 });
 

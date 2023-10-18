@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword  } from "firebase/auth";
 
+
+
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyB0O__HMlIABOS8DenBCvgo5GRuKRlRmfI",
   authDomain: "tcc-3a-etec.firebaseapp.com",
