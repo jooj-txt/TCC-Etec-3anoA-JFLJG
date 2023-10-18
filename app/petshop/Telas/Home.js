@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet, Modal } from 'react-native';
 import { Button, Menu, Divider, Provider , Card, Text, Searchbar } from 'react-native-paper';
-import {MenuOutlined} from '@ant-design/icons';
+import {MenuOutlined, HeartFilled} from '@ant-design/icons';
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
     <Card.Cover style={styles.animalImage} source={animal.image} />
     <Card.Content>
-      <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
-      <Text style={styles.animalText}>{animal.age}</Text>
+      <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
-      <Text style={styles.animalText}>{animal.color}</Text>
+      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
+      <TouchableOpacity style={{alignSelf: "flex-start"}}><HeartFilled/></TouchableOpacity>
     </Card.Content>
   </Card>
 );
@@ -25,10 +25,10 @@ const HomeScreen = () => {
   };
 
   const animalData = [
-    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', color: 'Branco', image: require('../imgs/cat.jpg') },
-    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', color: 'Dourado', image: require('../imgs/dog.jpg') },
-    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', color: 'Amarelo', image: require('../imgs/bird.jpg') },
-    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', color: 'Branco', image: require('../imgs/hamster.jpeg') },
+    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
+    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
     // Add more animals as needed
   ];
 
@@ -47,15 +47,13 @@ const HomeScreen = () => {
            <TouchableOpacity onPress={modalV}> <MenuOutlined/> </TouchableOpacity> 
           </View>
           {showModal && (
-  <Modal animationType="slide" visible={showModal} transparent={true}>
-    <View  style={styles.modalContent}>
-   <Text>CONDIGURSDASFSJHJDSVHD </Text>
-   <Button title="Fechar" onPress={() => setShowModal(false)} />
-
-    </View>
-   
-  </Modal>
-)}
+            <Modal animationType="slide" visible={showModal} transparent={true}>
+              <View  style={styles.modalContent}>
+                <Text>CONDIGURSDASFSJHJDSVHD </Text>
+                <Button style={{backgroundColor: 'black'}} value="Fechar" onPress={() => setShowModal(false)} />
+              </View>
+            </Modal>
+          )}
           <Searchbar
             style={styles.searchInput}
             placeholder="Pesquisar animais"
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 15,
   },
   searchInput: {
     flex: 1,
@@ -118,14 +116,17 @@ const styles = StyleSheet.create({
   animalText: {
     color:'black',
   },
+  animalLocal: {
+    textAlign:'end',
+    fontWeight:'bold',
+  },
   animalImage: {
-
     marginBottom: 20,
   },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignContent: 'center',
     backgroundColor: 'white',
     width:"40%", 
     height:"100%", 
