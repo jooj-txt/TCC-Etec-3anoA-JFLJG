@@ -15,7 +15,7 @@ export default function App() {
       <Stack.Screen
           name="Inicio"
           options={{ headerShown:false }}
-          component={PessoaJuridicaCadastro}
+          component={Inicio}
         />
 
         <Stack.Screen

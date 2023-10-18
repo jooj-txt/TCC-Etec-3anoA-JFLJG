@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');

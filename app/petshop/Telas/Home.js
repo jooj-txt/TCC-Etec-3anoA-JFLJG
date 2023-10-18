@@ -3,7 +3,6 @@ import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet } f
 import { Button, Menu, Divider, Provider , Card, Text, Searchbar   } from 'react-native-paper';
 import {MenuOutlined} from '@ant-design/icons';
 
-
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
     <Card.Cover style={styles.animalImage} source={animal.image} />
