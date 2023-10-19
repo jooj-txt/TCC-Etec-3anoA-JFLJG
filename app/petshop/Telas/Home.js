@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet, Modal } from 'react-native';
 import { Button, Menu, Divider, Provider , Card, Text, Searchbar } from 'react-native-paper';
+import { createDrawerNavigator,DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer';
 import {MenuOutlined, HeartFilled} from '@ant-design/icons';
+import Config from './Config';
+
+const Drawer = createDrawerNavigator();
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
@@ -15,66 +19,85 @@ const AnimalCard = ({ animal }) => (
   </Card>
 );
 
-const HomeScreen = () => {
-  const [searchText, setSearchText] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState([]);
+  export default function HomeScreen() {
 
-  const modalV = () => {
-    setShowModal(true);
-  };
+    const [searchText, setSearchText] = useState('');
 
-  const animalData = [
-    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
-    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-    // Add more animals as needed
-  ];
 
-  const filterAnimals = () => {
-    // Implement your filter logic here based on selectedFilters
-    // You can filter the animalData array and update the filteredAnimals state
-    // For simplicity, we'll use the entire animalData for this example
-    return animalData;
-  };
-
-  return (
-    <Provider>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View>
-           <TouchableOpacity onPress={modalV}> <MenuOutlined/> </TouchableOpacity> 
-          </View>
-          {showModal && (
-            <Modal animationType="slide" visible={showModal} transparent={true}>
-              <View  style={styles.modalContent}>
-                <Text>CONDIGURSDASFSJHJDSVHD </Text>
-                <Button style={{backgroundColor: 'black'}} value="Fechar" onPress={() => setShowModal(false)} />
-              </View>
-            </Modal>
-          )}
-          <Searchbar
-            style={styles.searchInput}
-            placeholder="Pesquisar animais"
+    return (     
+      <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+    
+        <Drawer.Screen name='Home' component={Conteudo} 
+         options={{
+          title:null,
+          headerStyle: {
+            backgroundColor: "#2163D3",
+          },
+          headerRight: () => (
+            <Searchbar
+            placeholder="Pesquisar"
+            onChangeText={setSearchText}
             value={searchText}
-            onChangeText={(text) => setSearchText(text)}
-          />
+            style={styles.searchInput}
+          />  ),
+           
+        
+        }}
+        />
+        <Drawer.Screen name='Configurações' component={Config} />
+      </Drawer.Navigator>
+    );
+      
+  }
+  
+  function CustomDrawerContent({ navigation, props }) {
+    return (
+      <DrawerContentScrollView {...props}>
+           <DrawerItem label="Configurações" onPress={() => navigation.navigate("Config")}
+         />
+           <DrawerItem label="Sair" onPress={() => navigation.navigate("Home")}
+         />
+      </DrawerContentScrollView>
+    );
+  }
+
+  
+  
+  function Conteudo({ navigation }) { // Adicionado parâmetro de navegação
+    const [selectedFilters, setSelectedFilters] = useState([]); // Movido para dentro do componente Conteudo
+  
+    const animalData = [
+      { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+      { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+      { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
+      { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
+    ];
+  
+    const filterAnimals = () => {
+      // Implement your filter logic here based on selectedFilters
+      // You can filter the animalData array and update the filteredAnimals state
+      // For simplicity, we'll use the entire animalData for this example
+      return animalData;
+    };
+  
+    return (
+      <Provider>
+        <View style={styles.container}>
+          <ScrollView style={styles.animalList}>
+            <FlatList
+              data={filterAnimals()}
+              numColumns={2}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <AnimalCard animal={item} />
+              )}
+            />
+          </ScrollView>
         </View>
-        <ScrollView style={styles.animalList}>
-          <FlatList
-            data={filterAnimals()}
-            numColumns={2}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <AnimalCard animal={item} />
-            )}
-          />
-        </ScrollView>
-      </View>
-    </Provider>
-  );
-};
+      </Provider>
+    );
+  }
+  
 
 const styles = StyleSheet.create({
   container: {
@@ -87,15 +110,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 15,
   },
-  searchInput: {
-    flex: 1,
-    borderWidth: 2,
+  searchInput : {
+    marginRight:"20%",
     borderRadius: 20,
-    backgroundColor: 'white',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    backgroundColor: '#FFAE2E',
     fontSize: 16,
     color: 'black',
+    width:"80%",
+    height: "85%",
   },
   menuButton: {
     padding: 10,
@@ -139,4 +161,3 @@ const styles = StyleSheet.create({
 });
 
 
-export default HomeScreen;
