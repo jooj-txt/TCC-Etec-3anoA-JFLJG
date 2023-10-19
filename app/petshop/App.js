@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
 
-import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro} from './Telas/index';
+import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Config} from './Telas/index';
 
 const Stack = createStackNavigator();
 

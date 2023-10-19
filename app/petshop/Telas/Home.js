@@ -61,7 +61,6 @@ const HomeScreen = () => {
             onChangeText={(text) => setSearchText(text)}
           />
         </View>
-
         <ScrollView style={styles.animalList}>
           <FlatList
             data={filterAnimals()}
@@ -90,9 +89,13 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    borderWidth: 1,
-    backgroundColor: '#F5F5F5',
-    padding: 10,
+    borderWidth: 2,
+    borderRadius: 20,
+    backgroundColor: 'white',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    fontSize: 16,
+    color: 'black',
   },
   menuButton: {
     padding: 10,
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     width:"40%", 
     height:"100%", 
     backgroundColor:'white',
-    
+
   },
 });
 
