@@ -1,137 +1,53 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
-import { BlurView } from 'expo-blur';
-import { Ionicons } from '@expo/vector-icons'; 
+import React, { useState } from 'react';
+import { View, Text, Switch, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 
+export default function Config() {
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
 
-
-import styles from '../Design/style.js';
-import logo from '../imgs/logo_Inicio.png';
-import logo2 from '../imgs/logo_Inicio2.png';
-
-
-
-
-export default function Config({navigation}) {
-
-
-  const [showModal, setShowModal] = useState(false);
-  const [isButtonsVisible, setButtonsVisible] = useState(true);
-
-  
-  const handlePessoaJuridicaPress = () => {
-    setButtonsVisible(false);
-    setShowModal(true);
+  const toggleNotifications = () => {
+    setNotificationsEnabled(!notificationsEnabled);
   };
 
+  const toggleDarkMode = () => {
+    setDarkModeEnabled(!darkModeEnabled);
+  };
 
-  
   return (
-
     <View style={styles.container}>
-      <Image source={logo} style={styles.logo} />
-      <Image source={logo2} style={styles.logo2} />
-
-         
-
-          {isButtonsVisible && (
-         <View style={styles.buttonsContainer}>
-         <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
-           <Text style={styles.buttonText}>ONG</Text>
-         </TouchableOpacity>
-
-         <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
-           <Text style={styles.buttonText}>Tutor</Text>
-         </TouchableOpacity>
-
-       </View>
-      )}
-        
-      <View style={styles.divider}>
-        <View style={{width:35,height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px',  }}></View>
-        <View style={{width:35,  height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
-        <View style={{width:35,  height: 3,backgroundColor: '#FFAE2E',  marginHorizontal: '4px'}}></View>
-        <View style={{width:35,   height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px'}}></View>
-        <View style={{width:35, height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px'}}></View>
+      <Text style={styles.sectionTitle}>Configurações</Text>
+      <View style={styles.setting}>
+        <Text>Notificações</Text>
+        <Switch value={notificationsEnabled} onValueChange={toggleNotifications} />
       </View>
-
-{showModal && (
-  <Modal animationType="slide" visible={showModal} transparent={true}>
-    <BlurView style={styles.containerModal} intensity={35} tint="light">
-
-      <View style={estilo.buttonsContainer}>
-        <TouchableOpacity
-          style={estilo.button}
-          onPress={() => {
-            navigation.navigate('Login');
-            setButtonsVisible(true);
-            setShowModal(false);          }}   
-        >
-          <Text style={estilo.buttonText}>Login</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={estilo.button}
-          onPress={() => {
-            navigation.navigate('PessoaFisicaCadastro');
-            setButtonsVisible(true);
-            setShowModal(false);            
-          }}
-        >
-          <Text style={estilo.buttonText}>Cadastrar-se</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ 
-          height:60,
-          width:60,
-          margin:15,
-          marginLeft:50,
-          backgroundColor:'#2163D3',
-          borderRadius:200,
-          alignItems:'center',
-          justifyContent:"center"
-        }}
-          onPress={() => {
-            setButtonsVisible(true);
-            setShowModal(false);
-          }}
-        >
-          <Ionicons name="ios-arrow-back-sharp" size={45} color="#FFAE2E" />
-        </TouchableOpacity>
-
-
+      <View style={styles.setting}>
+        <Text>Modo Escuro</Text>
+        <Switch value={darkModeEnabled} onValueChange={toggleDarkMode} />
       </View>
-    </BlurView>
-  </Modal>
-)}
-
+      <Button mode="contained" onPress={() => console.log("Salvar configurações")}>
+        Salvar Configurações
+      </Button>
     </View>
   );
 }
-const estilo = StyleSheet.create({
-  button: {
-      backgroundColor: '#2163D3', // Cor dos botões azul
-      borderRadius: 10,
-      height:50,
-      width:120,
-      margin:15,
-    },
-    buttonText: {
-      color: '#FFFFFF',
-      fontSize: 16,
-      paddingVertical:12,
-      textAlign:'center',
-      alignSelf:'center',
-      fontWeight:'bold'
-      
-    },
 
-    buttonsContainer: {
-      marginTop:320
-    },
-
-    
-
-
-})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  setting: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+});
