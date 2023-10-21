@@ -5,9 +5,12 @@ import { createDrawerNavigator,DrawerContentScrollView, DrawerItemList, DrawerIt
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { HeartFilled, HomeFilled, SettingFilled} from '@ant-design/icons';
+import{ FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faDog, faCat, faCrow} from '@fortawesome/free-solid-svg-icons'
 import { AntDesign } from 'react-native-vector-icons';
 import {Config, ConfigPerfil, Favoritos} from './rotas';
 import logo from '../imgs/logo_Inicio.png';
+
 
 
 
@@ -34,8 +37,6 @@ function Tabs({ navigation }) {
       tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
       tabBarStyle: {
         backgroundColor: '#2163D3', // Cor de fundo da barra de guias
-        borderTopWidth: 2, // Largura da borda superior
-        borderColor: 'blue', // Cor da borda superior
       },
     }}>
       <Tab.Screen 
@@ -147,6 +148,20 @@ function Home({ navigation }) {
     <Provider>
       <View style={styles.container}>
         <ScrollView style={styles.animalList}>
+          <View style={styles.filterContainer}>
+            <TouchableOpacity style={styles.filterCardAll}> 
+              <Text style={styles.textFilter}>TODOS</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterCard}> 
+              <FontAwesomeIcon icon={faDog} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterCard}> 
+              <FontAwesomeIcon icon={faCat} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.filterCard}> 
+              <FontAwesomeIcon icon={faCrow} />
+            </TouchableOpacity>
+          </View>
           <FlatList
             data={filterAnimals()}
             numColumns={2}
@@ -275,4 +290,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black',
   },
+  //FILTER
+  filterContainer:{
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center', 
+  },
+  filterCardAll:{
+    width: 50,
+    height: 50,
+    backgroundColor: '#2163D3',
+    justifyContent: 'center',
+    alignContent: 'center',
+    borderRadius: '10px',
+    borderWidth:'1px',
+    margin: '5px',
+  },
+  filterCard:{
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignContent: 'center',
+    borderRadius: '10px',
+    borderWidth:'1px',
+    margin: '5px',
+  },
+  textFilter:{
+    fontSize: 12,
+    fontFamily: "sans-serif-light",
+    textAlign: 'center',
+    color: '#FFAE2E',
+    fontWeight: 'bold',
+  }
 });
