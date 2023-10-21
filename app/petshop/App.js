@@ -34,17 +34,7 @@ export default function App() {
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}
           component={PessoaFisicaCadastro}
-        />
-
-
-  
-     
-
-       
-
-       
- 
-       
+        />    
     </Stack.Navigator>
     </NavigationContainer>
   

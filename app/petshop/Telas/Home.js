@@ -1,30 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, ScrollView, FlatList, StyleSheet, Modal } from 'react-native';
-import { Button, Menu, Divider, Provider , Card, Text, Searchbar } from 'react-native-paper';
+import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image } from 'react-native';
+import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { HeartFilled} from '@ant-design/icons';
-
+import { HeartFilled, HomeFilled, SettingFilled} from '@ant-design/icons';
+import { AntDesign } from 'react-native-vector-icons';
 import {Config, ConfigPerfil, Favoritos} from './rotas';
+import logo from '../imgs/logo_Inicio.png';
 
 
 
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-
-const AnimalCard = ({ animal }) => (
-  <Card style={styles.animalCard}>
-    <Card.Cover style={styles.animalImage} source={animal.image} />
-    <Card.Content>
-      <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
-      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
-      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
-      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}><HeartFilled /></TouchableOpacity>
-    </Card.Content>
-  </Card>
-);
 
 export default function HomeScreen() {
   return (
@@ -36,17 +25,87 @@ export default function HomeScreen() {
 
 function Tabs({ navigation }) {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name='Home' component={Home} options={{ headerShown: false }} />
-      <Tab.Screen name='Favoritos' component={Favoritos} options={{ headerShown: false }} />
-      <Tab.Screen name='ConfigPerfil' component={ConfigPerfil} options={{ headerShown: false }} />
+    <Tab.Navigator screenOptions={{
+      tabBarLabelStyle: {
+        fontSize: 16, // Tamanho da fonte das guias
+        fontWeight: 'bold', // Estilo da fonte das guias
+      },
+      tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
+      tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
+      tabBarStyle: {
+        backgroundColor: '#2163D3', // Cor de fundo da barra de guias
+        borderTopWidth: 2, // Largura da borda superior
+        borderColor: 'blue', // Cor da borda superior
+      },
+    }}>
+      <Tab.Screen 
+        name='Home' 
+        component={Home} 
+        options={{ 
+          headerShown: false, 
+          tabBarLabel: '', 
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name='home' color={color} size={size} />
+          ),
+        }} 
+      />
+      <Tab.Screen 
+        name='Favoritos' 
+        component={Favoritos} 
+        options={{ 
+          headerShown: false, 
+          tabBarLabel: '', 
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name='heart' color={color} size={size} />
+          ),
+        }} 
+      />
+      <Tab.Screen 
+        name='Configurações' 
+        component={ConfigPerfil}  
+        options={{ 
+          headerShown: false, 
+          tabBarLabel: '', 
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name='setting' color={color} size={size} />
+          ),
+        }}  
+      />
     </Tab.Navigator>
   );
 }
 
-function DrawerNavigator() {
-  const [searchText, setSearchText] = useState('');
 
+  function CustomDrawerContent({ navigation, ...props }) {
+    return (
+      <DrawerContentScrollView {...props}>
+        <View style={styles.containerDrawer}>
+          <View  style={styles.userArea}>
+          <Image
+              source={logo}
+              style={styles.user}
+            />
+            <View style={{flexDirection: 'column'}}>
+              <Text style={styles.nome}>Vira Lar</Text>
+              <Text style={styles.email}>viralar@gmail.com</Text>
+            </View>
+          </View>
+        </View>
+  
+        <DrawerItem 
+          label="Configurações" 
+          onPress={() => navigation.navigate("Config")} 
+          labelStyle={styles.drawerItem} />
+        <DrawerItem 
+          label="Sair" 
+          onPress={() => navigation.navigate("Home")} 
+          labelStyle={styles.drawerItem} />
+      </DrawerContentScrollView>
+    );
+  }
+  
+  function DrawerNavigator() {
+    const [searchText, setSearchText] = useState('');
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Tabs} options={{
@@ -65,15 +124,6 @@ function DrawerNavigator() {
       }} />
       <Drawer.Screen name='Config' component={Config} /> 
     </Drawer.Navigator>
-  );
-}
-
-function CustomDrawerContent({ navigation, ...props }) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItem label="Configurações" onPress={() => navigation.navigate("Config")} />
-      <DrawerItem label="Sair" onPress={() => navigation.navigate("Home")} />
-    </DrawerContentScrollView>
   );
 }
 
@@ -110,6 +160,17 @@ function Home({ navigation }) {
     </Provider>
   );
 }
+const AnimalCard = ({ animal }) => (
+  <Card style={styles.animalCard}>
+    <Card.Cover style={styles.animalImage} source={animal.image} />
+    <Card.Content>
+      <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
+      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
+      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}><HeartFilled /></TouchableOpacity>
+    </Card.Content>
+  </Card>
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -125,11 +186,21 @@ const styles = StyleSheet.create({
   searchInput: {
     marginRight: "20%",
     borderRadius: 20,
-    backgroundColor: '#FFAE2E',
     fontSize: 16,
     color: 'black',
     width: "80%",
     height: "85%",
+    paddingLeft: 10, 
+    paddingRight: 10, 
+    borderColor: '#FFAE2E', 
+    borderWidth: 2, 
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3, 
+    shadowRadius: 4, 
   },
   menuButton: {
     padding: 10,
@@ -168,5 +239,40 @@ const styles = StyleSheet.create({
     width: "40%",
     height: "100%",
     backgroundColor: 'white',
+  },
+  //DRAWER
+  containerDrawer:{
+    flex:1,
+    backgroundColor: 'lightblue',
+  },
+  userArea:{
+    padding: 10,
+    margin: 10,
+    flexDirection: 'row',
+    borderColor: 'blue',
+    borderBottomWidth: '4px',
+    borderRadius: '2px',
+  },
+  user:{
+    height: 60,
+    width: 60,
+    marginRight: 20,
+    borderRadius: 40,
+  },
+  nome:{
+    marginTop: 5,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'navy'
+  },
+  email:{
+    fontSize: 15,
+    marginBottom: 8,
+    color: 'darkblue', 
+  },
+  drawerItem: {
+    padding: 10,
+    fontSize: 16,
+    color: 'black',
   },
 });
