@@ -14,7 +14,18 @@ import logo from '../imgs/logo_Inicio.png';
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
+const animalData = [
+  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+  { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
+  { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
+  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+];
+
 export default function HomeScreen() {
+
+
   return (
     <NavigationContainer independent={true}>
       <DrawerNavigator />
@@ -41,7 +52,9 @@ function Tabs({ navigation }) {
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-       
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="home" size={size} color={color} />
+          ),
         }} 
       />
       <Tab.Screen 
@@ -50,7 +63,9 @@ function Tabs({ navigation }) {
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-        
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="heart" size={size} color={color} />
+          ),
         }} 
       />
       <Tab.Screen 
@@ -59,7 +74,9 @@ function Tabs({ navigation }) {
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-       
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="cog" size={size} color={color} />
+          ),
         }}  
       />
     </Tab.Navigator>
@@ -97,6 +114,13 @@ function Tabs({ navigation }) {
   
   function DrawerNavigator() {
     const [searchText, setSearchText] = useState('');
+    const searchAnimals = () => {
+      if (searchText === '') {
+        return animalData; 
+      } else {
+        return animalData.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
+      }
+    };
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Tabs} options={{
@@ -119,37 +143,47 @@ function Tabs({ navigation }) {
 }
 
 function Casa({ navigation }) {
-  const [selectedFilters, setSelectedFilters] = useState([]);
-  const animalData = [
-    { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-    { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-    { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
-    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-  ];
-
+  
+  const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const filterAnimals = () => {
-    // Implemente sua lógica de filtro aqui com base em selectedFilters
-    // Você pode filtrar a matriz animalData e atualizar o estado filteredAnimals
-    // Para simplificar, usaremos toda a animalData neste exemplo
-    return animalData;
+    if (selectedFilter === 'TODOS') {
+      return animalData; 
+    } else {
+      return animalData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
+    }
   };
-
+  
+  
   return (
     <Provider>
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
           <View style={styles.filterContainer}>
-            <TouchableOpacity style={styles.filterCardAll}> 
-              <Text style={styles.textFilter}>TODOS</Text>
+            <TouchableOpacity 
+              onPress={() => setSelectedFilter('TODOS')}
+              style={[styles.filterCard, selectedFilter === 'TODOS' ? {backgroundColor: "#2163D3"} : 
+              null]}>
+              <Text style={[styles.textFilter,
+                selectedFilter === 'TODOS' ? { color: '#FFAE2E' } : null]}>TODOS
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterCard}> 
-            <FontAwesome5 name="cat" size={24} color="black" />
+            <TouchableOpacity 
+              onPress={() => setSelectedFilter('Gato')}
+              style={[styles.filterCard, selectedFilter === 'Gato' ? {backgroundColor: "#2163D3"} : 
+              null]}>
+              <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterCard}> 
+            <TouchableOpacity 
+              onPress={() => setSelectedFilter('Cachorro')}
+              style={[styles.filterCard, selectedFilter === 'Cachorro' ? {backgroundColor: "#2163D3"} : 
+              null]}>
+              <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filterCard}> 
+            <TouchableOpacity 
+              onPress={() => setSelectedFilter('Pássaro')}
+              style={[styles.filterCard, selectedFilter === 'Pássaro' ? {backgroundColor: "#2163D3"} : 
+              null]}>
+              <FontAwesome5 name="crow" size={24} color={selectedFilter === 'Pássaro' ? '#FFAE2E' : 'black'}/>
             </TouchableOpacity>
           </View>
           <FlatList
@@ -162,10 +196,10 @@ function Casa({ navigation }) {
           />
         </View>
       </ScrollView>
-      
     </Provider>
   );
 }
+
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
     <Card.Cover style={styles.animalImage} source={animal.image} />
@@ -173,7 +207,9 @@ const AnimalCard = ({ animal }) => (
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
-      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}></TouchableOpacity>
+      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
+        <FontAwesome5 name="heart" size={16} color="black" />
+      </TouchableOpacity>
     </Card.Content>
   </Card>
 );
@@ -287,21 +323,12 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center', 
   },
-  filterCardAll:{
-    width: 50,
-    height: 50,
-    backgroundColor: '#2163D3',
-    justifyContent: 'center',
-    alignContent: 'center',
-    borderRadius: 10,
-    borderWidth:1,
-    margin: 5,
-  },
+
   filterCard:{
     width: 50,
     height: 50,
     justifyContent: 'center',
-    alignContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
     borderWidth:1,
     margin: 5,
@@ -310,7 +337,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "sans-serif-light",
     textAlign: 'center',
-    color: '#FFAE2E',
+    color: 'black',
     fontWeight: 'bold',
   }
 });

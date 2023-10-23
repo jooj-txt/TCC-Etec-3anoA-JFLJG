@@ -14,7 +14,7 @@ export default function App() {
       <Stack.Screen
           name="Inicio"
           options={{  headerShown:false  }}
-          component={Inicio}
+          component={HomeScreen}
         />
       <Stack.Screen
           name="Home"
