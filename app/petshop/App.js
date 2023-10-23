@@ -14,16 +14,13 @@ export default function App() {
       <Stack.Screen
           name="Inicio"
           options={{  headerShown:false  }}
-          component={HomeScreen}
+          component={Inicio}
         />
       <Stack.Screen
           name="Home"
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
-     
-
-     
 
         <Stack.Screen
           name="Login"
