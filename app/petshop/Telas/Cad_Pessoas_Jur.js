@@ -51,11 +51,13 @@ const PessoaJuridicaCadastro = ({setUser}) => {
 
  
   const handleCad = () => {
+
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log('Usuário criado:', user);
+
 
         // Faça o login do usuário recém-criado
         signInWithEmailAndPassword(auth, email, senha)
@@ -81,7 +83,7 @@ const PessoaJuridicaCadastro = ({setUser}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Cadastro Pessoa Física</Text>
+      <Text style={styles.heading}>Cadastro Pessoa Jurídica</Text>
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="Nome"
@@ -154,7 +156,8 @@ const PessoaJuridicaCadastro = ({setUser}) => {
         checkedColor="#2163D3"
         value={setAceitarTermos}
       />
-      <TouchableOpacity style={styles.button}   onPress={() => {
+      <TouchableOpacity style={styles.button}   onPress={() => {{navigation.navigate('Home');
+}
             handleCad();
           }}   >
         <Text style={styles.buttonText}>Cadastrar</Text>

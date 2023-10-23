@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image } from 'react-native';
+import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
-import { createDrawerNavigator,DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer';
+import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { HeartFilled, HomeFilled, SettingFilled} from '@ant-design/icons';
@@ -10,8 +10,6 @@ import {faDog, faCat, faCrow} from '@fortawesome/free-solid-svg-icons'
 import { AntDesign } from 'react-native-vector-icons';
 import {Config, ConfigPerfil, Favoritos} from './rotas';
 import logo from '../imgs/logo_Inicio.png';
-
-
 
 
 
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   searchInput: {
-    marginRight: "20%",
+    marginRight: '20%',
     borderRadius: 20,
     fontSize: 16,
     color: 'black',
@@ -265,8 +263,8 @@ const styles = StyleSheet.create({
     margin: 10,
     flexDirection: 'row',
     borderColor: 'blue',
-    borderBottomWidth: '4px',
-    borderRadius: '2px',
+    borderBottomWidth: 4,
+    borderRadius: 2,
   },
   user:{
     height: 60,
@@ -302,18 +300,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#2163D3',
     justifyContent: 'center',
     alignContent: 'center',
-    borderRadius: '10px',
-    borderWidth:'1px',
-    margin: '5px',
+    borderRadius: 10,
+    borderWidth:1,
+    margin: 5,
   },
   filterCard:{
     width: 50,
     height: 50,
     justifyContent: 'center',
     alignContent: 'center',
-    borderRadius: '10px',
-    borderWidth:'1px',
-    margin: '5px',
+    borderRadius: 10,
+    borderWidth:1,
+    margin: 5,
   },
   textFilter:{
     fontSize: 12,

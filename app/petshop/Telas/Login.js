@@ -36,7 +36,7 @@ export default function Login({ navigation }) {
           justifyContent: 'center',
         }}
         onPress={() => {
-          navigation.navigate('Inicio');
+          handleLogin();
         }}
       >
         <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
@@ -52,6 +52,7 @@ export default function Login({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="Senha"
+        secureTextEntry
         value={senha}
         onChangeText={setSenha}
       />

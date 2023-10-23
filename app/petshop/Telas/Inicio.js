@@ -16,12 +16,18 @@ export default function Inicio({navigation}) {
 
 
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
+
   const [isButtonsVisible, setButtonsVisible] = useState(true);
 
   
-  const handlePessoaJuridicaPress = () => {
+  const handlePessoaFisicaPress = () => {
     setButtonsVisible(false);
     setShowModal(true);
+  };
+  const handlePessoaJuridicaPress = () => {
+    setButtonsVisible(false);
+    setShowModal2(true);
   };
 
 
@@ -40,7 +46,7 @@ export default function Inicio({navigation}) {
            <Text style={styles.buttonText}>ONG</Text>
          </TouchableOpacity>
 
-         <TouchableOpacity style={styles.button} onPress={handlePessoaJuridicaPress}>
+         <TouchableOpacity style={styles.button} onPress={handlePessoaFisicaPress}>
            <Text style={styles.buttonText}>Tutor</Text>
          </TouchableOpacity>
 
@@ -95,6 +101,56 @@ export default function Inicio({navigation}) {
           onPress={() => {
             setButtonsVisible(true);
             setShowModal(false);
+          }}
+        >
+          <Ionicons name="ios-arrow-back-sharp" size={45} color="#FFAE2E" />
+        </TouchableOpacity>
+
+
+      </View>
+    </BlurView>
+  </Modal>
+)}
+{showModal2 && (
+  <Modal animationType="slide" visible={showModal2} transparent={true}>
+    <BlurView style={styles.containerModal} intensity={35} tint="light">
+
+      <View style={estilo.buttonsContainer}>
+        <TouchableOpacity
+          style={estilo.button}
+          onPress={() => {
+            navigation.navigate('Login');
+            setButtonsVisible(true);
+            setShowModal2(false);          }}   
+        >
+          <Text style={estilo.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={estilo.button}
+          onPress={() => {
+            navigation.navigate('PessoaJuridicaCadastro');
+            setButtonsVisible(true);
+            setShowModal2(false);            
+          }}
+        >
+          <Text style={estilo.buttonText}>Cadastrar-se</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ 
+          height:60,
+          width:60,
+          margin:15,
+          marginLeft:50,
+          backgroundColor:'#2163D3',
+          borderRadius:200,
+          alignItems:'center',
+          justifyContent:"center"
+        }}
+          onPress={() => {
+            setButtonsVisible(true);
+            setShowModal2(false);
           }}
         >
           <Ionicons name="ios-arrow-back-sharp" size={45} color="#FFAE2E" />

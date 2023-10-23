@@ -65,11 +65,13 @@ const PessoaFisicaCadastro = ({setUser}) => {
 
  
   const handleCad = () => {
+    navigation.navigate('Home');
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log('Usuário criado:', user);
+       
 
         // Faça o login do usuário recém-criado
         signInWithEmailAndPassword(auth, email, senha)
