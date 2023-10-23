@@ -11,7 +11,7 @@ const itemStyles = [
 ]; // Cor das linhas(apenas decoração)
 
 
-const PessoaFisicaCadastro = ({setUser}) => {
+const PessoaFisicaCadastro = ({setUser, navigation},) => {
   const [nome, setNome] = useState();
   const [cpf, setCPF] = useState();
   const [email, setEmail] = useState();
@@ -65,7 +65,7 @@ const PessoaFisicaCadastro = ({setUser}) => {
 
  
   const handleCad = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Login');
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
@@ -113,6 +113,7 @@ const PessoaFisicaCadastro = ({setUser}) => {
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="Email"
+        keyboardType='email-address'
         value={email}
         onChangeText={setEmail}
       />

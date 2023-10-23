@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -160,6 +161,7 @@ export default function Inicio({navigation}) {
       </View>
     </BlurView>
   </Modal>
+  
 )}
 
     </View>

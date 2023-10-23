@@ -12,15 +12,16 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
-        />
-      <Stack.Screen
           name="Inicio"
           options={{  headerShown:false  }}
           component={Inicio}
         />
+      <Stack.Screen
+          name="Home"
+          options={{ headerShown:false  }}
+          component={HomeScreen}
+        />
+     
 
      
 

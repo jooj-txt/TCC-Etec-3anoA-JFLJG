@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import { CheckBox } from 'react-native-elements';
-import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Services/firebaseConfig';
 

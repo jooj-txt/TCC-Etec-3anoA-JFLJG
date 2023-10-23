@@ -4,11 +4,9 @@ import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { HeartFilled, HomeFilled, SettingFilled} from '@ant-design/icons';
-import{ FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faDog, faCat, faCrow} from '@fortawesome/free-solid-svg-icons'
-import { AntDesign } from 'react-native-vector-icons';
 import {Config, ConfigPerfil, Favoritos} from './rotas';
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 
 
@@ -38,14 +36,12 @@ function Tabs({ navigation }) {
       },
     }}>
       <Tab.Screen 
-        name='Home' 
-        component={Home} 
+        name='Casa' 
+        component={Casa} 
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name='home' color={color} size={size} />
-          ),
+       
         }} 
       />
       <Tab.Screen 
@@ -54,9 +50,7 @@ function Tabs({ navigation }) {
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name='heart' color={color} size={size} />
-          ),
+        
         }} 
       />
       <Tab.Screen 
@@ -65,9 +59,7 @@ function Tabs({ navigation }) {
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name='setting' color={color} size={size} />
-          ),
+       
         }}  
       />
     </Tab.Navigator>
@@ -126,12 +118,14 @@ function Tabs({ navigation }) {
   );
 }
 
-function Home({ navigation }) {
+function Casa({ navigation }) {
   const [selectedFilters, setSelectedFilters] = useState([]);
   const animalData = [
     { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
     { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
     { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
+    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
+    { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
     { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
   ];
 
@@ -144,20 +138,18 @@ function Home({ navigation }) {
 
   return (
     <Provider>
-      <View style={styles.container}>
-        <ScrollView style={styles.animalList}>
+      <ScrollView style={styles.container}>
+        <View style={styles.animalList}>
           <View style={styles.filterContainer}>
             <TouchableOpacity style={styles.filterCardAll}> 
               <Text style={styles.textFilter}>TODOS</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.filterCard}> 
-              <FontAwesomeIcon icon={faDog} />
+            <FontAwesome5 name="cat" size={24} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.filterCard}> 
-              <FontAwesomeIcon icon={faCat} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.filterCard}> 
-              <FontAwesomeIcon icon={faCrow} />
             </TouchableOpacity>
           </View>
           <FlatList
@@ -168,8 +160,9 @@ function Home({ navigation }) {
               <AnimalCard animal={item} />
             )}
           />
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
+      
     </Provider>
   );
 }
@@ -180,7 +173,7 @@ const AnimalCard = ({ animal }) => (
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
-      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}><HeartFilled /></TouchableOpacity>
+      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}></TouchableOpacity>
     </Card.Content>
   </Card>
 );
@@ -238,7 +231,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   animalLocal: {
-    textAlign: 'end',
+    textAlign: 'right',
     fontWeight: 'bold',
   },
   animalImage: {

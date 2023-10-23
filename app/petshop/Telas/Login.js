@@ -36,8 +36,8 @@ export default function Login({ navigation }) {
           justifyContent: 'center',
         }}
         onPress={() => {
-          handleLogin();
-        }}
+        navigation.navigate('Inicio')   
+     }}
       >
         <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
       </TouchableOpacity>
