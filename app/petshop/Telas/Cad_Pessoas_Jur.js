@@ -1,10 +1,11 @@
-  import React, { useState } from 'react';
+  import React, { useState,useContext  } from 'react';
   import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
   import { CheckBox } from 'react-native-elements';
   import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
-  
+  import { AuthContext } from './AuthProvider'; // Importe o contexto
+
 
 
   const itemStyles = [
@@ -51,9 +52,11 @@
       setAceitarTermos(!aceitarTermos);
     };
 
-  
+    const { login } = useContext(AuthContext);
     const handleCad = () => {
       navigation.navigate('Login');
+      login('userJur');
+    
 
 
       if (!aceitarTermos) {

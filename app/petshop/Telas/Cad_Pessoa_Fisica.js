@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext  } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '../Services/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import { AuthContext } from './AuthProvider';
+
 
 const itemStyles = [
   {borderColor: '#2163D3' },
   {borderColor: '#FFAE2E' }
 ]; // Cor das linhas(apenas decoração)
-
 
 const PessoaFisicaCadastro = ({setUser, navigation},) => {
   const [nome, setNome] = useState();
@@ -64,11 +65,11 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
     setAceitarTermos(!aceitarTermos);
   };
 
- 
+  const { login } = useContext(AuthContext);
+
   const handleCad = () => {
     navigation.navigate('Login');
-
-
+    login('user'); 
     if (!aceitarTermos) {
       // Verifique se os termos foram aceitos
       alert('Você deve aceitar os termos e condições.');
