@@ -1,10 +1,12 @@
-  import React, { useState,useContext  } from 'react';
+  import React, { useState,useContext,useEffect   } from 'react';
   import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
-  import { CheckBox } from 'react-native-elements';
+  import { Alert } from 'react-native';
+  import {  CheckBox } from 'react-native-elements';  
   import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
   import { AuthContext } from './AuthProvider'; // Importe o contexto
+
 
 
 
@@ -13,7 +15,7 @@
     {borderColor: '#FFAE2E' }
   ]; // Cor das linhas(apenas decoração)
 
-
+  
   const PessoaJuridicaCadastro = ({setUserJur, navigation}) => {
     const [nome, setNome] = useState();
     const [cnpj, setCNPJ] = useState();
@@ -27,9 +29,39 @@
     const [confirmarSenha, setConfirmarSenha] = useState();
     const [aceitarTermos, setAceitarTermos] = useState(false);
     // Armazenando os dados de cadstro para posteriormente serem guardados no BD
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-
-
+    const validateFields = () => {
+      if (
+        nome &&
+        isValidCNPJ(cnpj) &&
+        email &&
+        celular &&
+        cep &&
+        endereco &&
+        cidade &&
+        estado &&
+        senha &&
+        senha === confirmarSenha &&
+        aceitarTermos
+      ) {
+        setIsButtonDisabled(false);
+      } else {
+        setIsButtonDisabled(true);
+      }
+    };
+  
+    useEffect(() => {
+      validateFields();
+    }, [nome, cnpj, email, celular, cep, endereco, cidade, estado, senha, confirmarSenha, aceitarTermos]);
+  
+  
+    const isValidCNPJ = (cnpj) => {
+      // Expressão regular para validar CNPJ
+      const cnpjPattern = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+      return cnpjPattern.test(cnpj);
+    };
+    
     const handleCNPJChange = (text) => {
       const numericText = text.replace(/\D/g, ''); // Remover caracteres não numéricos
 
@@ -50,21 +82,15 @@
 
     const handleCheckboxToggle = () => {
       setAceitarTermos(!aceitarTermos);
+      
     };
 
     const { login } = useContext(AuthContext);
+
     const handleCad = () => {
-      navigation.navigate('Login');
-      login('userJur');
-    
-
-
-      if (!aceitarTermos) {
-        // Verifique se os termos foram aceitos
-        alert('Você deve aceitar os termos e condições.');
-        return;
-      }
-    
+      if (!isButtonDisabled) {
+        navigation.navigate('Login');
+        login('userJur');
       // Crie o usuário com o email e senha fornecidos
       createUserWithEmailAndPassword(auth, email, senha)
         .then((userCredential) => {
@@ -113,6 +139,13 @@
           const errorMessage = error.message;
           console.error('Erro ao criar usuário:', errorMessage);
         });
+  
+      } else {
+
+        alert(
+          'Preenche aeeeeeee',"fuandjsafbsbfls")
+      }
+      
     };
     
 
@@ -187,7 +220,9 @@
         <CheckBox
           title="ACEITAR TERMOS DE CONDIÇÕES"
           checked={aceitarTermos}
-          onPress={handleCheckboxToggle}
+          onPress={() => {
+            handleCheckboxToggle();
+          }}
           containerStyle={styles.checkboxContainer}
           textStyle={styles.checkboxLabel}
           checkedColor="#2163D3"

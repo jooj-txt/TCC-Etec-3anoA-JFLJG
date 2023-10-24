@@ -1,5 +1,6 @@
-import React, { useState, useContext  } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+import React, { useState, useContext,useEffect   } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -29,6 +30,40 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
   const [aceitarTermos, setAceitarTermos] = useState(false);
   // Armazenando os dados de cadstro para posteriormente serem guardados no BD
 
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+    const validateFields = () => {
+      if (
+        nome &&
+        isValidCPF(cpf) &&
+        email &&
+        celular &&
+        cep &&
+        endereco &&
+        cidade &&
+        estado &&
+        dataNascimento &&
+        genero &&
+        senha &&
+        senha === confirmarSenha &&
+        aceitarTermos
+      ) {
+        setIsButtonDisabled(false);
+      } else {
+        setIsButtonDisabled(true);
+      }
+    };
+  
+    useEffect(() => {
+      validateFields();
+    }, [nome, cpf, email, celular, cep, endereco, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
+  
+  
+    const isValidCPF = (cpf) => {
+      const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+      return cpfPattern.test(cpf);
+    };
+    
 
   const handleDateChange = (text) => {
     const numericText = text.replace(/\D/g, ''); 
@@ -68,13 +103,10 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
   const { login } = useContext(AuthContext);
 
   const handleCad = () => {
+    if (!isButtonDisabled) {
     navigation.navigate('Login');
     login('user'); 
-    if (!aceitarTermos) {
-      // Verifique se os termos foram aceitos
-      alert('Você deve aceitar os termos e condições.');
-      return;
-    }
+   
   
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
@@ -126,6 +158,11 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
         const errorMessage = error.message;
         console.error('Erro ao criar usuário:', errorMessage);
       });
+    }
+    else{
+      alert(
+        'Preenche aeeeeeee',"fuandjsafbsbfls")
+    }
   };
   
 

@@ -5,6 +5,8 @@ import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { AuthContext } from './AuthProvider'; // Importe o contexto
+import { Alert } from 'react-native';
+
 
 
 export default function Login({ navigation }) {
@@ -28,8 +30,7 @@ export default function Login({ navigation }) {
     } catch (error) {
       // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
       console.error('Erro de autenticação:', error.message);
-    }
-  };
+    }  };
 
   return (
     <View style={styles.container}>

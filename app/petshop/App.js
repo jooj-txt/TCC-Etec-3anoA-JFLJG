@@ -15,15 +15,32 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
+          name="PessoaFisicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaFisicaCadastro}
+        />    
+      <Stack.Screen
+          name="PessoaJuridicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaJuridicaCadastro}
+        /> 
+      <Stack.Screen
+          name="Login"
+          options={{ headerShown:false }}
+          component={Login}
         />
+   
       <Stack.Screen
           name="HomeJur"
           options={{ headerShown:false  }}
           component={HomeScreenJur}
         />
+      <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+      
     
       <Stack.Screen
           name="Home"
@@ -31,26 +48,11 @@ export default function App() {
           component={HomeScreen}
         />
        
-  
-    
 
-        <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
-        />
 
-        <Stack.Screen
-          name="PessoaFisicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaFisicaCadastro}
-        />    
+        
 
-        <Stack.Screen
-          name="PessoaJuridicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaJuridicaCadastro}
-        />    
+          
         
     </Stack.Navigator>
     </NavigationContainer>
