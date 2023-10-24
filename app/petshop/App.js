@@ -1,14 +1,17 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
+import { AuthProvider } from './Telas/AuthProvider'; // Importe o AuthProvider
 
-import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Config, ConfigPerfil} from './Telas/rotas';
+
+import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add, ConfigPerfil, HomeScreenJur} from './Telas/rotas';
 
 const Stack = createStackNavigator();
 
 export default function App() {
 
    return (
+    <AuthProvider> 
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
@@ -17,10 +20,19 @@ export default function App() {
           component={Inicio}
         />
       <Stack.Screen
+          name="HomeJur"
+          options={{ headerShown:false  }}
+          component={HomeScreenJur}
+        />
+    
+      <Stack.Screen
           name="Home"
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
+       
+  
+    
 
         <Stack.Screen
           name="Login"
@@ -42,6 +54,8 @@ export default function App() {
         
     </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider> 
+
   
   );
 }

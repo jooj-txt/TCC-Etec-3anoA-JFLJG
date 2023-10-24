@@ -12,7 +12,7 @@ import logo from '../imgs/logo_Inicio.png';
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-const animalData = [
+const animalAdd = [
   { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
   { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
   { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
@@ -56,13 +56,14 @@ function Tabs({ navigation }) {
         }} 
       />
       <Tab.Screen 
-        name='Favoritos' 
-        component={Favoritos} 
+        name='Add' 
+        component={Add} 
+        
         options={{ 
           headerShown: false, 
           tabBarLabel: '', 
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="heart" size={size} color={color} />
+            <Ionicons name="add" size={size} color={color} />
           ),
         }} 
       />
@@ -100,10 +101,7 @@ function Tabs({ navigation }) {
           </View>
         </View>
   
-        <DrawerItem 
-          label="Adcionar animal" 
-          onPress={() => navigation.navigate("AdicionarAnimal")} 
-          labelStyle={styles.drawerItem} />
+      
         <DrawerItem 
           label="Sair" 
           onPress={() => navigation.navigate("Home")} 
@@ -121,9 +119,9 @@ function Tabs({ navigation }) {
     const [searchText, setSearchText] = useState('');
     const searchAnimals = () => {
       if (searchText === '') {
-        return animalData; 
+        return animalAdd; 
       } else {
-        return animalData.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
+        return animalAdd.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
       }
     };
   return (
@@ -142,7 +140,7 @@ function Tabs({ navigation }) {
           />
         ),
       }} />
-      <Drawer.Screen name='Add' component={Add} /> 
+
     </Drawer.Navigator>
   );
 }
@@ -152,7 +150,7 @@ function Casa({ navigation }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
-      return animalData; 
+      return animalAdd; 
     } else {
       return animalData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
     }
@@ -163,34 +161,7 @@ function Casa({ navigation }) {
     <Provider>
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
-          <View style={styles.filterContainer}>
-            <TouchableOpacity 
-              onPress={() => setSelectedFilter('TODOS')}
-              style={[styles.filterCard, selectedFilter === 'TODOS' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <Text style={[styles.textFilter,
-                selectedFilter === 'TODOS' ? { color: '#FFAE2E' } : null]}>TODOS
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => setSelectedFilter('Gato')}
-              style={[styles.filterCard, selectedFilter === 'Gato' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'}/>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => setSelectedFilter('Cachorro')}
-              style={[styles.filterCard, selectedFilter === 'Cachorro' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'}/>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => setSelectedFilter('Pássaro')}
-              style={[styles.filterCard, selectedFilter === 'Pássaro' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="crow" size={24} color={selectedFilter === 'Pássaro' ? '#FFAE2E' : 'black'}/>
-            </TouchableOpacity>
-          </View>
+         
           <FlatList
             data={filterAnimals()}
             numColumns={2}

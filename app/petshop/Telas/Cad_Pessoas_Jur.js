@@ -53,6 +53,9 @@
 
   
     const handleCad = () => {
+      navigation.navigate('Login');
+
+
       if (!aceitarTermos) {
         // Verifique se os termos foram aceitos
         alert('Você deve aceitar os termos e condições.');

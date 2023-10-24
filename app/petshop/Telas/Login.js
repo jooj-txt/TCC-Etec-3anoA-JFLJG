@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext  } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { AuthContext } from './AuthProvider'; // Importe o contexto
+
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const auth = getAuth();
+  
+  // Acesse o contexto para verificar o tipo de usuário
+  const { userType, login } = useContext(AuthContext);
 
   const handleLogin = async () => {
     try {
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-      // Autenticação bem-sucedida, redirecionar para a tela "home"
-      navigation.navigate('Home');
+      // Autenticação bem-sucedida, redirecionar para a tela correspondente
+      if (userType === 'user') {
+        navigation.navigate('Home');
+      } else if (userType === 'userJur') {
+        navigation.navigate('HomeJur');
+      }
     } catch (error) {
       // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
       console.error('Erro de autenticação:', error.message);

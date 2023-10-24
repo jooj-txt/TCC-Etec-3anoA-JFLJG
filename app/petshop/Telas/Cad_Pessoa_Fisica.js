@@ -3,7 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../Services/firebaseConfig';
+import { auth, firestore } from '../Services/firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
 const itemStyles = [
   {borderColor: '#2163D3' },
@@ -66,24 +67,57 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
  
   const handleCad = () => {
     navigation.navigate('Login');
+
+
+    if (!aceitarTermos) {
+      // Verifique se os termos foram aceitos
+      alert('Você deve aceitar os termos e condições.');
+      return;
+    }
+  
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log('Usuário criado:', user);
-       
-
-        // Faça o login do usuário recém-criado
-        signInWithEmailAndPassword(auth, email, senha)
-          .then((userCredential) => {
-            const loggedInUser = userCredential.user;
-            console.log('Usuário logado:', loggedInUser);
-
-            // Defina o usuário no estado
-            setUser(loggedInUser);
+  
+        // Crie um objeto com os dados do usuário
+        const userData = {
+          nome,
+          cpf,
+          email,
+          celular,
+          genero,
+          cep,
+          endereco,
+          cidade,
+          estado,
+          dataNascimento
+        };
+  
+        // Obtenha uma referência à coleção "PessoasJuridicas"
+        const pessoasFisicasRef = collection(firestore, 'PessoasFisicas');
+  
+        // Adicione os dados do usuário a um novo documento
+        addDoc(pessoasFisicasRef, userData)
+          .then((docRef) => {
+            console.log('Dados do usuário adicionados ao Firestore com ID do documento: ', docRef.id);
+  
+            // Faça o login do usuário recém-criado
+            signInWithEmailAndPassword(auth, email, senha)
+              .then((userCredential) => {
+                const loggedInUser = userCredential.user;
+                console.log('Usuário logado:', loggedInUser);
+  
+                // Defina o usuário no estado
+                setUser(loggedInUser);
+              })
+              .catch((error) => {
+                console.error('Erro ao fazer login:', error);
+              });
           })
           .catch((error) => {
-            console.error('Erro ao fazer login:', error);
+            console.error('Erro ao adicionar dados ao Firestore:', error);
           });
       })
       .catch((error) => {
@@ -92,8 +126,7 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
         console.error('Erro ao criar usuário:', errorMessage);
       });
   };
-
-
+  
 
   return (
     <View style={styles.container}>
