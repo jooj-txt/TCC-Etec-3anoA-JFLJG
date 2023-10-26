@@ -5,7 +5,6 @@
   import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
-  import { AuthContext } from './AuthProvider'; // Importe o contexto
 
 
 
@@ -16,7 +15,7 @@
   ]; // Cor das linhas(apenas decoração)
 
   
-  const PessoaJuridicaCadastro = ({setUserJur, navigation}) => {
+  const PessoaJuridicaCadastro = ({navigation}) => {
     const [nome, setNome] = useState('');
     const [cnpj, setCNPJ] = useState('');
     const [email, setEmail] = useState('');
@@ -85,18 +84,18 @@
       
     };
 
-    const { login } = useContext(AuthContext);
 
     const handleCad = () => {
       if (!isButtonDisabled) {
         navigation.navigate('Login');
-        login('userJur');
 
       // Crie o usuário com o email e senha fornecidos
       createUserWithEmailAndPassword(auth, email, senha)
         .then((userCredential) => {
           const userJur = userCredential.user;
-          const userUid = userJur.uid
+          const userUid = userJur.uid;
+          const userType = "userJur"
+
           console.log('Usuário criado:', userJur);
     
           // Crie um objeto com os dados do usuário
@@ -109,7 +108,8 @@
             endereco,
             cidade,
             estado,
-            userUid
+            userUid,
+            userType
           };
     
           // Obtenha uma referência à coleção "PessoasJuridicas"
@@ -130,7 +130,7 @@
                   setUserJur(loggedInUserJur);
                 })
                 .catch((error) => {
-                  console.error('Erro ao fazer login:', error);
+                  console.error('Erro ao fazer login:', error );
                 });
             })
             .catch((error) => {

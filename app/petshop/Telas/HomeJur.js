@@ -8,7 +8,7 @@ import {Add, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, doc, getDocs, query, where,collection } from 'firebase/firestore';
+import { getFirestore, docs, getDocs, query, where,collection } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();

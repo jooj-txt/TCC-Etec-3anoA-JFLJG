@@ -6,7 +6,6 @@ import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '../Services/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
-import { AuthContext } from './AuthProvider';
 
 
 const itemStyles = [
@@ -14,7 +13,7 @@ const itemStyles = [
   {borderColor: '#FFAE2E' }
 ]; // Cor das linhas(apenas decoração)
 
-const PessoaFisicaCadastro = ({setUser, navigation},) => {
+const PessoaFisicaCadastro = ({navigation},) => {
   const [nome, setNome] = useState();
   const [cpf, setCPF] = useState();
   const [email, setEmail] = useState();
@@ -101,20 +100,18 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
     setAceitarTermos(!aceitarTermos);
   };
 
-  const { login } = useContext(AuthContext);
 
   const handleCad = () => {
     if (!isButtonDisabled) {
     navigation.navigate('Login');
-    login('user'); 
-    // Obtenha o UID do usuário recém-criado
    
   
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         const user = userCredential.user;
-         const userUid = user.uid
+        const userUid = user.uid
+        const userType = "user"
         console.log('Usuário criado:', user);
   
         // Crie um objeto com os dados do usuário
@@ -129,7 +126,8 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
           cidade,
           estado,
           dataNascimento,
-          userUid
+          userUid,
+          userType
         };
   
         // Obtenha uma referência à coleção "PessoasJuridicas"

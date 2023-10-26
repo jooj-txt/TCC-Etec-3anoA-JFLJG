@@ -1,36 +1,76 @@
-import React, { useState, useContext  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { AuthContext } from './AuthProvider'; // Importe o contexto
-import { Alert } from 'react-native';
-
-
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const auth = getAuth();
-  
-  // Acesse o contexto para verificar o tipo de usuário
-  const { userType, login } = useContext(AuthContext);
+  const [userType, setUserType] = useState('');
+
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log('Usuário autenticado:', user);
+
+        const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+        const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
+
+        const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+        const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
+
+        try {
+          const querySnapshotFisicas = await getDocs(qFisicas);
+          const querySnapshotJuridicas = await getDocs(qJuridicas);
+
+          if (!querySnapshotFisicas.empty) {
+            const userDocSnapshot = querySnapshotFisicas.docs[0];
+            const userData = userDocSnapshot.data();
+            setUserType(userData.userType);
+          } else if (!querySnapshotJuridicas.empty) {
+            const userDocSnapshot = querySnapshotJuridicas.docs[0];
+            const userData = userDocSnapshot.data();
+            setUserType(userData.userType);
+          } else {
+            console.log('Documento do usuário não encontrado');
+          }
+        } catch (error) {
+          console.error('Erro ao buscar informações do usuário no Firestore', error);
+        }
+      } else {
+        console.log('Usuário não está autenticado');
+      }
+    });
+
+    // Certifique-se de cancelar a assinatura quando o componente for desmontado
+    return () => unsubscribe();
+  }, []);
 
   const handleLogin = async () => {
     try {
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-      // Autenticação bem-sucedida, redirecionar para a tela correspondente
-      if (userType === 'user') {
-        navigation.navigate('Home');
-      } else if (userType === 'userJur') {
-        navigation.navigate('HomeJur');
-      }
     } catch (error) {
       // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
       console.error('Erro de autenticação:', error.message);
-    }  };
+    }
+  };
+
+  // Quando o usuário efetuar login, redirecione-o com base no userType
+  useEffect(() => {
+    if (userType === 'user') {
+      navigation.navigate('Home');
+    } else if (userType === 'userJur') {
+      navigation.navigate('HomeJur');
+    }
+  }, [userType]);
 
   return (
     <View style={styles.container}>
@@ -46,8 +86,8 @@ export default function Login({ navigation }) {
           justifyContent: 'center',
         }}
         onPress={() => {
-        navigation.navigate('Inicio')   
-     }}
+          navigation.navigate('Inicio');
+        }}
       >
         <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
       </TouchableOpacity>
@@ -70,11 +110,38 @@ export default function Login({ navigation }) {
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       <View style={styles.divider}>
-        <View style={{ width: 35, height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px' }}></View>
-        <View style={{ width: 35, height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px' }}></View>
-        <View style={{ width: 35, height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px' }}></View>
-        <View style={{ width: 35, height: 3, backgroundColor: '#2163D3', marginHorizontal: '4px' }}></View>
-        <View style={{ width: 35, height: 3, backgroundColor: '#FFAE2E', marginHorizontal: '4px' }}></View>
+        <View
+          style={{
+            width: 35,
+            height: 3,
+            backgroundColor: '#FFAE2E',
+            marginHorizontal: '4px',
+          }}
+        ></View>
+        <View
+          style={{
+            width: 35,
+            height: 3,
+            backgroundColor: '#2163D3',
+            marginHorizontal: '4px',
+          }}
+        ></View>
+        <View
+          style={{
+            width: 35,
+            height: 3,
+            backgroundColor: '#FFAE2E',
+            marginHorizontal: '4px',
+          }}
+        ></View>
+        <View
+          style={{
+            width: 35,
+            height: 3,
+            backgroundColor: '#2163D3',
+            marginHorizontal: '4px',
+          }}
+        ></View>
       </View>
     </View>
   );
@@ -84,7 +151,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    // Cor de fundo branca
     alignItems: 'center',
     justifyContent: 'center',
   },
