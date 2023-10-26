@@ -15,20 +15,28 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
-          name="PessoaFisicaCadastro"
+          name="Login"
           options={{ headerShown:false }}
-          component={PessoaFisicaCadastro}
-        />    
+          component={Login}
+        />
       <Stack.Screen
           name="PessoaJuridicaCadastro"
           options={{ headerShown:false }}
           component={PessoaJuridicaCadastro}
         /> 
+  
       <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
+          name="Home"
+          options={{ headerShown:false  }}
+          component={HomeScreen}
         />
+      <Stack.Screen
+          name="PessoaFisicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaFisicaCadastro}
+        />    
+   
+   
    
       <Stack.Screen
           name="HomeJur"
@@ -40,13 +48,13 @@ export default function App() {
           options={{  headerShown:false  }}
           component={Inicio}
         />
-      
-    
-      <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
+         <Stack.Screen
+          name="AdicionarAnimal"
+          options={{  headerShown:false  }}
+          component={Add}
         />
+      
+   
        
 
 

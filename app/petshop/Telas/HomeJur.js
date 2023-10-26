@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
@@ -8,17 +8,15 @@ import {Add, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
+import { getFirestore, doc, getDocs, query, where,collection } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 const animalAdd = [
   { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
-  { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+ 
 ];
 
 export default function HomeScreen() {
@@ -85,6 +83,40 @@ function Tabs({ navigation }) {
 
   function CustomDrawerContent({ navigation, ...props }) {
     const [isDarkMode, setIsDarkMode] = useState('');
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    useEffect(() => {
+      const auth = getAuth();
+      const db = getFirestore();
+  
+      onAuthStateChanged(auth, async (userJur) => {
+        if (userJur) {
+          console.log('Usuário autenticado:', userJur);
+  
+          const PessoasJuridicasRef = collection(db, 'PessoasJuridicas');
+          const q = query(PessoasJuridicasRef, where('userUid', '==', userJur.uid));
+  
+          try {
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+              const userDocSnapshot = querySnapshot.docs[0]; // Assume que há apenas um documento correspondente
+              console.log('Dados do usuário:', userDocSnapshot.data());
+              const userData = userDocSnapshot.data();
+              setUserName(userData.nome);
+              setUserEmail(userData.email);
+            } else {
+              console.log('Documento do usuário não encontrado');
+            }
+          } catch (error) {
+            console.error('Erro ao buscar informações do usuário no Firestore', error);
+          }
+        } else {
+          console.log('Usuário não está autenticado');
+          setUserName('');
+          setUserEmail('');
+        }
+      });
+    }, []);
 
     return (
       <DrawerContentScrollView {...props}>
@@ -95,8 +127,8 @@ function Tabs({ navigation }) {
               style={styles.user}
             />
             <View style={{flexDirection: 'column'}}>
-              <Text style={styles.nome}>Vira Lar</Text>
-              <Text style={styles.email}>viralar@gmail.com</Text>
+            <Text style={styles.nome}>{userName}</Text>
+            <Text style={styles.email}>{userEmail}</Text>
             </View>
           </View>
         </View>

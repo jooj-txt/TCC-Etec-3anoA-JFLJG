@@ -28,6 +28,7 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
   const [confirmarSenha, setConfirmarSenha] = useState();
   const [dataNascimento, setDataNascimento] = useState();
   const [aceitarTermos, setAceitarTermos] = useState(false);
+
   // Armazenando os dados de cadstro para posteriormente serem guardados no BD
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -106,12 +107,14 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
     if (!isButtonDisabled) {
     navigation.navigate('Login');
     login('user'); 
+    // Obtenha o UID do usuário recém-criado
    
   
     // Crie o usuário com o email e senha fornecidos
     createUserWithEmailAndPassword(auth, email, senha)
       .then((userCredential) => {
         const user = userCredential.user;
+         const userUid = user.uid
         console.log('Usuário criado:', user);
   
         // Crie um objeto com os dados do usuário
@@ -125,7 +128,8 @@ const PessoaFisicaCadastro = ({setUser, navigation},) => {
           endereco,
           cidade,
           estado,
-          dataNascimento
+          dataNascimento,
+          userUid
         };
   
         // Obtenha uma referência à coleção "PessoasJuridicas"

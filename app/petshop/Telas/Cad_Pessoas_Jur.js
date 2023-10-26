@@ -17,16 +17,16 @@
 
   
   const PessoaJuridicaCadastro = ({setUserJur, navigation}) => {
-    const [nome, setNome] = useState();
-    const [cnpj, setCNPJ] = useState();
-    const [email, setEmail] = useState();
-    const [celular, setCelular] = useState();
-    const [cep, setCep] = useState();
-    const [endereco, setEndereco] = useState();
-    const [cidade, setCidade] = useState();
-    const [estado, setEstado] = useState();
-    const [senha, setSenha] = useState();
-    const [confirmarSenha, setConfirmarSenha] = useState();
+    const [nome, setNome] = useState('');
+    const [cnpj, setCNPJ] = useState('');
+    const [email, setEmail] = useState('');
+    const [celular, setCelular] = useState('');
+    const [cep, setCep] = useState('');
+    const [endereco, setEndereco] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('');
+    const [senha, setSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
     const [aceitarTermos, setAceitarTermos] = useState(false);
     // Armazenando os dados de cadstro para posteriormente serem guardados no BD
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -91,10 +91,12 @@
       if (!isButtonDisabled) {
         navigation.navigate('Login');
         login('userJur');
+
       // Crie o usuário com o email e senha fornecidos
       createUserWithEmailAndPassword(auth, email, senha)
         .then((userCredential) => {
           const userJur = userCredential.user;
+          const userUid = userJur.uid
           console.log('Usuário criado:', userJur);
     
           // Crie um objeto com os dados do usuário
@@ -107,6 +109,7 @@
             endereco,
             cidade,
             estado,
+            userUid
           };
     
           // Obtenha uma referência à coleção "PessoasJuridicas"
@@ -120,11 +123,11 @@
               // Faça o login do usuário recém-criado
               signInWithEmailAndPassword(auth, email, senha)
                 .then((userCredential) => {
-                  const loggedInUserJur = userCredential.user;
+                  const loggedInUserJur = userCredential.userJur;
                   console.log('Usuário logado:', loggedInUserJur);
     
                   // Defina o usuário no estado
-                  setUser(loggedInUserJur);
+                  setUserJur(loggedInUserJur);
                 })
                 .catch((error) => {
                   console.error('Erro ao fazer login:', error);

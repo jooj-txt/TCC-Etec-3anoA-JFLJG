@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
@@ -8,6 +8,8 @@ import {Add, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
+import { getFirestore, collection, doc, getDoc, query, where  } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -82,41 +84,74 @@ function Tabs({ navigation }) {
 }
 
 
-  function CustomDrawerContent({ navigation, ...props }) {
-    const [isDarkMode, setIsDarkMode] = useState('');
+function CustomDrawerContent({ navigation, ...props }) {
+  const [isDarkMode, setIsDarkMode] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
 
-    return (
-      <DrawerContentScrollView {...props}>
-        <View style={styles.containerDrawer}>
-          <View  style={styles.userArea}>
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log('Usuário autenticado:', user);
+
+        const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+        const q = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+
+        try {
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const userDocSnapshot = querySnapshot.docs[0]; // Assume que há apenas um documento correspondente
+            console.log('Dados do usuário:', userDocSnapshot.data());
+            const userData = userDocSnapshot.data();
+            setUserName(userData.nome);
+            setUserEmail(userData.email);
+          } else {
+            console.log('Documento do usuário não encontrado');
+          }
+        } catch (error) {
+          console.error('Erro ao buscar informações do usuário no Firestore', error);
+        }
+      } else {
+        console.log('Usuário não está autenticado');
+        setUserName('');
+        setUserEmail('');
+      }
+    });
+  }, []);
+  return (
+    <DrawerContentScrollView {...props}>
+      <View style={styles.containerDrawer}>
+        <View  style={styles.userArea}>
           <Image
-              source={logo}
-              style={styles.user}
-            />
-            <View style={{flexDirection: 'column'}}>
-              <Text style={styles.nome}>Vira Lar</Text>
-              <Text style={styles.email}>viralar@gmail.com</Text>
-            </View>
+            source={logo}
+            style={styles.user}
+          />
+          <View style={{flexDirection: 'column'}}>
+            <Text style={styles.nome}>{userName}</Text>
+            <Text style={styles.email}>{userEmail}</Text>
           </View>
         </View>
-  
-        <DrawerItem 
-          label="Adcionar animal" 
-          onPress={() => navigation.navigate("AdicionarAnimal")} 
-          labelStyle={styles.drawerItem} />
-        <DrawerItem 
-          label="Sair" 
-          onPress={() => navigation.navigate("Home")} 
-          labelStyle={styles.drawerItem} />
+      </View>
 
-        <View style={styles.darkModeSwitch}>
+      <DrawerItem 
+        label="Adicionar animal" 
+        onPress={() => navigation.navigate("AdicionarAnimal")} 
+        labelStyle={styles.drawerItem} />
+      <DrawerItem 
+        label="Sair" 
+        onPress={() => navigation.navigate("Home")} 
+        labelStyle={styles.drawerItem} />
+
+      <View style={styles.darkModeSwitch}>
         <Text style={styles.darkModeLabel}>Modo Escuro</Text>
         <Switch value={isDarkMode} />
       </View>
-      </DrawerContentScrollView>
-    );
-  }
-  
+    </DrawerContentScrollView>
+  );
+}
+
   function DrawerNavigator() {
     const [searchText, setSearchText] = useState('');
     const searchAnimals = () => {
