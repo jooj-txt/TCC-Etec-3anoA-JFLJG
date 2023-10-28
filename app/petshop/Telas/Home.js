@@ -177,7 +177,7 @@ function CustomDrawerContent({ navigation, ...props }) {
           />
         ),
       }} />
-      <Drawer.Screen name='Add' component={Add} /> 
+      <Drawer.Screen name='AdicionarAnimal' component={Add} /> 
     </Drawer.Navigator>
   );
 }
