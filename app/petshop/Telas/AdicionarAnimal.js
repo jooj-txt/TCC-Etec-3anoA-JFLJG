@@ -4,10 +4,10 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 
 const AdicionarAnimal = ({ route, navigation }) => {
-  const [name, onChangeName] = React.useState('Nome');
-  const [sexo, onChangeSexo] = React.useState('Sexo');
-  const [raça, onChangeRaça] = React.useState('Raça');
-  const [endereço, onChangeEndereço] = React.useState('Endereço');
+  const [name, onChangeName] = React.useState(null);
+  const [sexo, onChangeSexo] = React.useState(null);
+  const [raça, onChangeRaça] = React.useState(null);
+  const [endereço, onChangeEndereço] = React.useState(null);
   const [image, setImage] = React.useState(null);
   
   const pickImage = async () => {
@@ -44,6 +44,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
               style={styles.input}
               onChangeText={onChangeName}
               value={name}
+              placeholder='Nome'
             />
           </View>
           <View style={styles.detailsContainer}>
@@ -52,6 +53,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
               style={styles.input}
               onChangeText={onChangeSexo}
               value={sexo}
+              placeholder='Sexo'
             />
           </View>
           <View style={styles.detailsContainer}>
@@ -60,6 +62,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
               style={styles.input}
               onChangeText={onChangeRaça}
               value={raça}
+              placeholder='Raça'
             />
           </View>
           <View style={styles.detailsContainer}>
@@ -68,6 +71,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
               style={styles.input}
               onChangeText={onChangeEndereço}
               value={endereço}
+              placeholder='Endereço'
             />
           </View>
         </View>
@@ -102,8 +106,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailsContainer: {
-    alignItems: 'center',
     flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#2163D3', 
+    borderRadius: 5, 
+    padding: 8,
+    margin: 5,
   },
   animalName: {
     fontSize: 24,
@@ -118,6 +127,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 20,
+    borderBottomColor: '#0B35C3',
+    borderBottomWidth: 5,
   },
   divulgarButtonText: {
     color: 'white',
@@ -127,12 +138,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+    marginLeft: 8, 
+    color: '#000',
   },
   pickUpImage: {
-    width: 200, height: 200,
+    width: 250, height: 250,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems:'center',
