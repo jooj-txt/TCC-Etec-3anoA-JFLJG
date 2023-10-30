@@ -95,7 +95,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFAE2E',
     alignItems: 'center',
     justifyContent:'center'
   },
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 5, 
     padding: 8,
     margin: 5,
+    shadowRadius: 3,
   },
   animalName: {
     fontSize: 24,
@@ -147,6 +148,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',
     margin: 12,
+    shadowOpacity:2,
+    shadowRadius:2,
   }
 });
  
