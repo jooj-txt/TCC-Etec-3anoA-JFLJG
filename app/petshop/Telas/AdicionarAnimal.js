@@ -119,6 +119,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 10,
   },
+  detailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#2163D3', 
+    borderRadius: 5, 
+    padding: 8,
+    margin: 5,
+  },
   animalName: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -168,6 +177,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',
     margin: 12,
+    shadowOpacity:2,
+    shadowRadius:2,
   }
 });
  
