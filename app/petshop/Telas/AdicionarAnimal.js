@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import { TextInput} from 'react-native-paper';
 
 const AdicionarAnimal = ({ route, navigation }) => {
   const [name, onChangeName] = React.useState(null);
   const [sexo, onChangeSexo] = React.useState(null);
   const [raça, onChangeRaça] = React.useState(null);
   const [endereço, onChangeEndereço] = React.useState(null);
+  const [descricao, onChangeDescricao] = React.useState(null);
   const [image, setImage] = React.useState(null);
   
   const pickImage = async () => {
@@ -27,7 +29,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
 
   const renderButtonContent = () => {
     if (image) {
-      return <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />;
+      return <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />;
     } else {
       return <FontAwesome5 name="image" size={24} color="black" />;
     }
@@ -35,67 +37,79 @@ const AdicionarAnimal = ({ route, navigation }) => {
 
  
   return (
-    <View style={styles.container}>
-      <View style={{flexDirection: 'row', marginRight: 5}}>
-        <View style={{flexDirection: 'column', marginLeft:5}}>
-          <View style={styles.detailsContainer}>
-            <FontAwesome5 name="user" size={24} color="black" />
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeName}
-              value={name}
-              placeholder='Nome'
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <FontAwesome5 name="venus-mars" size={24} color="black"/>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeSexo}
-              value={sexo}
-              placeholder='Sexo'
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <FontAwesome5 name="paw" size={24} color="black"/>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeRaça}
-              value={raça}
-              placeholder='Raça'
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <FontAwesome5 name="house-user" size={24} color="black"/>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeEndereço}
-              value={endereço}
-              placeholder='Endereço'
-            />
-          </View>
-        </View>
-        <TouchableOpacity style={styles.pickUpImage}  onPress={pickImage}>
+    <ScrollView>
+      <View style={styles.container}>
+          <View style={{flexDirection: 'column',  alignItems:'center'}}>
+            <TouchableOpacity style={styles.pickUpImage}  onPress={pickImage}>
               {renderButtonContent()}
             </TouchableOpacity>
+            <View style={styles.detailsContainer}>
+              <FontAwesome5 name="user" size={24} color="black" />
+              <TextInput
+                style={[styles.input, styles.inputHeight]}
+                onChangeText={onChangeName}
+                value={name}
+                label="Nome"
+    
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <FontAwesome5 name="venus-mars" size={24} color="black"/>
+              <TextInput
+                style={[styles.input, styles.inputHeight]}
+                onChangeText={onChangeSexo}
+                value={sexo}
+                label='Sexo'
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <FontAwesome5 name="paw" size={24} color="black"/>
+              <TextInput
+                style={[styles.input, styles.inputHeight]}
+                onChangeText={onChangeRaça}
+                value={raça}
+                label='Raça'
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <FontAwesome5 name="house-user" size={24} color="black"/>
+              <TextInput
+                style={[styles.input, styles.inputHeight]}
+                onChangeText={onChangeEndereço}
+                value={endereço}
+                label='Endereço'
+              />
+            </View>
+            <View style={styles.detailsContainer}>
+              <FontAwesome5 name="keyboard" size={24} color="black"/>
+              <TextInput
+                style={[styles.inputDesc, styles.input]}
+                onChangeText={onChangeDescricao}
+                value={descricao}
+                label='Descrição'
+                multiline={true}
+                numberOfLines={4}
+              />
+            </View>
+          </View>
+        <TouchableOpacity
+          style={styles.divulgarButton}
+          onPress={() => {
+            // Adicione a lógica para entrar em contato com o proprietário do animal
+            // Isso pode ser um redirecionamento para uma página de contato ou outra ação.
+          }}
+        >
+          <Text style={styles.divulgarButtonText}>Divulgar animal</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.divulgarButton}
-        onPress={() => {
-          // Adicione a lógica para entrar em contato com o proprietário do animal
-          // Isso pode ser um redirecionamento para uma página de contato ou outra ação.
-        }}
-      >
-        <Text style={styles.divulgarButtonText}>Divulgar animal</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
  
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFAE2E',
     alignItems: 'center',
     justifyContent:'center'
   },
@@ -104,15 +118,6 @@ const styles = StyleSheet.create({
     height: 300,
     marginTop: 20,
     borderRadius: 10,
-  },
-  detailsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#2163D3', 
-    borderRadius: 5, 
-    padding: 8,
-    margin: 5,
   },
   animalName: {
     fontSize: 24,
@@ -135,11 +140,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  detailsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#2163D3', 
+    borderRadius: 5, 
+    padding: 8,
+    margin: 5,
+    shadowRadius:2,
+  },
   input: {
     flex: 1,
-    height: 40,
     marginLeft: 8, 
     color: '#000',
+    backgroundColor: '#FFAE2E',
+  },
+  inputHeight:{
+    height: 50,
+  },
+  inputDesc: {
+    height: 70,
   },
   pickUpImage: {
     width: 250, height: 250,

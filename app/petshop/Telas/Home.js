@@ -177,7 +177,12 @@ function CustomDrawerContent({ navigation, ...props }) {
           />
         ),
       }} />
-      <Drawer.Screen name='AdicionarAnimal' component={Add} /> 
+      <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
+        title: null,
+        headerStyle: {
+          backgroundColor: "#2163D3",
+        },
+      }} /> 
     </Drawer.Navigator>
   );
 }

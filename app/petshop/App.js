@@ -16,7 +16,7 @@ export default function App() {
       <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
-          component={HomeScreen}
+          component={AdicionarAnimal}
         />
       <Stack.Screen
           name="PessoaJuridicaCadastro"
