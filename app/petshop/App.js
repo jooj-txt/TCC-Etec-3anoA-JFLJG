@@ -18,11 +18,13 @@ export default function App() {
           options={{  headerShown:false  }}
           component={AdicionarAnimal}
         />
+    
       <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
           component={Login}
         />
+    
       <Stack.Screen
           name="PessoaJuridicaCadastro"
           options={{ headerShown:false }}

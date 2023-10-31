@@ -56,7 +56,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
       return (
         <ScrollView horizontal>
           {images.map((image, index) => (
-            <Image key={index} source={{ uri: image }} style={{ width: 100, height: 100, marginRight: 15 }} />
+            <Image key={index} source={{ uri: image }} style={{ width: 200, height: 200, marginRight: 15 }} />
           ))}
         </ScrollView>
       );
@@ -99,7 +99,6 @@ const AdicionarAnimal = ({ route, navigation }) => {
 
   // Renderização do componente e outras partes do código...
   return (
-    <ScrollView>
       <View style={styles.container}>
             {/* Componente para exibir imagens selecionadas e permitir remoção */}
         <View style={styles.imageContainer}>
@@ -117,7 +116,8 @@ const AdicionarAnimal = ({ route, navigation }) => {
           <TouchableOpacity style={styles.pickImage} onPress={pickImage}>
             {renderButtonContent()}
           </TouchableOpacity>
-          <View style={styles.detailsContainer}>
+          <View>
+            <View style={[styles.detailsContainer, styles.ajust]}>
               <FontAwesome5 name="user" size={24} color="black" />
               <TextInput
                 style={[styles.input, styles.inputHeight]}
@@ -127,6 +127,8 @@ const AdicionarAnimal = ({ route, navigation }) => {
     
               />
             </View>
+            </View>
+          
         </View>
           
             <View style={styles.detailsContainer}>
@@ -173,7 +175,6 @@ const AdicionarAnimal = ({ route, navigation }) => {
           <Text style={styles.divulgarButtonText}>Divulgar animal</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
   );
 };
  
@@ -185,8 +186,8 @@ const styles = StyleSheet.create({
     justifyContent:'center'
   },
   animalImage: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height: 200,
     marginTop: 20,
     borderRadius: 10,
   },
@@ -237,10 +238,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   inputHeight:{
-    height: '20%',
+    height: 80,
   },
   inputDesc: {
-    height: 80
+    height: 70,
   },
   pickUpImage: {
     width: 250, 
@@ -253,12 +254,12 @@ const styles = StyleSheet.create({
     shadowRadius:2,
   },
   pickImage: {
-    width: 100,
-    height: 100,
-    backgroundColor: 'white',
+    width: 200,
+    height: 200,
+    backgroundColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 5,
+    marginRight:60,
   },
   removeImageButton: {
     position: 'absolute',
@@ -277,9 +278,15 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   selectedImage: {
-    width: 300,
-    height: 300,
+    width: 200,
+    height:200,
   },
+  ajust:{
+marginTop:100,
+width:100,
+height:85,
+
+  }
 
 });
  
