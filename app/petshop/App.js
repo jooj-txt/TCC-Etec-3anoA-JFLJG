@@ -14,9 +14,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
+          name="AdicionarAnimal"
+          options={{  headerShown:false  }}
+          component={AdicionarAnimal}
+        />
+      <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
-          component={AdicionarAnimal}
+          component={Login}
         />
       <Stack.Screen
           name="PessoaJuridicaCadastro"
@@ -44,11 +49,7 @@ export default function App() {
           options={{  headerShown:false  }}
           component={Inicio}
         />
-         <Stack.Screen
-          name="AdicionarAnimal"
-          options={{  headerShown:false  }}
-          component={AdicionarAnimal}
-        />
+      
         
     </Stack.Navigator>
     </NavigationContainer>
