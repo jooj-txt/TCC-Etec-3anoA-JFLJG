@@ -53,13 +53,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
 
   const renderButtonContent = () => {
     if (images.length > 0) {
-      return (
-        <ScrollView horizontal>
-          {images.map((image, index) => (
-            <Image key={index} source={{ uri: image }} style={{ width: 200, height: 200, marginRight: 15 }} />
-          ))}
-        </ScrollView>
-      );
+       <FontAwesome5 name="image" size={24} color="black" />;
     } else {
       return <FontAwesome5 name="image" size={24} color="black" />;
     }
@@ -113,24 +107,20 @@ const AdicionarAnimal = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
           ))}
-          <TouchableOpacity style={styles.pickImage} onPress={pickImage}>
-            {renderButtonContent()}
-          </TouchableOpacity>
-          <View>
-            <View style={[styles.detailsContainer, styles.ajust]}>
-              <FontAwesome5 name="user" size={24} color="black" />
-              <TextInput
-                style={[styles.input, styles.inputHeight]}
-                onChangeText={onChangeName}
-                value={name}
-                label="Nome"
-    
-              />
-            </View>
-            </View>
+            <TouchableOpacity style={styles.pickImage} onPress={pickImage}>
+              <FontAwesome5 name="image" size={24} color="black" />
+            </TouchableOpacity>
           
         </View>
-          
+            <View style={styles.detailsContainer}>
+                <FontAwesome5 name="user" size={24} color="black" />
+                <TextInput
+                  style={[styles.input, styles.inputHeight]}
+                  onChangeText={onChangeName}
+                  value={name}
+                  label="Nome"
+                />
+            </View>
             <View style={styles.detailsContainer}>
               <FontAwesome5 name="venus-mars" size={24} color="black"/>
               <TextInput
