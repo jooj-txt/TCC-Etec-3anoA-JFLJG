@@ -16,19 +16,16 @@ export default function App() {
       <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
-          component={HomeScreen}
+          component={AdicionarAnimal}
         />
+    
       <Stack.Screen
           name="PessoaJuridicaCadastro"
           options={{ headerShown:false }}
           component={PessoaJuridicaCadastro}
         /> 
   
-      <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
-        />
+    
       <Stack.Screen
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}
@@ -44,11 +41,7 @@ export default function App() {
           options={{  headerShown:false  }}
           component={Inicio}
         />
-         <Stack.Screen
-          name="AdicionarAnimal"
-          options={{  headerShown:false  }}
-          component={AdicionarAnimal}
-        />
+      
         
     </Stack.Navigator>
     </NavigationContainer>

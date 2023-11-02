@@ -30,7 +30,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "expo": "^49.0.16",
     "expo-blur": "~12.4.1",
-    "expo-image-picker": "^14.5.0",
+    "expo-image-picker": "~14.3.2",
     "expo-splash-screen": "^0.20.5",
     "expo-status-bar": "~1.6.0",
     "firebase": "^10.5.0",

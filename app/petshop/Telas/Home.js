@@ -8,20 +8,45 @@ import {Add, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, docs, getDocs, query, where  } from 'firebase/firestore';
+import { getFirestore, collection, query, getDocs, where  } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-const animalData = [
-  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
-  { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-];
+const db = getFirestore();
+
+const fetchAnimais = async () => {
+  const animaisCollection = collection(db, 'Animais'); // Substitua 'Animal' pelo nome real da coleção no Firestore
+  const animaisQuery = query(animaisCollection);
+
+  try {
+    const querySnapshot = await getDocs(animaisQuery);
+
+    const animaisData = [];
+
+    querySnapshot.forEach((doc) => {
+      // Aqui você pode mapear os dados do documento para a estrutura desejada
+      const animal = {
+        id: doc.id, // ID do documento
+        name: doc.data().name, // Substitua 'name' pelo nome do campo no Firestore
+        raça: doc.data().raça, 
+        sexo: doc.data().sexo,
+        image: doc.data().images
+      };
+
+      animaisData.push(animal);
+    });
+
+    // Agora você tem os dados dos animais em animaisData
+    return animaisData;
+  } catch (error) {
+    console.error('Erro ao buscar animais: ', error);
+    return [];
+  }
+};
+
+const animais = await fetchAnimais();
 
 export default function HomeScreen() {
 
@@ -192,9 +217,9 @@ function Casa({ navigation }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
-      return animalData; 
+      return animaisData; 
     } else {
-      return animalData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
+      return animaisData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
     }
   };
   
@@ -224,21 +249,18 @@ function Casa({ navigation }) {
               null]}>
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'}/>
             </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => setSelectedFilter('Pássaro')}
-              style={[styles.filterCard, selectedFilter === 'Pássaro' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="crow" size={24} color={selectedFilter === 'Pássaro' ? '#FFAE2E' : 'black'}/>
-            </TouchableOpacity>
           </View>
           <FlatList
-            data={filterAnimals()}
-            numColumns={2}
+            data={animais}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <AnimalCard animal={item} />
-            )}
-          />
+              <TouchableOpacity
+               onPress={() => navigation.navigate('AnimalDesc', { animalId: item.id })}
+              >
+               <AnimalCard animal={item} />
+    </TouchableOpacity>
+  )}
+/>
         </View>
       </ScrollView>
     </Provider>
@@ -250,7 +272,8 @@ const AnimalCard = ({ animal }) => (
     <Card.Cover style={styles.animalImage} source={animal.image} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
-      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
       <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
