@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'rea
 import { FontAwesome5 } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { TextInput } from 'react-native-paper';
+import {Picker} from '@react-native-picker/picker';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
@@ -12,8 +13,14 @@ const AdicionarAnimal = ({ route, navigation }) => {
   const [raça, onChangeRaça] = React.useState('');
   const [endereço, onChangeEndereço] = React.useState('');
   const [descricao, onChangeDescricao] = React.useState('');
+  const [tipo, onChangeTipo] = React.useState('');
   const [images, setImages] = React.useState([]);
   const [userId, setUserId] = React.useState(null);
+
+  const itemStyles = [
+    {borderColor: '#2163D3' },
+    {borderColor: '#FFAE2E' }
+  ]; // Cor das linhas(apenas decoração)
 
   const db = getFirestore();
   const auth = getAuth();
@@ -76,6 +83,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
         endereço,
         descricao,
         images,
+        tipo,
         userId, // Inclua o userId do usuário logado
       };
 
@@ -93,6 +101,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
 
   // Renderização do componente e outras partes do código...
   return (
+    <ScrollView>
       <View style={styles.container}>
             {/* Componente para exibir imagens selecionadas e permitir remoção */}
         <View style={styles.imageContainer}>
@@ -112,7 +121,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
             </TouchableOpacity>
           
         </View>
-            <View style={styles.detailsContainer}>
+        <View style={[styles.detailsContainer, itemStyles[0]]}>
                 <FontAwesome5 name="user" size={24} color="black" />
                 <TextInput
                   style={[styles.input, styles.inputHeight]}
@@ -121,7 +130,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
                   label="Nome"
                 />
             </View>
-            <View style={styles.detailsContainer}>
+            <View style={[styles.detailsContainer, itemStyles[1]]}>
               <FontAwesome5 name="venus-mars" size={24} color="black"/>
               <TextInput
                 style={[styles.input, styles.inputHeight]}
@@ -130,7 +139,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
                 label='Sexo'
               />
             </View>
-            <View style={styles.detailsContainer}>
+            <View style={[styles.detailsContainer, itemStyles[0]]}>
               <FontAwesome5 name="paw" size={24} color="black"/>
               <TextInput
                 style={[styles.input, styles.inputHeight]}
@@ -138,8 +147,22 @@ const AdicionarAnimal = ({ route, navigation }) => {
                 value={raça}
                 label='Raça'
               />
+               
             </View>
+
             <View style={styles.detailsContainer}>
+            <Picker
+        style={[styles.picker, itemStyles[1]]}
+        selectedValue={tipo}
+        onValueChange={(itemValue) => onChangeTipo(itemValue)}
+      >
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
+        <Picker.Item  style={[styles.picker, itemStyles[1]]} label="Gato" value="gato" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Cachorro" value="cachorro" />
+      
+      </Picker>
+      </View>
+            <View style={[styles.detailsContainer, itemStyles[0]]}>
               <FontAwesome5 name="house-user" size={24} color="black"/>
               <TextInput
                 style={[styles.input, styles.inputHeight]}
@@ -165,6 +188,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
           <Text style={styles.divulgarButtonText}>Divulgar animal</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
   );
 };
  
@@ -199,7 +223,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   divulgarButton: {
-    backgroundColor: '#2163D3',
+    backgroundColor: '#FFAE2E',
     padding: 10,
     borderRadius: 10,
     marginTop: 20,
@@ -275,8 +299,13 @@ const styles = StyleSheet.create({
 marginTop:100,
 width:100,
 height:85,
+  },
+  picker: {
+    height: 80,
+    width:280,
+    borderWidth:3,  
 
-  }
+  },
 
 });
  

@@ -14,7 +14,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
-          name="Login"
+          name="Add"
           options={{ headerShown:false }}
           component={AdicionarAnimal}
         />
