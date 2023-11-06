@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   divulgarButton: {
-    backgroundColor: '#2163D3',
+    backgroundColor: '#FFAE2E',
     padding: 10,
     borderRadius: 10,
     marginTop: 20,
