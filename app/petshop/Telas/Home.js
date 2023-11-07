@@ -16,8 +16,8 @@ const Tab = createBottomTabNavigator();
 
 const db = getFirestore();
 
-const fetchAnimais = async () => {
-  const animaisCollection = collection(db, 'Animais'); // Substitua 'Animal' pelo nome real da coleção no Firestore
+async function fetchAnimais() {
+  const animaisCollection = collection(db, 'Animais');
   const animaisQuery = query(animaisCollection);
 
   try {
@@ -32,7 +32,9 @@ const fetchAnimais = async () => {
         name: doc.data().name, // Substitua 'name' pelo nome do campo no Firestore
         raça: doc.data().raça, 
         sexo: doc.data().sexo,
-        image: doc.data().images
+        local: doc.data().endereço,
+        tipo: doc.data().tipo,
+        image: doc.data().images[0]
       };
 
       animaisData.push(animal);
@@ -229,38 +231,51 @@ function Casa({ navigation }) {
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
           <View style={styles.filterContainer}>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setSelectedFilter('TODOS')}
-              style={[styles.filterCard, selectedFilter === 'TODOS' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <Text style={[styles.textFilter,
-                selectedFilter === 'TODOS' ? { color: '#FFAE2E' } : null]}>TODOS
+              style={[
+                styles.filterCard,
+                selectedFilter === 'TODOS' ? { backgroundColor: '#2163D3' } : null,
+              ]}
+            >
+              <Text
+                style={[
+                  styles.textFilter,
+                  selectedFilter === 'TODOS' ? { color: '#FFAE2E' } : null,
+                ]}
+              >
+                TODOS
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setSelectedFilter('Gato')}
-              style={[styles.filterCard, selectedFilter === 'Gato' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'}/>
+              style={[
+                styles.filterCard,
+                selectedFilter === 'Gato' ? { backgroundColor: '#2163D3' } : null,
+              ]}
+            >
+              <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'} />
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => setSelectedFilter('Cachorro')}
-              style={[styles.filterCard, selectedFilter === 'Cachorro' ? {backgroundColor: "#2163D3"} : 
-              null]}>
-              <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'}/>
+              style={[
+                styles.filterCard,
+                selectedFilter === 'Cachorro' ? { backgroundColor: '#2163D3' } : null,
+              ]}
+            >
+              <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
             </TouchableOpacity>
           </View>
           <FlatList
             data={animais}
-            keyExtractor={(item) => item.id}
+            numColumns={2}
+            contentContainerStyle={styles.flatListContainer} // Adicione esta linha
             renderItem={({ item }) => (
-              <TouchableOpacity
-               onPress={() => navigation.navigate('AnimalDesc', { animalId: item.id })}
-              >
-               <AnimalCard animal={item} />
-    </TouchableOpacity>
-  )}
-/>
+              <TouchableOpacity onPress={() => navigation.navigate('AnimalDesc', { animalId: item.id })}>
+                <AnimalCard animal={item} />
+              </TouchableOpacity>
+            )}
+          />
         </View>
       </ScrollView>
     </Provider>
@@ -269,9 +284,9 @@ function Casa({ navigation }) {
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
-    <Card.Cover style={styles.animalImage} source={animal.image} />
+    <Card.Cover style={styles.animalImage} source={{uri: animal.image}} />
     <Card.Content>
-      <Text variant="titleLarge" style={styles.animalText}>{animal.name}, {animal.age}</Text>
+      <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
@@ -325,11 +340,13 @@ const styles = StyleSheet.create({
   },
   animalCard: {
     flex: 1,
-    margin: 10,
+    margin: 15,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
     backgroundColor: 'white',
+    width:350,
+ 
   },
   animalText: {
     color: 'black',
@@ -341,15 +358,7 @@ const styles = StyleSheet.create({
   animalImage: {
     marginBottom: 20,
   },
-  modalContent: {
-    flex: 1,
-    justifyContent: 'center',
-    alignContent: 'center',
-    backgroundColor: 'white',
-    width: "40%",
-    height: "100%",
-    backgroundColor: 'white',
-  },
+
   //DRAWER
   containerDrawer:{
     flex:1,
@@ -416,5 +425,9 @@ const styles = StyleSheet.create({
   },
   darkModeLabel: {
     fontSize: 16,
+  },
+  flatListContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
