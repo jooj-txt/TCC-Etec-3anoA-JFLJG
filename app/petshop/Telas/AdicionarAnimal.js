@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
 import { TextInput } from 'react-native-paper';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL, uploadString   } from 'firebase/storage';
 
 const AdicionarAnimal = ({ route, navigation }) => {
   const [name, onChangeName] = React.useState('');
@@ -16,66 +16,85 @@ const AdicionarAnimal = ({ route, navigation }) => {
   const [tipo, onChangeTipo] = React.useState('');
   const [images, setImages] = React.useState([]);
   const [userId, setUserId] = React.useState(null);
+  const fileInputRef = useRef(null);
 
   const itemStyles = [
-    {borderColor: '#2163D3' },
-    {borderColor: '#FFAE2E' }
-  ]; // Cor das linhas(apenas decoração)
+    { borderColor: '#2163D3' },
+    { borderColor: '#FFAE2E' }
+  ];
 
   const db = getFirestore();
   const auth = getAuth();
+  const storage = getStorage();
 
-  // Use useEffect para observar as mudanças no usuário autenticado
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserId(user.uid); // Defina o userId com o ID do usuário autenticado
+        setUserId(user.uid);
       } else {
-        // O usuário não está autenticado, você pode fazer algo aqui se necessário
         setUserId(null);
       }
     });
 
-    return unsubscribe; // Certifique-se de cancelar a inscrição ao descartar o componente
+    return unsubscribe;
   }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+  const uploadImageToStorage = async (file) => {
+    const storage = getStorage();
+    const imageRef = ref(storage, 'images/' + Date.now());
 
-    if (!result.cancelled) {
-      const newImages = [...images, result.uri]; // Adicione a URL da imagem ao array
-      setImages(newImages);
+    try {
+      // Fazer upload da imagem para o Firebase Storage
+      await uploadBytes(imageRef, file);
+
+      // Obter a URL de download da imagem
+      const downloadURL = await getDownloadURL(imageRef);
+      console.log(downloadURL);
+      return downloadURL;
+    } catch (error) {
+      console.error('Erro ao fazer o upload da imagem: ', error);
+      return null;
+    }
+  };
+
+
+  const handleFileInputChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        // Fazer upload da imagem para o Firebase Storage
+        const downloadURL = await uploadImageToStorage(file);
+
+        if (downloadURL) {
+          const newImages = [...images, downloadURL]; // Adicione a URL de download da imagem ao array
+          setImages(newImages);
+        }
+      } catch (error) {
+        console.error('Erro ao fazer upload da imagem: ', error);
+      }
     }
   };
 
   const removeImage = (index) => {
-    const newImages = images.filter((_, i) => i !== index); // Remova a imagem do array com base no índice
+    const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);
   };
 
   const renderButtonContent = () => {
     if (images.length > 0) {
-       <FontAwesome5 name="image" size={24} color="black" />;
+      return <FontAwesome5 name="image" size={24} color="black" />;
     } else {
       return <FontAwesome5 name="image" size={24} color="black" />;
     }
   };
 
-
   const divulgarAnimal = async () => {
     try {
-      // Verifique se o usuário está autenticado
       if (!userId) {
         console.log('O usuário não está autenticado.');
         return;
       }
 
-      // Envie os dados do animal para o Firestore, incluindo o userId
       const animalData = {
         name,
         sexo,
@@ -84,26 +103,20 @@ const AdicionarAnimal = ({ route, navigation }) => {
         descricao,
         images,
         tipo,
-        userId, // Inclua o userId do usuário logado
+        userId,
       };
 
       const animaisRef = collection(db, 'Animais');
       const docRef = await addDoc(animaisRef, animalData);
 
       console.log('Animal adicionado com ID: ', docRef.id);
-
-      // Lógica para redirecionar após adicionar o animal
-      // Você pode redirecionar para uma página de sucesso, por exemplo
     } catch (error) {
       console.error('Erro ao adicionar o animal: ', error);
     }
   };
-
-  // Renderização do componente e outras partes do código...
   return (
     <ScrollView>
       <View style={styles.container}>
-            {/* Componente para exibir imagens selecionadas e permitir remoção */}
         <View style={styles.imageContainer}>
           {images.map((image, index) => (
             <View key={index} style={styles.selectedImageContainer}>
@@ -116,10 +129,17 @@ const AdicionarAnimal = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
           ))}
-            <TouchableOpacity style={styles.pickImage} onPress={pickImage}>
-              <FontAwesome5 name="image" size={24} color="black" />
-            </TouchableOpacity>
-          
+          <label htmlFor="imageInput" style={styles.pickImage}>
+            
+          </label>
+          <input
+          type="file"
+          id="imageInput"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          accept="image/*"
+          onChange={(e) => handleFileInputChange(e)}
+        />
         </View>
         <View style={[styles.detailsContainer, itemStyles[0]]}>
                 <FontAwesome5 name="user" size={24} color="black" />
@@ -156,7 +176,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
         selectedValue={tipo}
         onValueChange={(itemValue) => onChangeTipo(itemValue)}
       >
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
+        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione a espécie" value="" />
         <Picker.Item  style={[styles.picker, itemStyles[1]]} label="Gato" value="gato" />
         <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Cachorro" value="cachorro" />
       
