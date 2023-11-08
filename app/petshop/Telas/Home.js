@@ -10,9 +10,11 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import { getFirestore, collection, docs, getDocs, query, where  } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL, uploadString } from 'firebase/storage';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
+const db = getFirestore();
 
 const animalData = [
   { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
@@ -22,6 +24,7 @@ const animalData = [
   { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
   { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
 ];
+
 export default function HomeScreen() {
 
   return (

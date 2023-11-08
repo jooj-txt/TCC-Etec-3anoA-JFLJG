@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef} from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { TextInput } from 'react-native-paper';
@@ -6,6 +6,9 @@ import { Picker } from '@react-native-picker/picker';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker'; 
+
+
 
 const AdicionarAnimal = ({ route, navigation }) => {
   const [name, onChangeName] = React.useState('');
@@ -16,7 +19,6 @@ const AdicionarAnimal = ({ route, navigation }) => {
   const [tipo, onChangeTipo] = React.useState('');
   const [images, setImages] = React.useState([]);
   const [userId, setUserId] = React.useState(null);
-  const fileInputRef = useRef(null);
 
   const itemStyles = [
     { borderColor: '#2163D3' },
@@ -39,40 +41,49 @@ const AdicionarAnimal = ({ route, navigation }) => {
     return unsubscribe;
   }, []);
 
-  const uploadImageToStorage = async (file) => {
-    const storage = getStorage();
-    const imageRef = ref(storage, 'images/' + Date.now());
-
-    try {
-      // Fazer upload da imagem para o Firebase Storage
-      await uploadBytes(imageRef, file);
-
-      // Obter a URL de download da imagem
-      const downloadURL = await getDownloadURL(imageRef);
-      console.log(downloadURL);
-      return downloadURL;
-    } catch (error) {
-      console.error('Erro ao fazer o upload da imagem: ', error);
-      return null;
-    }
+  const uploadImageToStorage = async (uri) => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
+  
+    const fileRef = ref(storage, 'images/' + Date.now());
+    const result = await uploadBytes(fileRef, blob);
+  
+    // We're done with the blob, close and release it
+    URL.revokeObjectURL(uri);
+  
+    return await getDownloadURL(fileRef);
   };
 
+  const handleFileInputChange = async () => {
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
 
-  const handleFileInputChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        // Fazer upload da imagem para o Firebase Storage
-        const downloadURL = await uploadImageToStorage(file);
+    });
 
-        if (downloadURL) {
-          const newImages = [...images, downloadURL]; // Adicione a URL de download da imagem ao array
-          setImages(newImages);
-        }
-      } catch (error) {
-        console.error('Erro ao fazer upload da imagem: ', error);
+    try {
+
+      if (!pickerResult.cancelled) {
+        const uploadUrl = await uploadImageToStorage(pickerResult.uri);
+      setImages([...images, uploadUrl]); // Adicione o URL da imagem ao array de imagens
+        console.log(uploadUrl)
+
       }
-    }
+    } catch (e) {
+      console.log(e);
+      alert("Upload failed, sorry :(");
+    } 
   };
 
   const removeImage = (index) => {
@@ -114,6 +125,7 @@ const AdicionarAnimal = ({ route, navigation }) => {
       console.error('Erro ao adicionar o animal: ', error);
     }
   };
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -129,17 +141,9 @@ const AdicionarAnimal = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
           ))}
-          <label htmlFor="imageInput" style={styles.pickImage}>
-            
-          </label>
-          <input
-          type="file"
-          id="imageInput"
-          ref={fileInputRef}
-          style={{ display: 'none' }}
-          accept="image/*"
-          onChange={(e) => handleFileInputChange(e)}
-        />
+          <TouchableOpacity style={styles.pickImage} onPress={handleFileInputChange}>
+            <FontAwesome5 name="camera" size={24} color="black" />
+          </TouchableOpacity>
         </View>
         <View style={[styles.detailsContainer, itemStyles[0]]}>
                 <FontAwesome5 name="user" size={24} color="black" />

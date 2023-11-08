@@ -13,14 +13,14 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
       <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
-        />
-      <Stack.Screen
           name="Home"
           options={{ headerShown:false  }}
           component={HomeScreen}
+        />
+      <Stack.Screen
+          name="Login"
+          options={{ headerShown:false }}
+          component={Login}
         />
       <Stack.Screen
           name="Add"
@@ -28,6 +28,9 @@ export default function App() {
           component={Add}
         />
       
+    
+     
+ 
     
     
       <Stack.Screen
