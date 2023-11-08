@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 
 import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add, ConfigPerfil, HomeScreenJur} from './Telas/rotas';
-import AdicionarAnimal from './Telas/AdicionarAnimal';
 
 const Stack = createStackNavigator();
 
@@ -19,10 +18,17 @@ export default function App() {
           component={Login}
         />
       <Stack.Screen
+          name="Home"
+          options={{ headerShown:false  }}
+          component={HomeScreen}
+        />
+      <Stack.Screen
           name="Add"
           options={{ headerShown:false }}
           component={Add}
         />
+      
+    
     
       <Stack.Screen
           name="PessoaJuridicaCadastro"
@@ -41,11 +47,7 @@ export default function App() {
           options={{ headerShown:false  }}
           component={HomeScreenJur}
         />
-         <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
-        />
+      
       <Stack.Screen
           name="Inicio"
           options={{  headerShown:false  }}

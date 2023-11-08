@@ -8,50 +8,21 @@ import {Add, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, query, getDocs, where  } from 'firebase/firestore';
+import { getFirestore, collection, docs, getDocs, query, where  } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-const db = getFirestore();
-
-async function fetchAnimais() {
-  const animaisCollection = collection(db, 'Animais');
-  const animaisQuery = query(animaisCollection);
-
-  try {
-    const querySnapshot = await getDocs(animaisQuery);
-
-    const animaisData = [];
-
-    querySnapshot.forEach((doc) => {
-      // Aqui você pode mapear os dados do documento para a estrutura desejada
-      const animal = {
-        id: doc.id, // ID do documento
-        name: doc.data().name, // Substitua 'name' pelo nome do campo no Firestore
-        raça: doc.data().raça, 
-        sexo: doc.data().sexo,
-        local: doc.data().endereço,
-        tipo: doc.data().tipo,
-        image: doc.data().images[0]
-      };
-
-      animaisData.push(animal);
-    });
-
-    // Agora você tem os dados dos animais em animaisData
-    return animaisData;
-  } catch (error) {
-    console.error('Erro ao buscar animais: ', error);
-    return [];
-  }
-};
-
-const animais = await fetchAnimais();
-
+const animalData = [
+  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+  { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
+  { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
+  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
+  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
+];
 export default function HomeScreen() {
-
 
   return (
     <NavigationContainer independent={true}>
@@ -59,57 +30,55 @@ export default function HomeScreen() {
     </NavigationContainer>
   );
 }
-
 function Tabs({ navigation }) {
-  return (
-    <Tab.Navigator screenOptions={{
-      tabBarLabelStyle: {
-        fontSize: 16, // Tamanho da fonte das guias
-        fontWeight: 'bold', // Estilo da fonte das guias
-      },
-      tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
-      tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
-      tabBarStyle: {
-        backgroundColor: '#2163D3', // Cor de fundo da barra de guias
-      },
-    }}>
-      <Tab.Screen 
-        name='Casa' 
-        component={Casa} 
-        options={{ 
-          headerShown: false, 
-          tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="home" size={size} color={color} />
-          ),
-        }} 
-      />
-      <Tab.Screen 
-        name='Favoritos' 
-        component={Favoritos} 
-        options={{ 
-          headerShown: false, 
-          tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="heart" size={size} color={color} />
-          ),
-        }} 
-      />
-      <Tab.Screen 
-        name='Configurações' 
-        component={ConfigPerfil}  
-        options={{ 
-          headerShown: false, 
-          tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
-        }}  
-      />
-    </Tab.Navigator>
-  );
+return (
+<Tab.Navigator screenOptions={{
+tabBarLabelStyle: {
+fontSize: 16, // Tamanho da fonte das guias
+fontWeight: 'bold', // Estilo da fonte das guias
+},
+tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
+tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
+tabBarStyle: {
+backgroundColor: '#2163D3', // Cor de fundo da barra de guias
+},
+}}>
+<Tab.Screen 
+name='Casa' 
+component={Casa} 
+options={{ 
+  headerShown: false, 
+  tabBarLabel: '', 
+  tabBarIcon: ({ color, size }) => (
+    <FontAwesome5 name="home" size={size} color={color} />
+  ),
+}} 
+/>
+<Tab.Screen 
+name='Favoritos' 
+component={Favoritos} 
+options={{ 
+  headerShown: false, 
+  tabBarLabel: '', 
+  tabBarIcon: ({ color, size }) => (
+    <FontAwesome5 name="heart" size={size} color={color} />
+  ),
+}} 
+/>
+<Tab.Screen 
+name='Configurações' 
+component={ConfigPerfil}  
+options={{ 
+  headerShown: false, 
+  tabBarLabel: '', 
+  tabBarIcon: ({ color, size }) => (
+    <Ionicons name="person" size={size} color={color} />
+  ),
+}}  
+/>
+</Tab.Navigator>
+);
 }
-
 
 function CustomDrawerContent({ navigation, ...props }) {
   const [isDarkMode, setIsDarkMode] = useState('');
@@ -118,14 +87,11 @@ function CustomDrawerContent({ navigation, ...props }) {
   useEffect(() => {
     const auth = getAuth();
     const db = getFirestore();
-
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log('Usuário autenticado:', user);
-
         const pessoasFisicasRef = collection(db, 'PessoasFisicas');
         const q = query(pessoasFisicasRef, where('userUid', '==', user.uid));
-
         try {
           const querySnapshot = await getDocs(q);
           if (!querySnapshot.empty) {
@@ -147,7 +113,8 @@ function CustomDrawerContent({ navigation, ...props }) {
       }
     });
   }, []);
-  return (
+
+ return (
     <DrawerContentScrollView {...props}>
       <View style={styles.containerDrawer}>
         <View  style={styles.userArea}>
@@ -161,7 +128,6 @@ function CustomDrawerContent({ navigation, ...props }) {
           </View>
         </View>
       </View>
-
       <DrawerItem 
         label="Adicionar animal" 
         onPress={() => navigation.navigate("AdicionarAnimal")} 
@@ -170,7 +136,6 @@ function CustomDrawerContent({ navigation, ...props }) {
         label="Sair" 
         onPress={() => navigation.navigate("Home")} 
         labelStyle={styles.drawerItem} />
-
       <View style={styles.darkModeSwitch}>
         <Text style={styles.darkModeLabel}>Modo Escuro</Text>
         <Switch value={isDarkMode} />
@@ -178,40 +143,39 @@ function CustomDrawerContent({ navigation, ...props }) {
     </DrawerContentScrollView>
   );
 }
-
-  function DrawerNavigator() {
-    const [searchText, setSearchText] = useState('');
-    const searchAnimals = () => {
-      if (searchText === '') {
-        return animalData; 
-      } else {
-        return animalData.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
-      }
-    };
-  return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={Tabs} options={{
-        title: null,
-        headerStyle: {
-          backgroundColor: "#2163D3",
-        },
-        headerRight: () => (
-          <Searchbar
-            placeholder="Pesquisar"
-            onChangeText={setSearchText}
-            value={searchText}
-            style={styles.searchInput}
-          />
-        ),
-      }} />
-      <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
-        title: null,
-        headerStyle: {
-          backgroundColor: "#2163D3",
-        },
-      }} /> 
-    </Drawer.Navigator>
-  );
+function DrawerNavigator() {
+  const [searchText, setSearchText] = useState('');
+  const searchAnimals = () => {
+    if (searchText === '') {
+      return animalData; 
+    } else {
+      return animalData.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
+    }
+  };
+return (
+  <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+    <Drawer.Screen name="Home" component={Tabs} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerRight: () => (
+        <Searchbar
+          placeholder="Pesquisar"
+          onChangeText={setSearchText}
+          value={searchText}
+          style={styles.searchInput}
+        />
+      ),
+    }} />
+    <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+    }} /> 
+  </Drawer.Navigator>
+);
 }
 
 function Casa({ navigation }) {
@@ -219,9 +183,9 @@ function Casa({ navigation }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
-      return animaisData; 
-    } else {
-      return animaisData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
+      return animalData; 
+        } else {
+          return animalData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
     }
   };
   
@@ -267,13 +231,11 @@ function Casa({ navigation }) {
             </TouchableOpacity>
           </View>
           <FlatList
-            data={animais}
+            data={filterAnimals()}
             numColumns={2}
-            contentContainerStyle={styles.flatListContainer} // Adicione esta linha
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => navigation.navigate('AnimalDesc', { animalId: item.id })}>
-                <AnimalCard animal={item} />
-              </TouchableOpacity>
+              <AnimalCard animal={item} />
             )}
           />
         </View>
@@ -284,11 +246,10 @@ function Casa({ navigation }) {
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
-    <Card.Cover style={styles.animalImage} source={{uri: animal.image}} />
+    <Card.Cover style={styles.animalImage} source={animal.image} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
-      <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
-      <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
       <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
@@ -296,7 +257,6 @@ const AnimalCard = ({ animal }) => (
     </Card.Content>
   </Card>
 );
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
