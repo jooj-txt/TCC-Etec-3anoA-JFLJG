@@ -16,14 +16,6 @@ const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 const db = getFirestore();
 
-const animalData = [
-  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '3', name: 'Pássaro', age: '1 ano', breed: 'Canário', local: 'RJ', image: require('../imgs/bird.jpg') },
-  { id: '4', name: 'Hamster', age: '6 meses', breed: 'Anão russo', local: 'MG', image: require('../imgs/hamster.jpeg') },
-  { id: '2', name: 'Cachorro', age: '3 anos', breed: 'Labrador', local: 'SP', image: require('../imgs/dog.jpg') },
-  { id: '1', name: 'Gato', age: '2 anos', breed: 'Siamês', local: 'SP', image: require('../imgs/cat.jpg') },
-];
 
 export default function HomeScreen() {
 
@@ -182,17 +174,35 @@ return (
 }
 
 function Casa({ navigation }) {
-  
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
+  const [animais, setAnimais] = useState([]);
+
+
+  useEffect(() => {
+    const fetchAnimais = async () => {
+      const animaisCollection = collection(db, 'Animais');
+      const animaisQuery = await getDocs(animaisCollection);
+
+      const animaisData = [];
+      animaisQuery.forEach((doc) => {
+        const animal = doc.data();
+        animaisData.push(animal);
+      });
+  
+      setAnimais(animaisData);
+    };
+    
+    fetchAnimais();
+  }, []);
+
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
-      return animalData; 
-        } else {
-          return animalData.filter(animal => animal.name.toLowerCase() === selectedFilter.toLowerCase());
+      return animais;
+    } else {
+      return animais.filter((animal) => animal.tipo.toLowerCase() === selectedFilter.toLowerCase());
     }
   };
-  
-  
+
   return (
     <Provider>
       <ScrollView style={styles.container}>
@@ -249,11 +259,12 @@ function Casa({ navigation }) {
 
 const AnimalCard = ({ animal }) => (
   <Card style={styles.animalCard}>
-    <Card.Cover style={styles.animalImage} source={animal.image} />
+    <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
-      <Text variant="bodyMedium" style={styles.animalText}>{animal.breed}</Text>
-      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.local}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
+      <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
+      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.endereço}</Text>
       <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
       </TouchableOpacity>
