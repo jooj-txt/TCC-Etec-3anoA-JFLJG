@@ -5,6 +5,7 @@ import HomeScreen from './Home';
 import HomeScreenJur from './HomeJur';
 import PessoaJuridicaCadastro from './Cad_Pessoas_Jur';
 import Add from './AdicionarAnimal';
+import PosAdd from './PosAdd.js';
 import ConfigPerfil from './ConfigPerfil';
 import Favoritos from './Favoritos.js';
-export{Inicio, PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro, Add, ConfigPerfil, Favoritos,HomeScreenJur};
+export{Inicio, PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro, Add, ConfigPerfil, Favoritos,HomeScreenJur,PosAdd};

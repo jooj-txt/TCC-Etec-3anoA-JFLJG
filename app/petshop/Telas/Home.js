@@ -3,26 +3,28 @@ import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAr
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, ConfigPerfil, Favoritos} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, docs, getDocs, query, where  } from 'firebase/firestore';
+import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getStorage, ref, uploadBytes, getDownloadURL, uploadString } from 'firebase/storage';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 const db = getFirestore();
 
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
 
   return (
     <NavigationContainer independent={true}>
-      <DrawerNavigator />
-    </NavigationContainer>
+    <DrawerNavigator/>
+  </NavigationContainer>
+
   );
 }
 function Tabs({ navigation }) {
@@ -71,6 +73,9 @@ options={{
   ),
 }}  
 />
+
+
+
 </Tab.Navigator>
 );
 }
@@ -124,8 +129,9 @@ function CustomDrawerContent({ navigation, ...props }) {
         </View>
       </View>
       <DrawerItem 
-        label="Adicionar animal" 
-        onPress={() => navigation.navigate("AdicionarAnimal")} 
+        label="Adicionar animal"
+        
+        onPress={() => navigation.navigate('AdicionarAnimal')} 
         labelStyle={styles.drawerItem} />
       <DrawerItem 
         label="Sair" 
@@ -164,6 +170,12 @@ return (
       ),
     }} />
     <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+    }} /> 
+     <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
       headerStyle: {
         backgroundColor: "#2163D3",
@@ -246,7 +258,6 @@ function Casa({ navigation }) {
           <FlatList
             data={filterAnimals()}
             numColumns={2}
-            keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <AnimalCard animal={item} />
             )}
