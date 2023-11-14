@@ -3,7 +3,7 @@
   import { FontAwesome5 } from '@expo/vector-icons';
   import { TextInput } from 'react-native-paper';
   import { Picker } from '@react-native-picker/picker';
-  import { getFirestore, collection, addDoc } from 'firebase/firestore';
+  import { getFirestore, collection, addDoc,setDoc, doc } from 'firebase/firestore';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import * as ImagePicker from 'expo-image-picker'; 
@@ -108,6 +108,7 @@
         }
 
         const animalData = {
+          ID: '',
           name,
           sexo,
           raça,
@@ -121,6 +122,11 @@
         const animaisRef = collection(db, 'Animais');
         const docRef = await addDoc(animaisRef, animalData);
         navigation.navigate("PosAdd");
+        const docId = docRef.id;
+        animalData.ID = docId; // Atualize o ID no animalData
+
+    // Atualize o documento com o ID
+    await setDoc(doc(animaisRef, docId), animalData);
 
 
         console.log('Animal adicionado com ID: ', docRef.id);

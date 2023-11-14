@@ -18,7 +18,7 @@ const Stack = createStackNavigator();
 const db = getFirestore();
 
 
-export default function HomeScreen({ route }) {
+export default function HomeScreenJur({ route }) {
 
   return (
     <NavigationContainer independent={true}>

@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
 
 
-import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add, ConfigPerfil, HomeScreenJur, PosAdd, Favoritos} from './Telas/rotas';
+import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add, ConfigPerfil, HomeScreenJur, PosAdd, Favoritos, AnimalDesc} from './Telas/rotas';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +71,13 @@ export default function App() {
           name="Favoritos"
           options={{ headerShown:false  }}
           component={Favoritos}
+        />
+
+        
+          <Stack.Screen
+          name="AnimalDesc"
+          options={{ headerShown:false  }}
+          component={AnimalDesc}
         />
       
       
