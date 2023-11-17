@@ -219,6 +219,7 @@
             style={styles.divulgarButton}
             onPress={() => {
               divulgarAnimal();
+            
               }}   
             >
             <Text style={styles.divulgarButtonText}>Divulgar animal</Text>

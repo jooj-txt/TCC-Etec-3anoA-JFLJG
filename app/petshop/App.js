@@ -12,17 +12,23 @@ export default function App() {
    return (
     <NavigationContainer>
       <Stack.Navigator useLegacyImplementation>
+      <Stack.Screen
+          name="Login"
+          options={{ headerShown:false }}
+          component={Login}
+        />
+      <Stack.Screen
+          name="ConfigPerfil"
+          options={{ headerShown:false  }}
+          component={ConfigPerfil}
+        />
         <Stack.Screen
           name="Inicio"
           options={{  headerShown:false  }}
           component={Inicio}
         />
       
-      <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
-        />
+     
       <Stack.Screen
           name="PosAdd"
           options={{ headerShown:false }}
@@ -61,11 +67,7 @@ export default function App() {
           options={{ headerShown:false  }}
           component={HomeScreenJur}
         />
-           <Stack.Screen
-          name="ConfigPerfil"
-          options={{ headerShown:false  }}
-          component={ConfigPerfil}
-        />
+         
 
           <Stack.Screen
           name="Favoritos"

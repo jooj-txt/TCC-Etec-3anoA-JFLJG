@@ -28,7 +28,8 @@ export default function HomeScreen({ route }) {
 
   );
 }
-function Tabs({ navigation }) {
+function Tabs({ navigation, route }) {
+
 return (
 <Tab.Navigator screenOptions={{
 tabBarLabelStyle: {
@@ -73,6 +74,7 @@ options={{
     <Ionicons name="person" size={size} color={color} />
   ),
 }}  
+
 />
 
 
@@ -85,6 +87,8 @@ function CustomDrawerContent({ navigation, ...props }) {
   const [isDarkMode, setIsDarkMode] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+   const [userId, setUserId] = useState('');
+
   useEffect(() => {
     const auth = getAuth();
     const db = getFirestore();
@@ -101,6 +105,8 @@ function CustomDrawerContent({ navigation, ...props }) {
             const userData = userDocSnapshot.data();
             setUserName(userData.nome);
             setUserEmail(userData.email);
+            setUserId(userData.userUid);
+
           } else {
             console.log('Documento do usuário não encontrado');
           }

@@ -65,7 +65,7 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoLabel}>Descrição:</Text>
       </View>
 
-      <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('TelaAdoção')}>
+      <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('TelaAdocao')}>
       <Text style={styles.infoText}>ME ADOTE</Text>
       </TouchableOpacity>
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     marginBottom: 8,
-    marginLeft:"20%",
+    marginLeft:"10%",
     
   },
   swiper: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   backButton: {
     backgroundColor: '#2163D3',
     padding: 7,
-    borderRadius: "100%",
+    borderRadius: 100,
     alignItems: 'center',
     marginTop: 5,
     marginBottom:25,
@@ -124,14 +124,13 @@ const styles = StyleSheet.create({
     width:40,
     height:40,
   },
-  kButton: {
+  Button: {
     backgroundColor: '#2163D3',
     padding: 7,
-    borderRadius: "10%",
+    borderRadius: 10,
     alignItems: 'center',
-    marginTop: 5,
-    marginBottom:25,
-    marginRight:20,
+    marginTop: 150,
+    marginLeft: 250,
     width:100,
   },
   backButtonText: {
