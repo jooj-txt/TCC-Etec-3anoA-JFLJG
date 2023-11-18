@@ -5,6 +5,15 @@
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/menu.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='css/about.css'>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
     <!-- Font Awesome -->
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -29,7 +38,6 @@
             text-align: center;
             color: white;
             padding: 10px;
-            font-family: 'Times New Roman', Times, serif;
         }
 
         .carousel-caption h1 {
@@ -58,10 +66,16 @@
             .carousel-caption h3 {
                 font-size: 14px;
             }
+            .container {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+            }
         }
     </style>
 </head>
-<body>
+<body class="body">
     <!-- Seu conteúdo HTML aqui -->
     
     <nav class="navbar navbar-expand-lg navbar-light tccNavbar">
@@ -110,13 +124,13 @@
     </nav>
     <!--CARROUSEL-->
     <div class="container-fluid">
-        <div id="carouselExampleAutoplaying" class="carousel slide" data-ride="carousel">
+        <div id="carouselExampleAutoplaying" data-aos="fade-down" class="carousel slide" data-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="./Fotos/carrosel1.jpg" class="d-block w-100" alt="...">
                     <div class="carousel-caption">
-                        <h1>VIRA-LAR</h1>
-                        <h3>Adote sem Rótulos!</h3>
+                        <h1 data-aos="fade-up" data-aos-delay="300" >VIRA-LAR</h1>
+                        <h3 data-aos="fade-up" data-aos-delay="300" >Adote sem Rótulos!</h3>
                     </div>
                 </div>
                 <div class="carousel-item">
@@ -140,55 +154,75 @@
             </a>
         </div>
     </div>
-    <div class="card container border-0">
+    <div class="card container border-0 body">
         <div class="card-body text-center">
-            <h4>This is some text within a card body.</h4>
-            <h6>It is a paradisematic country, in which roasted parts of sentences 
+            <h4 class="responsiveTextH4" data-aos="fade-down" data-aos-delay="400">This is some text within a card body.</h4>
+            <h6 class="responsiveTextH6" data-aos="fade-up" data-aos-delay="500">It is a paradisematic country, in which roasted parts of sentences 
               fly into your mouth. Even the all-powerful Pointing has no control about 
               the blind texts it is an almost unorthographic life One day however a small 
               line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</h6>
         </div>
+    </div>  
+    <hr data-aos="fade-down" class="hr3"/>
+    <div class="card-body text-center">
+        <h2 data-aos="fade-down" >This is some text within a card body.</h2>
     </div>
-    <div class="backgroundParallax"> 
-      <div class="container d-flex justify-content-between mt-4 ">
-        <div class="flip-card">
-          <div class="flip-card-inner">
+    <div class="container d-flex justify-content-between mt-4">
+        <div  data-aos="fade-right" class="flip-card">
+            <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
+                <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
             </div>
             <div class="flip-card-back">
-              <h1>Romeu</h1>
-              <p>2 aninhos</p>
-              <p>Adora perturbar sua irmã!</p>
+                <h1>Romeu</h1>
+                <p>2 aninhos</p>
+                <p>Adora perturbar sua irmã!</p>
             </div>
-          </div>
+            </div>
         </div>
-        <div class="flip-card">
-          <div class="flip-card-inner">
+        <div class="flip-card" data-aos="fade-down">
+            <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
+                <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
             </div>
             <div class="flip-card-back">
-              <h1>Romeu</h1>
-              <p>2 aninhos</p>
-              <p>Adora perturbar sua irmã!</p>
+                <h1>Romeu</h1>
+                <p>2 aninhos</p>
+                <p>Adora perturbar sua irmã!</p>
             </div>
-          </div>
+            </div>
         </div>
-        <div class="flip-card">
-          <div class="flip-card-inner">
+        <div data-aos="fade-left" class="flip-card">
+            <div class="flip-card-inner">
             <div class="flip-card-front">
-              <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
+                <img src="./Fotos/card1.jpg" class="card-img-top" alt="...">
             </div>
             <div class="flip-card-back">
-              <h1>Romeu</h1>
-              <p>2 aninhos</p>
-              <p>Adora perturbar sua irmã!</p>
+                <h1>Romeu</h1>
+                <p>2 aninhos</p>
+                <p>Adora perturbar sua irmã!</p>
             </div>
-          </div>
+            </div>
         </div>
     </div>
-  </div>
+    <hr data-aos="fade-down" class="hr3"/>
+    <div class="container">
+        <div style="margin: 20px;" class="row">
+            <div class="col-12 mt-3">
+                <div class="card border-0">
+                    <div class="card-horizontal body">
+                        <div class="card-body" data-aos="fade-left">
+                            <h4 class="card-title">Card title</h4>
+                            <p class="card-text">What about to know us?</p>
+                        </div>
+                        <div>
+                            <img data-aos="fade-right"  src="./Fotos/simulacao qrcode.png" height="300" width="300" alt="Card image cap">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
    <div class="backgroundParallax"></div>
    <!--Footer-->
    <div class="footer-dark">
@@ -228,5 +262,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/0000000000.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
 </body>
 </html>
