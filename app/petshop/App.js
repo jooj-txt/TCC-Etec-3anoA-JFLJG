@@ -11,7 +11,13 @@ export default function App() {
 
    return (
     <NavigationContainer>
-      <Stack.Navigator useLegacyImplementation>
+            <Stack.Navigator useLegacyImplementation>
+       <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+      
       <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
@@ -22,12 +28,7 @@ export default function App() {
           options={{ headerShown:false  }}
           component={ConfigPerfil}
         />
-        <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
-        />
-      
+
      
       <Stack.Screen
           name="PosAdd"

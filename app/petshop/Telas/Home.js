@@ -6,7 +6,7 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
@@ -193,6 +193,12 @@ return (
         backgroundColor: "#2163D3",
       },
     }} /> 
+      <Drawer.Screen name='HomeJur' component={HomeScreenJur} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+    }} />
   </Drawer.Navigator>
 );
 }
@@ -338,24 +344,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3, 
     shadowRadius: 4, 
   },
-  menuButton: {
-    padding: 10,
-    backgroundColor: 'lightgray',
-    borderRadius: 5,
-  },
-  menu: {
-    // Adicione seus estilos de menu aqui
-  },
-  animalList: {
-    // Adicione estilos para a lista de animais aqui
-  },
   animalCard: {
     flex: 1,
     margin: 15,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
   },
   animalText: {
     color: 'black',

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
@@ -134,7 +135,7 @@ function Tabs({ navigation }) {
       
         <DrawerItem 
           label="Sair" 
-          onPress={() => navigation.navigate("Home")} 
+          onPress={() => navigation.navigate("HomeJur")} 
           labelStyle={styles.drawerItem} />
 
         <View style={styles.darkModeSwitch}>
@@ -156,7 +157,7 @@ function Tabs({ navigation }) {
     };
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={Tabs} options={{
+      <Drawer.Screen name="HomeJur" component={Tabs} options={{
         title: null,
         headerStyle: {
           backgroundColor: "#2163D3",
@@ -170,33 +171,59 @@ function Tabs({ navigation }) {
           />
         ),
       }} />
+       <Drawer.Screen name='PosAdd' component={PosAdd} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+    }} /> 
+    <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
+      title: null,
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+    }} /> 
 
     </Drawer.Navigator>
   );
 }
 
 
-function Casa({ navigation }) {
+function Casa({ navigation, route }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const [animais, setAnimais] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const fetchAnimais = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-  useEffect(() => {
-    const fetchAnimais = async () => {
+    if (user) {
       const animaisCollection = collection(db, 'Animais');
       const animaisQuery = await getDocs(animaisCollection);
 
       const animaisData = [];
       animaisQuery.forEach((doc) => {
         const animal = doc.data();
-        animaisData.push(animal);
+        if (animal.userId === user.uid) {
+          animaisData.push(animal);
+        }
       });
-  
+
       setAnimais(animaisData);
-    };
-    
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAnimais();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAnimais();
+    }, [])
+  );
 
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
@@ -210,8 +237,14 @@ function Casa({ navigation }) {
     <Provider>
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
+          {isLoading ? (
+            <Text style={styles.AnimalsText}>Carregando...</Text>
+          ) : animais.length === 0 ? (
+            <Text style={styles.AnimalsText}>NENHUM ANIMAL DIVULGADO</Text>
+          ) : (
+            <>
+              <View style={styles.filterContainer}>
+              <TouchableOpacity
               onPress={() => setSelectedFilter('TODOS')}
               style={[
                 styles.filterCard,
@@ -244,16 +277,24 @@ function Casa({ navigation }) {
               ]}
             >
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>
-          </View>
-          <Text>ANIMAIS POSTADOS</Text>
-          <FlatList
-            data={filterAnimals()}
-            numColumns={2}
-            renderItem={({ item }) => (
-              <AnimalCard animal={item} />
-            )}
-          />
+            </TouchableOpacity>              
+            </View>
+            <Text  style={styles.AnimalsText}>ANIMAIS POSTADOS:</Text>
+              <FlatList
+                data={filterAnimals()}
+                numColumns={2}
+                keyExtractor={(item) => item.ID}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.animalCard}
+                    onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
+                  >
+                    <AnimalCard animal={item} />
+                  </TouchableOpacity>
+                )}
+              />
+            </>
+          )}
         </View>
       </ScrollView>
     </Provider>
@@ -408,5 +449,11 @@ const styles = StyleSheet.create({
   },
   darkModeLabel: {
     fontSize: 16,
+  },
+  AnimalsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
