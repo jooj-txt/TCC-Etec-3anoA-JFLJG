@@ -8,4 +8,5 @@ import Add from './AdicionarAnimal';
 import PosAdd from './PosAdd.js';
 import ConfigPerfil from './ConfigPerfil';
 import Favoritos from './Favoritos.js';
-export{Inicio, PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro, Add, ConfigPerfil, Favoritos,HomeScreenJur,PosAdd};
+import AnimalDesc from './AnimalDesc'
+export{Inicio, PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro, Add, ConfigPerfil, Favoritos,HomeScreenJur,PosAdd, AnimalDesc};
