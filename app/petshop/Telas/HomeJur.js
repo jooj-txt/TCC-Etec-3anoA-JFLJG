@@ -6,12 +6,12 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, Login, Inicio} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,31 +121,42 @@ function Tabs({ navigation }) {
       <DrawerContentScrollView {...props}>
         <View style={styles.containerDrawer}>
           <View  style={styles.userArea}>
-          <Image
+            <Image
               source={logo}
               style={styles.user}
             />
             <View style={{flexDirection: 'column'}}>
-            <Text style={styles.nome}>{userName}</Text>
-            <Text style={styles.email}>{userEmail}</Text>
+              <Text style={styles.nome}>{userName}</Text>
+              <Text style={styles.email}>{userEmail}</Text>
             </View>
           </View>
         </View>
-  
-      
+        <DrawerItem 
+          label="Adicionar animal"
+          onPress={() => navigation.navigate('AdicionarAnimal')} 
+          labelStyle={styles.drawerItem} />
         <DrawerItem 
           label="Sair" 
-          onPress={() => navigation.navigate("HomeJur")} 
+          onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
           labelStyle={styles.drawerItem} />
-
         <View style={styles.darkModeSwitch}>
-        <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-        <Switch value={isDarkMode} />
-      </View>
+          <Text style={styles.darkModeLabel}>Modo Escuro</Text>
+          <Switch value={isDarkMode} />
+        </View>
       </DrawerContentScrollView>
     );
   }
   
+  // Adiciona a função handleLogout
+  const handleLogout = async (navigation) => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      navigation.navigate('Login'); 
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
+  };
   function DrawerNavigator() {
     const [searchText, setSearchText] = useState('');
     const searchAnimals = () => {
@@ -173,17 +184,29 @@ function Tabs({ navigation }) {
       }} />
        <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
-      headerStyle: {
-        backgroundColor: "#2163D3",
-      },
+      headerShown: false
+
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
       title: null,
-      headerStyle: {
-        backgroundColor: "#2163D3",
-      },
+      headerShown: false
+ 
     }} /> 
+      <Drawer.Screen name='Login' component={Login} options={{
+      title: null,
+      headerShown: false
 
+    }} /> 
+    <Drawer.Screen name='Inicio' component={Inicio} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+     <Drawer.Screen name='ConfigPerfil' component={ConfigPerfil} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
     </Drawer.Navigator>
   );
 }
@@ -455,5 +478,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 20,
+    color:'#000'
   },
 });

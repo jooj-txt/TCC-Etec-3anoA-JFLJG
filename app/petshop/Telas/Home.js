@@ -6,12 +6,12 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, Inicio} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,7 +121,7 @@ function CustomDrawerContent({ navigation, ...props }) {
     });
   }, []);
 
- return (
+  return (
     <DrawerContentScrollView {...props}>
       <View style={styles.containerDrawer}>
         <View  style={styles.userArea}>
@@ -141,7 +141,7 @@ function CustomDrawerContent({ navigation, ...props }) {
         labelStyle={styles.drawerItem} />
       <DrawerItem 
         label="Sair" 
-        onPress={() => navigation.navigate("Home")} 
+        onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
         labelStyle={styles.drawerItem} />
       <View style={styles.darkModeSwitch}>
         <Text style={styles.darkModeLabel}>Modo Escuro</Text>
@@ -150,6 +150,17 @@ function CustomDrawerContent({ navigation, ...props }) {
     </DrawerContentScrollView>
   );
 }
+
+// Adiciona a função handleLogout
+const handleLogout = async (navigation) => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+    navigation.navigate('Login'); 
+  } catch (error) {
+    console.error('Erro ao fazer logout:', error);
+  }
+};
 function DrawerNavigator() {
   const [searchText, setSearchText] = useState('');
   const searchAnimals = () => {
@@ -195,10 +206,24 @@ return (
     }} /> 
       <Drawer.Screen name='HomeJur' component={HomeScreenJur} options={{
       title: null,
-      headerStyle: {
-        backgroundColor: "#2163D3",
-      },
+      headerShown: false
+
     }} />
+      <Drawer.Screen name='Login' component={Login} options={{
+      title: null,
+      headerShown: false
+
+    }} />
+      <Drawer.Screen name='Inicio' component={Inicio} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+         <Drawer.Screen name='ConfigPerfil' component={ConfigPerfil} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
   </Drawer.Navigator>
 );
 }
@@ -346,10 +371,11 @@ const styles = StyleSheet.create({
   },
   animalCard: {
     flex: 1,
-    margin: 15,
+    margin: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
+    backgroundColor: 'white',
   },
   animalText: {
     color: 'black',

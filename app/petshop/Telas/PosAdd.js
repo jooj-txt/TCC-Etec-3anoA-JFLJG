@@ -63,7 +63,11 @@ export default function PosAdd({ navigation }) {
         <Image source={require('../imgs/logo_Inicio.png')} style={styles.image} />
         <Text style={styles.text}>Seu Texto Aqui</Text>
       </View>
-      <TouchableOpacity onPress={handleRefresh} style={{ width: 200 }}>
+      <TouchableOpacity onPress={handleRefresh} style={{ width: 200,backgroundColor: '#2163D3',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    margin: 20, }}>
         <Text>Voltar para a Home</Text>
       </TouchableOpacity>
     </View>
