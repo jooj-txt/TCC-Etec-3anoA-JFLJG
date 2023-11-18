@@ -54,7 +54,7 @@
   background-color: dodgerblue;
   color: white;
   transform: rotateY(180deg);
-  
+  align-items: center;
 }
 .backgroundParallax{
      background-image: url("../Fotos/parralax.jpg");
