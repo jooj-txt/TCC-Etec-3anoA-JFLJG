@@ -336,13 +336,13 @@ const ConfigPerfil = ({ route, navigation }) => {
         <View>
         <Text style={styles.title}>Possui Instagram?</Text>
         <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
-        <Entypo style={{marginLeft:20,marginTop:105, position:'absolute'}} name="instagram" size={24} color="black" />
+        <Entypo style={{marginLeft:"5%",marginTop:"20%", position:'absolute'}} name="instagram" size={24} color="black" />
         <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
         </View>
         <View>
         <Text style={styles.title}>Whatsapp</Text>
         <Text style={styles.subtitle}>Pode fica tranquilo/a, suas informações não ficaram visíveis</Text>
-        <FontAwesome  style={{marginLeft:20,marginTop:90, position:'absolute'}} name="whatsapp" size={24} color="black" />
+        <FontAwesome  style={{marginLeft:"5%",marginTop:"17%", position:'absolute'}} name="whatsapp" size={24} color="black" />
         <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
         </View>
 

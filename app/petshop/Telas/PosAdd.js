@@ -51,7 +51,6 @@ export default function PosAdd({ navigation }) {
   const handleRefresh = () => {
     if (userType === 'user') {
       navigation.navigate('Home');
-      setShowModal(true);
     } else if (userType === 'userJur') {
       navigation.navigate('HomeJur');
     }

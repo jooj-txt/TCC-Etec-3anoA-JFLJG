@@ -6,11 +6,11 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, Inicio} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, Inicio, PessoaFisicaCadastro, PessoaJuridicaCadastro} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
+import { getFirestore, collection, doc, getDocs,setDoc, query, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
@@ -28,66 +28,64 @@ export default function HomeScreen({ route }) {
 
   );
 }
-function Tabs({ navigation, route }) {
 
-return (
-<Tab.Navigator screenOptions={{
-tabBarLabelStyle: {
-fontSize: 16, // Tamanho da fonte das guias
-fontWeight: 'bold', // Estilo da fonte das guias
-},
-tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
-tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
-tabBarStyle: {
-backgroundColor: '#2163D3', // Cor de fundo da barra de guias
-},
-}}>
-<Tab.Screen 
-name='Casa' 
-component={Casa} 
-options={{ 
-  headerShown: false, 
-  tabBarLabel: '', 
-  tabBarIcon: ({ color, size }) => (
-    <FontAwesome5 name="home" size={size} color={color} />
-  ),
-}} 
-/>
-<Tab.Screen 
-name='Favoritos' 
-component={Favoritos} 
-options={{ 
-  headerShown: false, 
-  tabBarLabel: '', 
-  tabBarIcon: ({ color, size }) => (
-    <FontAwesome5 name="heart" size={size} color={color} />
-  ),
-}} 
-/>
-<Tab.Screen 
-name='Configurações' 
-component={ConfigPerfil}  
-options={{ 
-  headerShown: false, 
-  tabBarLabel: '', 
-  tabBarIcon: ({ color, size }) => (
-    <Ionicons name="person" size={size} color={color} />
-  ),
-}}  
+      function Tabs({ navigation, route }) {
 
-/>
+      return (
+      <Tab.Navigator screenOptions={{
+      tabBarLabelStyle: {
+      fontWeight: 'bold', // Estilo da fonte das guias
+      },
+      tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
+      tabBarInactiveTintColor: '#143D9B', // Cor do texto da guia inativa
+      tabBarStyle: {
+      backgroundColor: '#2163D3',
+      // Cor de fundo da barra de guias
+      },
+      }}>
+      <Tab.Screen 
+      name='Casa' 
+      component={Casa} 
+      options={{ 
+        headerShown: false, 
+        tabBarLabel: '', 
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome5 name="home" size={size} color={color} style={{ marginTop:8,}} />
+        ),
+      }} 
+      />
+      <Tab.Screen 
+      name='Favoritos' 
+      component={Favoritos} 
+      options={{ 
+        headerShown: false, 
+        tabBarLabel: '', 
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome5 name="heart" size={size} color={color} style={{ marginTop:8,}} />
+        ),
+      }} 
+      />
+      <Tab.Screen 
+      name='Configurações' 
+      component={ConfigPerfil}  
+      options={{ 
+        headerShown: false, 
+        tabBarLabel: '', 
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="person" size={size} color={color} style={{ marginTop:8,}} />
+        ),
+      }}  
 
-
+      />
 
 </Tab.Navigator>
 );
 }
-
 function CustomDrawerContent({ navigation, ...props }) {
   const [isDarkMode, setIsDarkMode] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-   const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     const auth = getAuth();
@@ -224,15 +222,71 @@ return (
       headerShown: false
 
     }} /> 
+            <Drawer.Screen name='PessoaJuridicaCadastro' component={PessoaJuridicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+            <Drawer.Screen name='PessoaFisicaCadastro' component={PessoaFisicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
   </Drawer.Navigator>
 );
 }
 
-function Casa({ navigation, route }) {
+const Casa = ({ navigation, route }) => {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const [animais, setAnimais] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
+  const [userId, setUserId] = useState('');
 
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+        const q = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+        try {
+          const querySnapshot = await getDocs(q);
+          if (!querySnapshot.empty) {
+            const userDocSnapshot = querySnapshot.docs[0]; // Assume que há apenas um documento correspondente
 
+            const userData = userDocSnapshot.data();
+          
+            setUserId(userData.userUid);
+
+          } 
+        } catch (error) {
+          console.error('Erro ao buscar informações do usuário no Firestore', error);
+        }
+      } 
+    });
+  }, []);
+
+  const handleAdicionarFavorito = async (animal) => {
+    try {
+      // Adiciona o animal aos favoritos do usuário
+      const updatedFavoritos = [...favoritos, { ...animal, userId: userId }];
+  
+      // Atualiza o estado local
+      setFavoritos(updatedFavoritos);
+  
+      // Obtém uma referência para o documento do usuário no Firestore
+      const userDocRef = doc(db, 'PessoasFisicas', userId);
+  
+      // Atualiza o campo de favoritos no documento do usuário
+      await setDoc(userDocRef, { favoritos: updatedFavoritos }, { merge: true });
+  
+      console.log('Animal favoritado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao favoritar o animal:', error);
+    }
+  };
+  
+  
   const fetchAnimais = async () => {
     const animaisCollection = collection(db, 'Animais');
     const animaisQuery = await getDocs(animaisCollection);
@@ -306,6 +360,7 @@ function Casa({ navigation, route }) {
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
             </TouchableOpacity>
           </View>
+          <Text  style={styles.AnimalsText}>ANIMAIS DISPOIVEIS PARA ADOÇÃO:</Text>
           <FlatList
             data={filterAnimals()}
             numColumns={2}
@@ -315,7 +370,12 @@ function Casa({ navigation, route }) {
               style={styles.animalCard}
                onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
               >
-               <AnimalCard animal={item} />
+             <AnimalCard
+              animal={item}
+              onAdicionarFavorito={() => handleAdicionarFavorito(item)}
+              />
+
+               
     </TouchableOpacity>
   )}
 />
@@ -325,7 +385,7 @@ function Casa({ navigation, route }) {
   );
 }
 
-const AnimalCard = ({ animal }) => (
+const AnimalCard = ({ animal, onAdicionarFavorito  }) => (
   <Card>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
@@ -333,7 +393,7 @@ const AnimalCard = ({ animal }) => (
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.endereço}</Text>
-      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
+      <TouchableOpacity onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
       </TouchableOpacity>
     </Card.Content>
@@ -458,5 +518,12 @@ const styles = StyleSheet.create({
   flatListContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  AnimalsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+    color:'#000'
   },
 });

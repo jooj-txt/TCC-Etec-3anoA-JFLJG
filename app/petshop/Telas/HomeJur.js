@@ -6,9 +6,10 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, Login, Inicio} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, Login, Inicio, HomeScreen, PessoaFisicaCadastro, PessoaJuridicaCadastro} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons'; 
 import logo from '../imgs/logo_Inicio.png';
 import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
@@ -32,7 +33,6 @@ function Tabs({ navigation }) {
   return (
     <Tab.Navigator screenOptions={{
       tabBarLabelStyle: {
-        fontSize: 16, // Tamanho da fonte das guias
         fontWeight: 'bold', // Estilo da fonte das guias
       },
       tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
@@ -65,14 +65,13 @@ function Tabs({ navigation }) {
         }} 
       />
       <Tab.Screen 
-        name='Configurações' 
-        component={ConfigPerfil}  
+        name='HomeScreen' 
+        component={HomeScreen}  
         options={{ 
-          headerShown: false, 
+          headerShown: false,   
           tabBarLabel: '', 
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
+          <FontAwesome name="paw" size={size} color={color} />          ),
         }}  
       />
     </Tab.Navigator>
@@ -168,7 +167,7 @@ function Tabs({ navigation }) {
     };
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="HomeJur" component={Tabs} options={{
+      <Drawer.Screen name="Home" component={Tabs} options={{
         title: null,
         headerStyle: {
           backgroundColor: "#2163D3",
@@ -203,6 +202,26 @@ function Tabs({ navigation }) {
 
     }} /> 
      <Drawer.Screen name='ConfigPerfil' component={ConfigPerfil} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+      <Drawer.Screen name='HomeJur' component={HomeScreenJur} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+         <Drawer.Screen name='HomeScreen' component={HomeScreen} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+            <Drawer.Screen name='PessoaJuridicaCadastro' component={PessoaJuridicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+            <Drawer.Screen name='PessoaFisicaCadastro' component={PessoaFisicaCadastro} options={{
       title: null,
       headerShown: false
 
@@ -325,7 +344,7 @@ function Casa({ navigation, route }) {
 }
 
 const AnimalCard = ({ animal }) => (
-  <Card style={styles.animalCard}>
+  <Card>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
@@ -373,19 +392,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     borderRadius: 5,
   },
-  menu: {
-    // Adicione seus estilos de menu aqui
-  },
-  animalList: {
-    // Adicione estilos para a lista de animais aqui
-  },
+  
   animalCard: {
     flex: 1,
     margin: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
   },
   animalText: {
     color: 'black',

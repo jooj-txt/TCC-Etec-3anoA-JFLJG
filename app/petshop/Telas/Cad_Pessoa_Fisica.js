@@ -136,29 +136,11 @@ const PessoaFisicaCadastro = ({navigation},) => {
         addDoc(pessoasFisicasRef, userData)
           .then((docRef) => {
             console.log('Dados do usuário adicionados ao Firestore com ID do documento: ', docRef.id);
-  
-            // Faça o login do usuário recém-criado
-            signInWithEmailAndPassword(auth, email, senha)
-              .then((userCredential) => {
-                const loggedInUser = userCredential.user;
-                console.log('Usuário logado:', loggedInUser);
-  
-                // Defina o usuário no estado
-                setUser(loggedInUser);
-              })
-              .catch((error) => {
-                console.error('Erro ao fazer login:', error);
-              });
+
           })
-          .catch((error) => {
-            console.error('Erro ao adicionar dados ao Firestore:', error);
-          });
+          
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error('Erro ao criar usuário:', errorMessage);
-      });
+   
     }
     else{
       alert(
