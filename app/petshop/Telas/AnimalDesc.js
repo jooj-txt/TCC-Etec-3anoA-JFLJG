@@ -65,7 +65,7 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoLabel}>Descrição:</Text>
       </View>
 
-      <TouchableOpacity style={styles.Button} onPress={() => navigation.navigate('TelaAdocao')}>
+      <TouchableOpacity style={styles.Button} onPress={console.log(animalInfo.userId)}>
       <Text style={styles.infoText}>ME ADOTE</Text>
       </TouchableOpacity>
 

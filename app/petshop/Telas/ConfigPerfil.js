@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Entypo } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons'; 
 
 
 
-const ConfigPerfil = ({ route }) => {
+const ConfigPerfil = ({ route, navigation }) => {
   const db = getFirestore();
   const auth = getAuth();
 
@@ -13,6 +15,7 @@ const ConfigPerfil = ({ route }) => {
   const [dataNascimento, setDataNascimento] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
+  const [endereco, setEndereco] = useState('')
   const [generoFeminino, setGeneroFeminino] = useState(false);
   const [generoMasculino, setGeneroMasculino] = useState(false);
   const [criancasSim, setCriancasSim] = useState(false);
@@ -81,6 +84,7 @@ const ConfigPerfil = ({ route }) => {
           setDataNascimento(userData.dataNascimento);
           setEmail(userData.email);
           setCelular(userData.celular);
+          setEndereco(userData.endereco);
 
                 } else {
           console.warn('Documento do usuário não encontrado no Firestore');
@@ -274,66 +278,75 @@ const ConfigPerfil = ({ route }) => {
   return (
     <ScrollView>
       <View>
-        <Text>Nome</Text>
-        <TextInput value={nome} onChangeText={setNome} />
+      <Text style={styles.title}>DADOS PESSOAIS:</Text>
+        <TextInput  style={styles.input} value={nome} onChangeText={setNome} placeholder="NOME"/>
+        <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} />
+        <TextInput style={styles.input}  value={email} onChangeText={setEmail} />
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Entypo style={{marginLeft:20, position:'absolute'}} name="location" size={24} color="black" />
+        <TextInput   style={styles.input}  value={endereco} onChangeText={setEndereco}/>
+        </View>
 
-        <Text>Data de Nascimento</Text>
-        <TextInput value={dataNascimento} onChangeText={setDataNascimento} />
 
-        <Text>Email</Text>
-        <TextInput value={email} onChangeText={setEmail} />
-
-                <Text>Gênero</Text>
+                <Text style={styles.title}>Gênero</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('genero', 'feminino', 'Feminino')}
           {renderButton('genero', 'masculino', 'Masculino')}
         </View>
 
-        <Text>Há crianças em sua residência?</Text>
+        <Text style={styles.title} >Há crianças em sua residência?</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('criancas', 'Sim', 'Sim')}
           {renderButton('criancas', 'Nao', 'Não')}
         </View>
 
-        <Text>Você mora em:</Text>
+        <Text style={styles.title}>Você mora em:</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('moradia', 'Casa', 'Casa')}
           {renderButton('moradia', 'Apartamento', 'Apartamento')}
         </View>
 
-        <Text>Espaço de sua residência:</Text>
+        <Text style={styles.title}>Espaço de sua residência:</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('espaco', 'Pequeno', 'Pequeno')}
           {renderButton('espaco', 'Medio', 'Médio')}
           {renderButton('espaco', 'Grande', 'Grande')}
         </View>
 
-        <Text>Você possui outros pets?</Text>
+        <Text style={styles.title}>Você possui outros pets?</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('possuiPets', 'Sim', 'Sim')}
           {renderButton('possuiPets', 'Nao', 'Não')}
         </View>
 
-        <Text>Quantas horas passa em casa por dia?</Text>
+        <Text style={styles.title}>Quantas horas passa em casa por dia?</Text>
         <View style={{ flexDirection: 'row' }}>
           {renderButton('horas', '4ouMenos', '4 ou menos')}
           {renderButton('horas', '4a8', '4 a 8 horas')}
+          </View>
+          <View style={{ flexDirection: 'row' }}>
           {renderButton('horas', '8a12', '8 a 12 horas')}
           {renderButton('horas', '12ouMais', '12 ou mais horas')}
         </View>
-        <Text>Sua ocupação</Text>
-        <TextInput value={ocupacao} onChangeText={setOcupacao} />
+        <Text style={styles.title}>Sua ocupação</Text>
+        <TextInput  style={styles.input} value={ocupacao} onChangeText={setOcupacao} />
 
-        <Text>Número de pessoas que moram com você</Text>
-        <TextInput value={numPessoas} onChangeText={setNumPessoas} />
+        <Text style={styles.title}>Número de pessoas que moram com você</Text>
+        <TextInput  style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
+        <View>
+        <Text style={styles.title}>Possui Instagram?</Text>
+        <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
+        <Entypo style={{marginLeft:"5%",marginTop:"20%", position:'absolute'}} name="instagram" size={24} color="black" />
+        <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
+        </View>
+        <View>
+        <Text style={styles.title}>Whatsapp</Text>
+        <Text style={styles.subtitle}>Pode fica tranquilo/a, suas informações não ficaram visíveis</Text>
+        <FontAwesome  style={{marginLeft:"5%",marginTop:"17%", position:'absolute'}} name="whatsapp" size={24} color="black" />
+        <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
+        </View>
 
-        <Text>Possui Instagram?</Text>
-        <TextInput value={instagram} onChangeText={setInstagram} />
-
-        <Text>Whatsapp</Text>
-        <TextInput value={celular} onChangeText={setCelular} />
-
-        <Text>Como conheceu a gente?</Text>
+        <Text style={styles.title}>Como conheceu a gente?</Text>
         <View>
                 {['instagram', 'facebook', 'twitter', 'outros'].map((buttonName) => (
           <TouchableOpacity
@@ -355,7 +368,16 @@ const ConfigPerfil = ({ route }) => {
         ))}
         </View>
 
-        <TouchableOpacity onPress={handleSaveProfile} style={styles.button}>
+        <TouchableOpacity  onPress={() => {
+                handleSaveProfile();
+                navigation.navigate('Home');
+              }} style={{ alignItems: 'center',
+              alignSelf:'center',
+              backgroundColor: '#FFAE2E',
+              padding: 10,
+              borderRadius: 5,
+              marginTop: 10,
+              width:120,}}>
           <Text style={{ color: 'white' }}>Salvar Perfil</Text>
         </TouchableOpacity>
       </View>
@@ -371,8 +393,30 @@ const styles = {
     backgroundColor: '#2163D3',
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 5,
+    margin:5,
+    width:120,
   },
+  input:{
+    height: 40,
+    width:280,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    margin:15,
+    textAlign:'center'
+  },
+  title:{
+    fontSize: 15,
+    fontWeight: 'bold',
+    margin:5,
+  },
+  subtitle:{
+    marginLeft:20,
+    color:'darkgrey'
+
+  }
 };
 
 export default ConfigPerfil;

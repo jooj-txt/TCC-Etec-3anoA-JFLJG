@@ -118,30 +118,12 @@
           // Adicione os dados do usuário a um novo documento
           addDoc(pessoasJuridicasRef, userData)
             .then((docRef) => {
-              console.log('Dados do usuário adicionados ao Firestore com ID do documento: ', docRef.id);
-    
-              // Faça o login do usuário recém-criado
-              signInWithEmailAndPassword(auth, email, senha)
-                .then((userCredential) => {
-                  const loggedInUserJur = userCredential.userJur;
-                  console.log('Usuário logado:', loggedInUserJur);
-    
-                  // Defina o usuário no estado
-                  setUserJur(loggedInUserJur);
-                })
-                .catch((error) => {
-                  console.error('Erro ao fazer login:', error );
-                });
+              console.log('Dados do usuário adicionados ao Firestore com ID do documento: ', docRef.id);          
+               
             })
-            .catch((error) => {
-              console.error('Erro ao adicionar dados ao Firestore:', error);
-            });
+            
         })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error('Erro ao criar usuário:', errorMessage);
-        });
+        
   
       } else {
 

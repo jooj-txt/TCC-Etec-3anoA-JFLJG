@@ -1,16 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+import { BlurView } from 'expo-blur';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const auth = getAuth();
   const [userType, setUserType] = useState('');
+  const [showModal, setShowModal] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      // Autenticar o usuário com o Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+
+      // Verificar se é a primeira vez que o usuário fez login
+      const firstTimeLogin = await AsyncStorage.getItem('firstTimeLogin');
+      if (!firstTimeLogin) {
+        // Se for a primeira vez que o usuário fez login, exiba o modal
+        setShowModal(false);
+
+        // Marque que o usuário já fez login para que o modal não seja exibido novamente
+        await AsyncStorage.setItem('firstTimeLogin', 'true');
+      }
+    } catch (error) {
+      // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
+      console.error('Erro de autenticação:', error.message);
+    }
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -53,27 +76,48 @@ export default function Login({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-  const handleLogin = async () => {
-    try {
-      // Autenticar o usuário com o Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-    } catch (error) {
-      // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
-      console.error('Erro de autenticação:', error.message);
-    }
-  };
-
   // Quando o usuário efetuar login, redirecione-o com base no userType
   useEffect(() => {
     if (userType === 'user') {
       navigation.navigate('Home');
+      setShowModal(true);
     } else if (userType === 'userJur') {
       navigation.navigate('HomeJur');
     }
   }, [userType]);
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={closeModal}
+      >
+    <BlurView style={styles.containerModal} intensity={35} tint="light">
+
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Complete seu perfil para aproveitar ao máximo nosso aplicativo!
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                closeModal();
+                navigation.navigate('ConfigPerfil');
+              }}
+            >
+              <Text style={styles.buttonText}>Completar Perfil</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        </BlurView>
+      </Modal>
       <TouchableOpacity
         style={{
           height: 40,
@@ -188,5 +232,33 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     marginBottom: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#2163D3',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: 200,
+  },
+  containerModal: {
+    flex: 1,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
 });

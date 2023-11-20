@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, Login, Inicio, HomeScreen, PessoaFisicaCadastro, PessoaJuridicaCadastro} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons'; 
 import logo from '../imgs/logo_Inicio.png';
 import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,7 +33,6 @@ function Tabs({ navigation }) {
   return (
     <Tab.Navigator screenOptions={{
       tabBarLabelStyle: {
-        fontSize: 16, // Tamanho da fonte das guias
         fontWeight: 'bold', // Estilo da fonte das guias
       },
       tabBarActiveTintColor: '#FFAE2E', // Cor do texto da guia ativa
@@ -64,14 +65,13 @@ function Tabs({ navigation }) {
         }} 
       />
       <Tab.Screen 
-        name='Configurações' 
-        component={ConfigPerfil}  
+        name='HomeScreen' 
+        component={HomeScreen}  
         options={{ 
-          headerShown: false, 
+          headerShown: false,   
           tabBarLabel: '', 
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
-          ),
+          <FontAwesome name="paw" size={size} color={color} />          ),
         }}  
       />
     </Tab.Navigator>
@@ -120,31 +120,42 @@ function Tabs({ navigation }) {
       <DrawerContentScrollView {...props}>
         <View style={styles.containerDrawer}>
           <View  style={styles.userArea}>
-          <Image
+            <Image
               source={logo}
               style={styles.user}
             />
             <View style={{flexDirection: 'column'}}>
-            <Text style={styles.nome}>{userName}</Text>
-            <Text style={styles.email}>{userEmail}</Text>
+              <Text style={styles.nome}>{userName}</Text>
+              <Text style={styles.email}>{userEmail}</Text>
             </View>
           </View>
         </View>
-  
-      
+        <DrawerItem 
+          label="Adicionar animal"
+          onPress={() => navigation.navigate('AdicionarAnimal')} 
+          labelStyle={styles.drawerItem} />
         <DrawerItem 
           label="Sair" 
-          onPress={() => navigation.navigate("Home")} 
+          onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
           labelStyle={styles.drawerItem} />
-
         <View style={styles.darkModeSwitch}>
-        <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-        <Switch value={isDarkMode} />
-      </View>
+          <Text style={styles.darkModeLabel}>Modo Escuro</Text>
+          <Switch value={isDarkMode} />
+        </View>
       </DrawerContentScrollView>
     );
   }
   
+  // Adiciona a função handleLogout
+  const handleLogout = async (navigation) => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      navigation.navigate('Login'); 
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
+  };
   function DrawerNavigator() {
     const [searchText, setSearchText] = useState('');
     const searchAnimals = () => {
@@ -170,33 +181,91 @@ function Tabs({ navigation }) {
           />
         ),
       }} />
+       <Drawer.Screen name='PosAdd' component={PosAdd} options={{
+      title: null,
+      headerShown: false
 
+    }} /> 
+    <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
+      title: null,
+      headerShown: false
+ 
+    }} /> 
+      <Drawer.Screen name='Login' component={Login} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+    <Drawer.Screen name='Inicio' component={Inicio} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+     <Drawer.Screen name='ConfigPerfil' component={ConfigPerfil} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+      <Drawer.Screen name='HomeJur' component={HomeScreenJur} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+         <Drawer.Screen name='HomeScreen' component={HomeScreen} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+            <Drawer.Screen name='PessoaJuridicaCadastro' component={PessoaJuridicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+            <Drawer.Screen name='PessoaFisicaCadastro' component={PessoaFisicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
     </Drawer.Navigator>
   );
 }
 
 
-function Casa({ navigation }) {
+function Casa({ navigation, route }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const [animais, setAnimais] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  const fetchAnimais = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-  useEffect(() => {
-    const fetchAnimais = async () => {
+    if (user) {
       const animaisCollection = collection(db, 'Animais');
       const animaisQuery = await getDocs(animaisCollection);
 
       const animaisData = [];
       animaisQuery.forEach((doc) => {
         const animal = doc.data();
-        animaisData.push(animal);
+        if (animal.userId === user.uid) {
+          animaisData.push(animal);
+        }
       });
-  
+
       setAnimais(animaisData);
-    };
-    
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchAnimais();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAnimais();
+    }, [])
+  );
 
   const filterAnimals = () => {
     if (selectedFilter === 'TODOS') {
@@ -210,8 +279,14 @@ function Casa({ navigation }) {
     <Provider>
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
-          <View style={styles.filterContainer}>
-            <TouchableOpacity
+          {isLoading ? (
+            <Text style={styles.AnimalsText}>Carregando...</Text>
+          ) : animais.length === 0 ? (
+            <Text style={styles.AnimalsText}>NENHUM ANIMAL DIVULGADO</Text>
+          ) : (
+            <>
+              <View style={styles.filterContainer}>
+              <TouchableOpacity
               onPress={() => setSelectedFilter('TODOS')}
               style={[
                 styles.filterCard,
@@ -244,16 +319,24 @@ function Casa({ navigation }) {
               ]}
             >
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>
-          </View>
-          <Text>ANIMAIS POSTADOS</Text>
-          <FlatList
-            data={filterAnimals()}
-            numColumns={2}
-            renderItem={({ item }) => (
-              <AnimalCard animal={item} />
-            )}
-          />
+            </TouchableOpacity>              
+            </View>
+            <Text  style={styles.AnimalsText}>ANIMAIS POSTADOS:</Text>
+              <FlatList
+                data={filterAnimals()}
+                numColumns={2}
+                keyExtractor={(item) => item.ID}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.animalCard}
+                    onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
+                  >
+                    <AnimalCard animal={item} />
+                  </TouchableOpacity>
+                )}
+              />
+            </>
+          )}
         </View>
       </ScrollView>
     </Provider>
@@ -261,7 +344,7 @@ function Casa({ navigation }) {
 }
 
 const AnimalCard = ({ animal }) => (
-  <Card style={styles.animalCard}>
+  <Card>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
@@ -309,19 +392,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgray',
     borderRadius: 5,
   },
-  menu: {
-    // Adicione seus estilos de menu aqui
-  },
-  animalList: {
-    // Adicione estilos para a lista de animais aqui
-  },
+  
   animalCard: {
     flex: 1,
     margin: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
   },
   animalText: {
     color: 'black',
@@ -408,5 +486,12 @@ const styles = StyleSheet.create({
   },
   darkModeLabel: {
     fontSize: 16,
+  },
+  AnimalsText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+    color:'#000'
   },
 });
