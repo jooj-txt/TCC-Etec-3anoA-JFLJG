@@ -6,6 +6,14 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/menu.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/about.css'>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="teste.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
     <!-- Font Awesome -->
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -22,95 +30,92 @@
         rel="stylesheet"
     />
 </head>
-    <body>
+    <body class="body">
         <!-- Seu conteúdo HTML aqui -->
-        <nav class="navbar navbar-expand-lg navbar-light tccNavbar">
-            <!-- Container wrapper -->
-            <div class="container-fluid">
-                <!-- Toggle button -->
-                <button
-                    class="navbar-toggler"
-                    type="button"
-                    data-mdb-toggle="collapse"
-                    data-mdb-target="#navbarCenteredExample"
-                    aria-controls="navbarCenteredExample"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <!-- Collapsible wrapper -->
-                <div
-                    class="collapse navbar-collapse justify-content-center"
-                    id="navbarCenteredExample"
-                >
-                    <!-- Left links -->
-                    <ul class="navbar-nav mb-2 mb-lg-0">
-                        <a class="navbar-brand" href="#">
-                            <img
-                                src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-                                height="20"
-                                alt="MDB Logo"
-                                loading="lazy"
-                            />
-                        </a>
-                        <li class="nav-item">
-                            <a class="nav-link " href="mainMenu.html">Início</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="aboutUs.html">Sobre Nós</a>
-                        </li>
-                    </ul>
-                    <!-- Left links -->
-                </div>
-                <!-- Collapsible wrapper -->
-            </div>
-            <!-- Container wrapper -->
-        </nav>
-        <div class="card container cardIntro">
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark tccNavbar p-md-3">
+        <div class="container">
+          <a class="navbar-brand" href="./mainMenu.html">VIRA-LAR</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="mx-auto"></div>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="./mainMenu.html">Inicío</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="./aboutUs.html">Sobre Nós</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white"href="https://instagram.com/viralaroficial?igshid=OGQ5ZDc2ODk2ZA==">Instagram</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+        <div class="card container cardIntro body">
             <div class="card-body text-center">
-                <h4>This is some text within a card body.</h4>
-                <h6>It is a paradisematic country, in which roasted parts of sentences 
-                  fly into your mouth. Even the all-powerful Pointing has no control about 
-                  the blind texts it is an almost unorthographic life One day however a small 
-                  line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</h6>
+                <h2 data-aos="fade-up" style="margin-bottom: 20px;">Sobre nós?</h2>
+                <h6 data-aos="fade-up" data-aos-delay="200">Somos uma equipe da ETEC de Desenvolvimento de Sistemas de Taboão
+                     da Serra e estamos inaugurando esse APP como nosso Trabalho de Conclusão de Curso, 
+                    com o objetivo de diminuir cada vez mais os mal-tratos aos animais de estimação e incentivar a adoção consciente.</h6>
             </div>
         </div>
-        <div class="container">
+        <div class="container body">
             <div class="row">
                 <div class="col-12 mt-3">
                     <div class="card border-0">
-                        <div class="card-horizontal">
-                            <div >
-                                <img class="" src="http://via.placeholder.com/510x200" alt="Card image cap">
+                        <div class="card-horizontal body">
+                            <div style="padding-left: 10%;">
+                                <img data-aos="fade-right"  src="./Fotos/etec.jpg" height="200" width="410" alt="Card image cap">
                             </div>
-                            <div class="card-body">
-                                <h4 class="card-title">Card title</h4>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <div class="card-body" data-aos="fade-left">
+                                <h4 class="card-title">ETEC de Taboão da Serra</h4>
+                                <p class="card-text">Fundada em 2018, a ETEC de Taboão da Serra tem como o curso  de
+                                    Desenvolvimento de Sistemas que aborda diversos assuntos na área da tecnologia de software, como HTML, CSS, C#,
+                                     JavaScript e outras linguagens de programação e estilização, além de arduinos e segurança de software.</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <hr class="hr3"/>
             <div class="container">
+                <div class="card-body">
+                    <h1 class="tituloGaleria" data-aos="fade-down">Quem somos?</h1>
+                </div>
                 <div class="responsive gallery" >
-                    <div class="card imageColumn imageAbout">
+                    <div class="card imageColumn imageAbout" data-aos="fade-right">
                         <img class="imagensPessoal" src="./Fotos/participantes/Fernando.jpeg" alt="Card image cap" >
+                        <p class="namesCards card-text">Fernando Ares Guerra Capestrani</p>
                     </div>
-                    <div class="card imageColumn imageAbout">
-                        <img class="imagensPessoal" src="./Fotos/participantes/Juan.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="card imageColumn imageAbout" data-aos="fade-down">
+                        <img class="imagensPessoal" src="./Fotos/participantes/Westphal.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                        <p class="namesCards card-text">Guilherme Westphal de Souza</p>
                     </div>
-                    <div class="card imageColumn imageAbout">
+                    <div class="card imageColumn imageAbout" data-aos="fade-left">
                         <img class="imagensPessoal" src="./Fotos/participantes/José.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                        <p class="namesCards card-text">José Rubens de Freitas Pinheiro</p>
                     </div>
                 </div>
                 <div class=" responsive gallery" >
-                    <div class="card imageColumn imageAbout">
-                        <img class="imagensPessoal" src="./Fotos/participantes/Lara.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="card imageColumn imageAbout" data-aos="fade-right">
+                        <img class="imagensPessoal" src="./Fotos/participantes/Juan.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                        <p class="namesCards card-text">Juan Pablo Rebelo Coelho</p>
                     </div>
-                    <div class="card imageColumn imageAbout">
-                        <img class="imagensPessoal" src="./Fotos/participantes/Westphal.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="card imageColumn imageAbout" data-aos="fade-left">
+                        <img class="imagensPessoal" src="./Fotos/participantes/Lara.jpeg" alt="Card image cap" style="width: 100%; height: 100%; object-fit: cover;">
+                        <p class="namesCards card-text">Lara Gabrielly Jesus dos Santos</p>
                     </div>
                 </div>
             </div>
@@ -149,5 +154,8 @@
                 <p class="copyright">Company Name © 2018</p>
             </div>
         </footer>
+
+        <script src="script.js"></script>
+        <script src="teste.js"></script>
     </body>
 </html>

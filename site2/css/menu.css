@@ -54,7 +54,7 @@
   background-color: dodgerblue;
   color: white;
   transform: rotateY(180deg);
-  
+  align-items: center;
 }
 .backgroundParallax{
      background-image: url("../Fotos/parralax.jpg");
@@ -155,3 +155,33 @@
      font-size:13px;
      margin-bottom:0;
    }
+    
+.flip-card {
+  width: 200px; /* Defina a largura desejada */
+  height: 300px; /* Defina a altura desejada */
+}
+.flip-card-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+.flip-card-front,
+.flip-card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+}
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+.flip-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.body{
+  background-image: url("../Fotos/rm222-mind-31.jpg");
+  font-family: 'Sora', sans-serif;
+}
