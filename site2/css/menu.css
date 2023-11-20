@@ -185,3 +185,6 @@
   background-image: url("../Fotos/rm222-mind-31.jpg");
   font-family: 'Sora', sans-serif;
 }
+.footer-dark {
+  padding: 0; /* Cor do texto */
+}
