@@ -1,5 +1,5 @@
   import React, { useState,useContext,useEffect   } from 'react';
-  import { View, Text, TextInput, TouchableOpacity, StyleSheet} from 'react-native';
+  import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
   import { Alert } from 'react-native';
   import {  CheckBox } from 'react-native-elements';  
   import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -137,6 +137,7 @@
 
 
     return (
+      <ScrollView>
       <View style={styles.container}>
         <Text style={styles.heading}>Cadastro Pessoa Jurídica</Text>
         <TextInput
@@ -218,6 +219,7 @@
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     );
   };
 

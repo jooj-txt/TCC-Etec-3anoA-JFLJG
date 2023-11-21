@@ -64,16 +64,7 @@ function Tabs({ navigation }) {
           ),
         }} 
       />
-      <Tab.Screen 
-        name='HomeScreen' 
-        component={HomeScreen}  
-        options={{ 
-          headerShown: false,   
-          tabBarLabel: '', 
-          tabBarIcon: ({ color, size }) => (
-          <FontAwesome name="paw" size={size} color={color} />          ),
-        }}  
-      />
+   
     </Tab.Navigator>
   );
 }
@@ -130,10 +121,7 @@ function Tabs({ navigation }) {
             </View>
           </View>
         </View>
-        <DrawerItem 
-          label="Adicionar animal"
-          onPress={() => navigation.navigate('AdicionarAnimal')} 
-          labelStyle={styles.drawerItem} />
+  
         <DrawerItem 
           label="Sair" 
           onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
