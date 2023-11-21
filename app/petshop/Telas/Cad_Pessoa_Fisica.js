@@ -147,8 +147,8 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
 
   return (
+  
     <View style={styles.container}>
-          <ScrollView>
 
       <Text style={styles.heading}>Cadastro Pessoa Física</Text>
       <TextInput
@@ -162,7 +162,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
         style={[styles.input,itemStyles[1]]}
         inputMode='numeric'
         keyboardType='numeric'
-        placeholder="CPF, XXX.XXX.XXX.XX"
+        placeholder="CPF(XXX.XXX.XXX.XX)"
         value={cpf}
         onChangeText={handleCPFChange}
       />
@@ -176,8 +176,8 @@ const PessoaFisicaCadastro = ({navigation},) => {
       />
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="Celular, +55XXXXXXXXXXX"
-        value={celular}
+        placeholder="Celular(COM O DDD)"
+        value={[celular + "+55"]}
         keyboardType='numeric'
         onChangeText={setCelular}
       />
@@ -195,7 +195,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
 
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="Data de Nascimento, XX/XX/XXXX"
+        placeholder="Data de Nascimento(XX/XX/XXXX)"
         keyboardType='numeric'
         value={dataNascimento}
         onChangeText={handleDateChange}
@@ -248,7 +248,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
           }}   >
         <Text style={styles.buttonText}>Cadastrar</Text>
       </Pressable>
-      </ScrollView>
 
     </View>
   );
