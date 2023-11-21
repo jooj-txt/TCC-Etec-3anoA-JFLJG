@@ -128,8 +128,8 @@
       } else {
 
         alert(
-          'Preenche aeeeeeee',"fuandjsafbsbfls")
-      }
+          'Preencha TUDO')
+        }
       
     };
     
@@ -137,8 +137,10 @@
 
 
     return (
-      <ScrollView>
+        
       <View style={styles.container}>
+              <ScrollView>
+
         <Text style={styles.heading}>Cadastro Pessoa Jurídica</Text>
         <TextInput
           style={[styles.input,itemStyles[0]]}
@@ -218,8 +220,9 @@
             }}   >
           <Text style={styles.buttonText}>Cadastrar</Text>
         </TouchableOpacity>
+        </ScrollView>
+
       </View>
-      </ScrollView>
     );
   };
 

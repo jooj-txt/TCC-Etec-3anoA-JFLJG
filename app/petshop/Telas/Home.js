@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
   },
   animalText: {
     color: 'black',

@@ -144,14 +144,15 @@ const PessoaFisicaCadastro = ({navigation},) => {
     }
     else{
       alert(
-        'PreenchA TUDO')
+        'Preencha TUDO')
     }
   };
   
 
   return (
-    <ScrollView>
     <View style={styles.container}>
+          <ScrollView>
+
       <Text style={styles.heading}>Cadastro Pessoa Física</Text>
       <TextInput
         style={[styles.input,itemStyles[0]]}
@@ -249,8 +250,9 @@ const PessoaFisicaCadastro = ({navigation},) => {
           }}   >
         <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
+      </ScrollView>
+
     </View>
-    </ScrollView>
   );
 };
 
