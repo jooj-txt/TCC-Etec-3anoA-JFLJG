@@ -1,5 +1,5 @@
 import React, { useState, useContext,useEffect   } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -19,7 +19,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [celular, setCelular] = useState();
   const [genero, setGenero] = useState();
   const [cep, setCep] = useState();
-  const [endereco, setEndereco] = useState();
   const [cidade, setCidade] = useState();
   const [estado, setEstado] = useState();
   const [senha, setSenha] = useState();
@@ -38,7 +37,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
         email &&
         celular &&
         cep &&
-        endereco &&
         cidade &&
         estado &&
         dataNascimento &&
@@ -55,7 +53,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
     useEffect(() => {
       validateFields();
-    }, [nome, cpf, email, celular, cep, endereco, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
+    }, [nome, cpf, email, celular, cep, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
   
   
     const isValidCPF = (cpf) => {
@@ -121,7 +119,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
           celular,
           genero,
           cep,
-          endereco,
           cidade,
           estado,
           dataNascimento,
@@ -155,6 +152,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
 
       <Text style={styles.heading}>Cadastro Pessoa Física</Text>
       <TextInput
+        inputMode='name'
         style={[styles.input,itemStyles[0]]}
         placeholder="Nome"
         value={nome}
@@ -162,12 +160,15 @@ const PessoaFisicaCadastro = ({navigation},) => {
       />
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="CPF"
+        inputMode='numeric'
+        keyboardType='numeric'
+        placeholder="CPF, XXX.XXX.XXX.XX"
         value={cpf}
         onChangeText={handleCPFChange}
       />
       <TextInput
         style={[styles.input,itemStyles[0]]}
+        inputMode='email'
         placeholder="Email"
         keyboardType='email-address'
         value={email}
@@ -175,8 +176,9 @@ const PessoaFisicaCadastro = ({navigation},) => {
       />
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="Celular"
+        placeholder="Celular, +55XXXXXXXXXXX"
         value={celular}
+        keyboardType='numeric'
         onChangeText={setCelular}
       />
 
@@ -193,21 +195,17 @@ const PessoaFisicaCadastro = ({navigation},) => {
 
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="Data de Nascimento"
+        placeholder="Data de Nascimento, XX/XX/XXXX"
+        keyboardType='numeric'
         value={dataNascimento}
         onChangeText={handleDateChange}
       />
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="CEP"
+        keyboardType='numeric'
         value={cep}
         onChangeText={setCep}
-      />
-      <TextInput
-        style={[styles.input,itemStyles[1]]}
-        placeholder="Endereço"
-        value={endereco}
-        onChangeText={setEndereco}
       />
       <TextInput
         style={[styles.input,itemStyles[0]]}
@@ -245,11 +243,11 @@ const PessoaFisicaCadastro = ({navigation},) => {
         checkedColor="#2163D3"
         value={setAceitarTermos}
       />
-      <TouchableOpacity style={styles.button}   onPress={() => {
+      <Pressable style={styles.button}   onPress={() => {
             handleCad();
           }}   >
         <Text style={styles.buttonText}>Cadastrar</Text>
-      </TouchableOpacity>
+      </Pressable>
       </ScrollView>
 
     </View>

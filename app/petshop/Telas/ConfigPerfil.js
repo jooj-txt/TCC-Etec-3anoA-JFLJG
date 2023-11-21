@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Switch, Alert } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, Switch, Alert } from 'react-native';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Entypo } from '@expo/vector-icons'; 
@@ -15,6 +15,8 @@ const ConfigPerfil = ({ route, navigation }) => {
   const [dataNascimento, setDataNascimento] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
   const [endereco, setEndereco] = useState('')
   const [generoFeminino, setGeneroFeminino] = useState(false);
   const [generoMasculino, setGeneroMasculino] = useState(false);
@@ -84,7 +86,9 @@ const ConfigPerfil = ({ route, navigation }) => {
           setDataNascimento(userData.dataNascimento);
           setEmail(userData.email);
           setCelular(userData.celular);
-          setEndereco(userData.endereco);
+          setCidade(userData.cidade);
+          setEstado(userData.estado);
+
 
                 } else {
           console.warn('Documento do usuário não encontrado no Firestore');
@@ -143,10 +147,6 @@ const ConfigPerfil = ({ route, navigation }) => {
     profileData.numPessoas = numPessoas;
   
     
-
-
-
-
       await updateDoc(userDocRef, profileData);
       Alert.alert('Perfil atualizado com sucesso!');
     } catch (error) {
@@ -252,7 +252,7 @@ const ConfigPerfil = ({ route, navigation }) => {
   };
 
   const renderButton = (category, buttonName, buttonText) => (
-    <TouchableOpacity
+    <Pressable
       key={buttonName}
     
       onPress={() => {
@@ -271,7 +271,7 @@ const ConfigPerfil = ({ route, navigation }) => {
       <Text style={{ color: selectedButtons[category] === buttonName ? '#FFAE2E' : 'white' }}>
         {buttonText}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   );
   
 
@@ -280,11 +280,11 @@ const ConfigPerfil = ({ route, navigation }) => {
       <View>
       <Text style={styles.title}>DADOS PESSOAIS:</Text>
         <TextInput  style={styles.input} value={nome} onChangeText={setNome} placeholder="NOME"/>
-        <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} />
-        <TextInput style={styles.input}  value={email} onChangeText={setEmail} />
+        <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} placeholder='XX/XX/XXXX' />
+        <TextInput style={styles.input}  value={email} onChangeText={setEmail} placeholder='seunome@gmail.com' />
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Entypo style={{marginLeft:20, position:'absolute'}} name="location" size={24} color="black" />
-        <TextInput   style={styles.input}  value={endereco} onChangeText={setEndereco}/>
+        <TextInput   style={styles.input}  value={[cidade +","+estado]} onChangeText={setEndereco}/>
         </View>
 
 
@@ -333,23 +333,36 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Text style={styles.title}>Número de pessoas que moram com você</Text>
         <TextInput  style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
+        
         <View>
-        <Text style={styles.title}>Possui Instagram?</Text>
-        <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
-        <Entypo style={{marginLeft:"5%",marginTop:"20%", position:'absolute'}} name="instagram" size={24} color="black" />
-        <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
+          <Text style={styles.title}>Possui Instagram?</Text>
+          <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
+
+          <View style={{flexDirection:'row'}}>
+          <Entypo style={{position:'absolute', marginLeft:"2.5%", marginTop:"2.5%"}}  name="instagram" size={24} color="black" />
+          <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
+          </View>
+        
+        
         </View>
+
         <View>
-        <Text style={styles.title}>Whatsapp</Text>
-        <Text style={styles.subtitle}>Pode fica tranquilo/a, suas informações não ficaram visíveis</Text>
-        <FontAwesome  style={{marginLeft:"5%",marginTop:"17%", position:'absolute'}} name="whatsapp" size={24} color="black" />
-        <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
+          <Text style={styles.title}>Whatsapp</Text>
+          <Text style={styles.subtitle}>Pode fica tranquilo/a, suas informações não ficaram visíveis</Text>
+          
+          <View style={{flexDirection:'row'}}>
+          <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
+        <FontAwesome  style={{position:'absolute', marginLeft:"2.5%", marginTop:"2.5%"}} name="whatsapp" size={24} color="black" />
+          </View>
+          
+
+
         </View>
 
         <Text style={styles.title}>Como conheceu a gente?</Text>
         <View>
                 {['instagram', 'facebook', 'twitter', 'outros'].map((buttonName) => (
-          <TouchableOpacity
+          <Pressable
             key={buttonName}
             onPress={() => handleButtonPress('conheceuRedes', buttonName)}
             style={[
@@ -364,11 +377,11 @@ const ConfigPerfil = ({ route, navigation }) => {
             <Text style={{ color: selectedButtons.conheceuRedes === buttonName ? '#2163D3' : 'white' }}>
               {buttonName.charAt(0).toUpperCase() + buttonName.slice(1)}
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
         </View>
 
-        <TouchableOpacity  onPress={() => {
+        <Pressable  onPress={() => {
                 handleSaveProfile();
                 navigation.navigate('Home');
               }} style={{ alignItems: 'center',
@@ -379,7 +392,7 @@ const ConfigPerfil = ({ route, navigation }) => {
               marginTop: 10,
               width:120,}}>
           <Text style={{ color: 'white' }}>Salvar Perfil</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </ScrollView>
   );
@@ -410,7 +423,7 @@ const styles = {
   title:{
     fontSize: 15,
     fontWeight: 'bold',
-    margin:5,
+    margin:8,
   },
   subtitle:{
     marginLeft:20,

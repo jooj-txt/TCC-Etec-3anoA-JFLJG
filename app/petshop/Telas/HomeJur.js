@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
+import { View, Pressable, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -274,7 +274,7 @@ function Casa({ navigation, route }) {
           ) : (
             <>
               <View style={styles.filterContainer}>
-              <TouchableOpacity
+              <Pressable
               onPress={() => setSelectedFilter('TODOS')}
               style={[
                 styles.filterCard,
@@ -289,8 +289,8 @@ function Casa({ navigation, route }) {
               >
                 TODOS
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => setSelectedFilter('Gato')}
               style={[
                 styles.filterCard,
@@ -298,8 +298,8 @@ function Casa({ navigation, route }) {
               ]}
             >
               <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => setSelectedFilter('Cachorro')}
               style={[
                 styles.filterCard,
@@ -307,7 +307,7 @@ function Casa({ navigation, route }) {
               ]}
             >
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>              
+            </Pressable>              
             </View>
             <Text  style={styles.AnimalsText}>ANIMAIS POSTADOS:</Text>
               <FlatList
@@ -315,12 +315,12 @@ function Casa({ navigation, route }) {
                 numColumns={2}
                 keyExtractor={(item) => item.ID}
                 renderItem={({ item }) => (
-                  <TouchableOpacity
+                  <Pressable
                     style={styles.animalCard}
                     onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
                   >
                     <AnimalCard animal={item} />
-                  </TouchableOpacity>
+                  </Pressable>
                 )}
               />
             </>
@@ -338,10 +338,10 @@ const AnimalCard = ({ animal }) => (
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
-      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.endereço}</Text>
-      <TouchableOpacity onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
+      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
+      <Pressable onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
-      </TouchableOpacity>
+      </Pressable>
     </Card.Content>
   </Card>
 );

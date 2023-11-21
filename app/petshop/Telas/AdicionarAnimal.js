@@ -1,4 +1,4 @@
-  import React, { useEffect, useRef} from 'react';
+  import React, { useEffect, useRef, useState} from 'react';
   import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
   import { FontAwesome5 } from '@expo/vector-icons';
   import { TextInput } from 'react-native-paper';
@@ -13,7 +13,8 @@
     const [name, onChangeName] = React.useState('');
     const [sexo, onChangeSexo] = React.useState('');
     const [raça, onChangeRaça] = React.useState('');
-    const [endereço, onChangeEndereço] = React.useState('');
+    const [cidade, setCidade] = useState('');
+    const [estado, setEstado] = useState('');    
     const [descricao, onChangeDescricao] = React.useState('');
     const [tipo, onChangeTipo] = React.useState('');
     const [images, setImages] = React.useState([]);
@@ -112,7 +113,8 @@
           name,
           sexo,
           raça,
-          endereço,
+          cidade,
+          estado,
           descricao,
           images,
           tipo,
@@ -195,13 +197,23 @@
         
         </Picker>
         </View>
+        <View style={[styles.detailsContainer, itemStyles[0]]}>
+                <FontAwesome5 name="house-user" size={24} color="black"/>
+                <TextInput
+                  style={[styles.input, styles.inputHeight]}
+                  onChangeText={setEstado}
+                  value={estado}
+                  label='Estado'
+                />
+              </View>
+            
               <View style={[styles.detailsContainer, itemStyles[0]]}>
                 <FontAwesome5 name="house-user" size={24} color="black"/>
                 <TextInput
                   style={[styles.input, styles.inputHeight]}
-                  onChangeText={onChangeEndereço}
-                  value={endereço}
-                  label='Endereço'
+                  onChangeText={setCidade}
+                  value={cidade}
+                  label='Cidade'
                 />
               </View>
               <View style={styles.detailsContainer}>

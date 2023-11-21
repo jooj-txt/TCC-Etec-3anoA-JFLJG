@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, TouchableOpacity, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
+import { View, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Pressable } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -161,11 +161,32 @@ const handleLogout = async (navigation) => {
 };
 function DrawerNavigator() {
   const [searchText, setSearchText] = useState('');
+  const [animais, setAnimais] = useState([]);
+
+  const fetchAnimais = async () => {
+    const animaisCollection = collection(db, 'Animais');
+    const animaisQuery = await getDocs(animaisCollection);
+
+    const animaisData = [];
+    animaisQuery.forEach((doc) => {
+      const animal = doc.data();
+      animaisData.push(animal);
+    });
+
+    setAnimais(animaisData);
+  };
+  
+
   const searchAnimals = () => {
     if (searchText === '') {
-      return animalData; 
+      return animais; // Retorna todos os animais se a barra de pesquisa estiver vazia
     } else {
-      return animalData.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
+      return animais.filter(animal =>
+        animal.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        animal.raça.toLowerCase().includes(searchText.toLowerCase()) ||
+        animal.estado.toLowerCase().includes(searchText.toLowerCase()) ||
+        animal.cidade.toLowerCase().includes(searchText.toLowerCase())
+      );
     }
   };
 return (
@@ -325,7 +346,7 @@ const Casa = ({ navigation, route }) => {
       <ScrollView style={styles.container}>
         <View style={styles.animalList}>
           <View style={styles.filterContainer}>
-            <TouchableOpacity
+            <Pressable
               onPress={() => setSelectedFilter('TODOS')}
               style={[
                 styles.filterCard,
@@ -340,8 +361,8 @@ const Casa = ({ navigation, route }) => {
               >
                 TODOS
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => setSelectedFilter('Gato')}
               style={[
                 styles.filterCard,
@@ -349,8 +370,8 @@ const Casa = ({ navigation, route }) => {
               ]}
             >
               <FontAwesome5 name="cat" size={24} color={selectedFilter === 'Gato' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>
-            <TouchableOpacity
+            </Pressable>
+            <Pressable
               onPress={() => setSelectedFilter('Cachorro')}
               style={[
                 styles.filterCard,
@@ -358,7 +379,7 @@ const Casa = ({ navigation, route }) => {
               ]}
             >
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
           <Text  style={styles.AnimalsText}>ANIMAIS DISPOIVEIS PARA ADOÇÃO:</Text>
           <FlatList
@@ -366,8 +387,8 @@ const Casa = ({ navigation, route }) => {
             numColumns={2}
               keyExtractor={(item) => item.ID}
             renderItem={({ item }) => (
-              <TouchableOpacity
-              style={styles.animalCard}
+              <Pressable
+              style={[styles.animalCard]}
                onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
               >
              <AnimalCard
@@ -376,7 +397,7 @@ const Casa = ({ navigation, route }) => {
               />
 
                
-    </TouchableOpacity>
+    </Pressable>
   )}
 />
         </View>
@@ -386,16 +407,16 @@ const Casa = ({ navigation, route }) => {
 }
 
 const AnimalCard = ({ animal, onAdicionarFavorito  }) => (
-  <Card>
-    <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
-    <Card.Content>
+  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+    <Card.Cover style={[styles.animalImage]} source={{uri: animal.images[0]}} />
+    <Card.Content style={{backgroundColor:"#2163D3", borderRadius:10}}>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
-      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.endereço}</Text>
-      <TouchableOpacity onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
+      <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
+      <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
-      </TouchableOpacity>
+      </Pressable>
     </Card.Content>
   </Card>
 );
@@ -435,7 +456,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor:'#FFAE2E',
+    
   },
   animalText: {
     color: 'black',

@@ -1,5 +1,5 @@
   import React, { useState,useContext,useEffect   } from 'react';
-  import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView} from 'react-native';
+  import { View, Text, TextInput, Pressable, StyleSheet, ScrollView} from 'react-native';
   import { Alert } from 'react-native';
   import {  CheckBox } from 'react-native-elements';  
   import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -21,7 +21,6 @@
     const [email, setEmail] = useState('');
     const [celular, setCelular] = useState('');
     const [cep, setCep] = useState('');
-    const [endereco, setEndereco] = useState('');
     const [cidade, setCidade] = useState('');
     const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
@@ -37,7 +36,6 @@
         email &&
         celular &&
         cep &&
-        endereco &&
         cidade &&
         estado &&
         senha &&
@@ -52,7 +50,7 @@
   
     useEffect(() => {
       validateFields();
-    }, [nome, cnpj, email, celular, cep, endereco, cidade, estado, senha, confirmarSenha, aceitarTermos]);
+    }, [nome, cnpj, email, celular, cep, cidade, estado, senha, confirmarSenha, aceitarTermos]);
   
   
     const isValidCNPJ = (cnpj) => {
@@ -105,7 +103,6 @@
             email,
             celular,
             cep,
-            endereco,
             cidade,
             estado,
             userUid,
@@ -151,33 +148,24 @@
         <TextInput
           style={[styles.input,itemStyles[1]]}
           placeholder="CNPJ"
+          keyboardType='numeric'
           value={cnpj} 
           onChangeText={handleCNPJChange}     />
         <TextInput
           style={[styles.input,itemStyles[0]]}
           placeholder="Email"
           value={email}
+          keyboardType='email-address'
           onChangeText={setEmail}
         />
         <TextInput
           style={[styles.input,itemStyles[1]]}
           placeholder="Celular"
           value={celular}
+          keyboardType='numeric'
           onChangeText={setCelular}
         />
-
-        <TextInput
-          style={[styles.input,itemStyles[0]]}
-          placeholder="CEP"
-          value={cep}
-          onChangeText={setCep}
-        />
-        <TextInput
-          style={[styles.input,itemStyles[1]]}
-          placeholder="Endereço"
-          value={endereco}
-          onChangeText={setEndereco}
-        />
+  
         <TextInput
           style={[styles.input,itemStyles[0]]}
           placeholder="Cidade"
@@ -216,10 +204,10 @@
           checkedColor="#2163D3"
           value={setAceitarTermos}
         />
-        <TouchableOpacity style={styles.button}  onPress={() =>  {{} handleCad();
+        <Pressable style={styles.button}  onPress={() =>  {{} handleCad();
             }}   >
           <Text style={styles.buttonText}>Cadastrar</Text>
-        </TouchableOpacity>
+        </Pressable>
         </ScrollView>
 
       </View>

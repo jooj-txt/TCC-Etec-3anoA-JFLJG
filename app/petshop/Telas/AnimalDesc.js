@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -34,9 +34,9 @@ const AnimalDesc = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={{flexDirection:'row'}}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+      <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
       <Ionicons name="ios-arrow-back-sharp" size={25} color="#FFAE2E" />
-      </TouchableOpacity>
+      </Pressable>
       <Text style={styles.title}>Informações do Pet</Text>
       </View>
       
@@ -60,14 +60,14 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoText}>{animalInfo.raça}</Text>
 
         <Text style={styles.infoLabel}>Local:</Text>
-        <Text style={styles.infoText}>{animalInfo.endereço}</Text>
+        <Text style={styles.infoText}>{animalInfo.cidade}-{animalInfo.estado}</Text>
 
         <Text style={styles.infoLabel}>Descrição:</Text>
       </View>
 
-      <TouchableOpacity style={styles.Button} onPress={console.log(animalInfo.userId)}>
+      <Pressable style={styles.Button} onPress={console.log(animalInfo.userId)}>
       <Text style={styles.infoText}>ME ADOTE</Text>
-      </TouchableOpacity>
+      </Pressable>
 
 
 
