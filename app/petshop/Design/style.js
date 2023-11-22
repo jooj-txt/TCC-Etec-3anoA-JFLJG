@@ -30,11 +30,12 @@ const styles = StyleSheet.create({
     button: {
       backgroundColor: '#2163D3', //Azul
       textAlign: 'center',
+      alignSelf:'center',
       paddingVertical:15,
       borderRadius: 8,
       marginHorizontal: 10,
-      height: '100%',
-      width: '40%',
+      height: 50,
+      width: 150,
     },
     buttonText: {
       color: '#FFFFFF',

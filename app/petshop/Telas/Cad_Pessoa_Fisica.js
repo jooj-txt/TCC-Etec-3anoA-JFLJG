@@ -1,5 +1,5 @@
 import React, { useState, useContext,useEffect   } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Linking } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -18,7 +18,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [email, setEmail] = useState();
   const [celular, setCelular] = useState();
   const [genero, setGenero] = useState();
-  const [cep, setCep] = useState();
   const [cidade, setCidade] = useState();
   const [estado, setEstado] = useState();
   const [senha, setSenha] = useState();
@@ -27,7 +26,29 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [aceitarTermos, setAceitarTermos] = useState(false);
 
   // Armazenando os dados de cadstro para posteriormente serem guardados no BD
-
+  const handleCelularChange = (text) => {
+    const numericText = text.replace(/\D/g, '');
+  
+    if (numericText.length <= 2) {
+      // Mantém o formato inicial
+      setCelular(numericText);
+    } else if (numericText.length <= 11) {
+      const ddd = numericText.slice(0, 2);
+      const rest = numericText.slice(2);
+  
+      if (rest.length >= 9) {
+        // Se houver 9 dígitos ou mais após o DDD, inclui o "9"
+        setCelular(`(${ddd})${rest.slice(0, 5)}-${rest.slice(5)}`);
+      } else {
+        // Se não, mantém o formato padrão
+        setCelular(`(${ddd})${rest}`);
+      }
+    }
+  };
+  
+  
+  
+  
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
     const validateFields = () => {
@@ -36,7 +57,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
         isValidCPF(cpf) &&
         email &&
         celular &&
-        cep &&
         cidade &&
         estado &&
         dataNascimento &&
@@ -53,7 +73,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
     useEffect(() => {
       validateFields();
-    }, [nome, cpf, email, celular, cep, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
+    }, [nome, cpf, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
   
   
     const isValidCPF = (cpf) => {
@@ -62,22 +82,37 @@ const PessoaFisicaCadastro = ({navigation},) => {
     };
     
 
-  const handleDateChange = (text) => {
-    const numericText = text.replace(/\D/g, ''); 
-    let formattedDate = '';
-
-    if (numericText.length <= 2) {
-      formattedDate = numericText;
-    } else if (numericText.length <= 4) {
-      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2)}`;
-    } else if (numericText.length <= 8) {
-      formattedDate = `${numericText.slice(0, 2)}/${numericText.slice(2, 4)}/${numericText.slice(4, 8)}`;
-    }
-    setDataNascimento(formattedDate);
-  };
-  // Formatando o formato do dado data
-
-
+    const handleDateChange = (text) => {
+      const numericText = text.replace(/\D/g, '');
+    
+      if (numericText.length <= 2) {
+        setDataNascimento(numericText);
+      } else if (numericText.length <= 4) {
+        setDataNascimento(`${numericText.slice(0, 2)}/${numericText.slice(2)}`);
+      } else if (numericText.length <= 8) {
+        setDataNascimento(`${numericText.slice(0, 2)}/${numericText.slice(2,4)}/${numericText.slice(4,8)}`);
+        const day = numericText.slice(0, 2);
+        const month = numericText.slice(2,4);
+        const year = numericText.slice(4, 8);
+    
+        // Validar mês, dia e ano
+        if (
+          parseInt(month) <= 12 &&
+          parseInt(day) <= 31 &&
+          parseInt(year) >= 1 &&
+          parseInt(year) <= 2005
+        ) {
+          setDataNascimento(`${day}/${month}/${year}`);
+        }
+        else{
+          alert("COLOQUE UMA DATA DE NASCIMENTO DE VÁLIDO")
+          setDataNascimento("");
+        }
+      }
+    };
+    
+       
+    
   const handleCPFChange = (text) => {
     const numericText = text.replace(/\D/g, ''); 
      if (numericText.length <= 3) {
@@ -99,6 +134,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
 
 
   const handleCad = () => {
+   
     if (!isButtonDisabled) {
     navigation.navigate('Login');
    
@@ -118,7 +154,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
           email,
           celular,
           genero,
-          cep,
           cidade,
           estado,
           dataNascimento,
@@ -176,10 +211,11 @@ const PessoaFisicaCadastro = ({navigation},) => {
       />
       <TextInput
         style={[styles.input,itemStyles[1]]}
-        placeholder="Celular(COM O DDD)"
-        value={[celular + "+55"]}
+        placeholder="DDD+CELULAR(WHATSAPP)"
+        value={celular}
         keyboardType='numeric'
-        onChangeText={setCelular}
+        onChangeText={handleCelularChange}
+        
       />
 
       <Picker
@@ -200,13 +236,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
         value={dataNascimento}
         onChangeText={handleDateChange}
       />
-      <TextInput
-        style={[styles.input,itemStyles[0]]}
-        placeholder="CEP"
-        keyboardType='numeric'
-        value={cep}
-        onChangeText={setCep}
-      />
+    
       <TextInput
         style={[styles.input,itemStyles[0]]}
         placeholder="Cidade"
@@ -235,14 +265,17 @@ const PessoaFisicaCadastro = ({navigation},) => {
       />
      
       <CheckBox
-        title="ACEITAR TERMOS DE CONDIÇÕES"
+        title="ACEITAR TERMOS E CONDIÇÕES"
         checked={aceitarTermos}
         onPress={handleCheckboxToggle}
         containerStyle={styles.checkboxContainer}
         textStyle={styles.checkboxLabel}
         checkedColor="#2163D3"
         value={setAceitarTermos}
-      />
+      
+      /><Text style={{margin:8, color:"blue", fontWeight:'bold'}}  onPress={() => { 
+        Linking.openURL('https://etecspgov-my.sharepoint.com/:w:/g/personal/jose_rubens_etec_sp_gov_br/Eaa2ArwIN-BAiuA1C94WC9oBf2tTuhQU2-cmRbYwmmQ1BA?e=qnUcC4'); 
+      }}>TERMOS E CONDIÇÕES</Text>
       <Pressable style={styles.button}   onPress={() => {
             handleCad();
           }}   >
@@ -279,7 +312,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
-    width:150,
+    alignSelf:'center',
+    width:100,
   },
   buttonText: {
     color: '#FFFFFF',

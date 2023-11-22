@@ -12,10 +12,11 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const auth = getAuth();
+  const db = getFirestore();
   const [userType, setUserType] = useState('');
   const [showModal, setShowModal] = useState(false);
 
-  const handleLogin = async () => {
+  const handleLogin = (auth, async (user) => {
     try {
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
@@ -33,11 +34,6 @@ export default function Login({ navigation }) {
       // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
       console.error('Erro de autenticação:', error.message);
     }
-  };
-
-  useEffect(() => {
-    const auth = getAuth();
-    const db = getFirestore();
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -74,7 +70,9 @@ export default function Login({ navigation }) {
 
     // Certifique-se de cancelar a assinatura quando o componente for desmontado
     return () => unsubscribe();
-  }, []);
+  });
+
+
 
   // Quando o usuário efetuar login, redirecione-o com base no userType
   useEffect(() => {
