@@ -20,7 +20,6 @@
     const [cnpj, setCNPJ] = useState('');
     const [email, setEmail] = useState('');
     const [celular, setCelular] = useState('');
-    const [cep, setCep] = useState('');
     const [cidade, setCidade] = useState('');
     const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
@@ -35,7 +34,6 @@
         isValidCNPJ(cnpj) &&
         email &&
         celular &&
-        cep &&
         cidade &&
         estado &&
         senha &&
@@ -50,7 +48,7 @@
   
     useEffect(() => {
       validateFields();
-    }, [nome, cnpj, email, celular, cep, cidade, estado, senha, confirmarSenha, aceitarTermos]);
+    }, [nome, cnpj, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos]);
   
   
     const isValidCNPJ = (cnpj) => {
@@ -102,7 +100,6 @@
             cnpj,
             email,
             celular,
-            cep,
             cidade,
             estado,
             userUid,
@@ -136,7 +133,6 @@
     return (
         
       <View style={styles.container}>
-              <ScrollView>
 
         <Text style={styles.heading}>Cadastro Pessoa Jurídica</Text>
         <TextInput
@@ -204,11 +200,13 @@
           checkedColor="#2163D3"
           value={setAceitarTermos}
         />
+        <Text style={{margin:8, color:"blue", fontWeight:'bold'}}  onPress={() => { 
+        Linking.openURL('https://etecspgov-my.sharepoint.com/:w:/g/personal/jose_rubens_etec_sp_gov_br/Eaa2ArwIN-BAiuA1C94WC9oBf2tTuhQU2-cmRbYwmmQ1BA?e=qnUcC4'); 
+      }}>TERMOS E CONDIÇÕES</Text>
         <Pressable style={styles.button}  onPress={() =>  {{} handleCad();
             }}   >
           <Text style={styles.buttonText}>Cadastrar</Text>
         </Pressable>
-        </ScrollView>
 
       </View>
     );

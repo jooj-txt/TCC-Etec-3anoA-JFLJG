@@ -12,22 +12,34 @@ export default function App() {
    return (
     <NavigationContainer>
             <Stack.Navigator useLegacyImplementation>
+      <Stack.Screen
+          name="Add"
+          options={{ headerShown:false }}
+          component={Add}
+        />
             <Stack.Screen
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}
           component={PessoaFisicaCadastro}
         />
             <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+         
+          <Stack.Screen
           name="PessoaJuridicaCadastro"
           options={{ headerShown:false }}
           component={PessoaJuridicaCadastro}
         /> 
+          
             <Stack.Screen
           name="Home"
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
-        
+         
       <Stack.Screen
           name="Login"
           options={{ headerShown:false }}
@@ -38,48 +50,27 @@ export default function App() {
           options={{ headerShown:false  }}
           component={ConfigPerfil}
         />
-       
+          
          
-            <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
-        />
+          
       <Stack.Screen
           name="PosAdd"
           options={{ headerShown:false }}
           component={PosAdd}
         />
     
-   
-     
-     
-      <Stack.Screen
-          name="Add"
-          options={{ headerShown:false }}
-          component={Add}
-        />
-
-   
-    
-      
-  
-    
-        
       <Stack.Screen
           name="HomeJur"
           options={{ headerShown:false  }}
           component={HomeScreenJur}
         />
-         
-
+        
           <Stack.Screen
           name="Favoritos"
           options={{ headerShown:false  }}
           component={Favoritos}
         />
 
-        
           <Stack.Screen
           name="AnimalDesc"
           options={{ headerShown:false  }}
