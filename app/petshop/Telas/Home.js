@@ -414,6 +414,10 @@ const AnimalCard = ({ animal, onAdicionarFavorito  }) => (
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
+      {animal.userType === "userJur" && (
+        <Text variant="bodyMedium" style={[styles.animalText2, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
+      )}
+
       <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
         <FontAwesome5 name="heart" size={16} color="black" />
       </Pressable>
@@ -461,6 +465,9 @@ const styles = StyleSheet.create({
   },
   animalText: {
     color: 'black',
+  },
+  animalText2: {
+    color: '#FFAE2E',
   },
   animalLocal: {
     textAlign: 'right',

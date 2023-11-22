@@ -13,17 +13,24 @@ const itemStyles = [
 ]; // Cor das linhas(apenas decoração)
 
 const PessoaFisicaCadastro = ({navigation},) => {
-  const [nome, setNome] = useState();
-  const [cpf, setCPF] = useState();
-  const [email, setEmail] = useState();
-  const [celular, setCelular] = useState();
-  const [genero, setGenero] = useState();
-  const [cidade, setCidade] = useState();
-  const [estado, setEstado] = useState();
-  const [senha, setSenha] = useState();
-  const [confirmarSenha, setConfirmarSenha] = useState();
-  const [dataNascimento, setDataNascimento] = useState();
+  const [nome, setNome] = useState('');
+  const [cpf, setCPF] = useState('');
+  const [email, setEmail] = useState('');
+  const [celular, setCelular] = useState('');
+  const [genero, setGenero] = useState('');
+  const [cidade, setCidade] = useState('');
+  const [estado, setEstado] = useState('');
+  const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
   const [aceitarTermos, setAceitarTermos] = useState(false);
+
+  const [senhaRequisitos, setSenhaRequisitos] = useState({
+    minLength: false,
+    uppercase: false,
+    lowercase: false,
+    number: false,
+  });
 
   // Armazenando os dados de cadstro para posteriormente serem guardados no BD
   const handleCelularChange = (text) => {
@@ -111,6 +118,25 @@ const PessoaFisicaCadastro = ({navigation},) => {
       }
     };
     
+    const checkSenhaRequisitos = (text) => {
+      const hasUppercase = /[A-Z]/.test(text);
+      const hasLowercase = /[a-z]/.test(text);
+      const hasNumber = /\d/.test(text);
+      const hasMinLength = text.length >= 8;
+  
+      setSenhaRequisitos({
+        minLength: hasMinLength,
+        uppercase: hasUppercase,
+        lowercase: hasLowercase,
+        number: hasNumber,
+      });
+    };
+
+    const handleSenhaChange = (text) => {
+      setSenha(text);
+      checkSenhaRequisitos(text);
+    };
+  
        
     
   const handleCPFChange = (text) => {
@@ -249,13 +275,19 @@ const PessoaFisicaCadastro = ({navigation},) => {
         value={estado}
         onChangeText={setEstado}
       />
-      <TextInput
-        style={[styles.input,itemStyles[0]]}
+     <TextInput
+        style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
         placeholder="Senha"
         secureTextEntry
         value={senha}
-        onChangeText={setSenha}
+        onChangeText={handleSenhaChange}
       />
+      <Text style={styles.requisitosSenha}>
+        - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- letra minúscula {senhaRequisitos.lowercase && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- número {senhaRequisitos.number && <Text style={{ color: 'green' }}>✓</Text>}
+      </Text>
       <TextInput
         style={[styles.input,itemStyles[1]]}
         placeholder="Confirmar Senha"
@@ -327,6 +359,11 @@ picker: {
   borderWidth: 1,
   borderRadius: 8,
   marginBottom: 10,
+},
+requisitosSenha: {
+  color: 'gray',
+  fontSize: 12,
+  margin: 5,
 },
 });
 

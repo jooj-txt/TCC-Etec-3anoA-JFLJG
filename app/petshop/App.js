@@ -12,44 +12,15 @@ export default function App() {
    return (
     <NavigationContainer>
             <Stack.Navigator useLegacyImplementation>
-      <Stack.Screen
+            <Stack.Screen
+          name="PosAdd"
+          options={{ headerShown:false }}
+          component={PosAdd}
+        />
+            <Stack.Screen
           name="Add"
           options={{ headerShown:false }}
           component={Add}
-        />
-            <Stack.Screen
-          name="PessoaFisicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaFisicaCadastro}
-        />
-      <Stack.Screen
-          name="Add"
-          options={{ headerShown:false }}
-          component={Add}
-        />
-           
-            <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
-        />
-         
-          <Stack.Screen
-          name="PessoaJuridicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaJuridicaCadastro}
-        /> 
-          
-            <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
-        />
-         
-      <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
         />
             <Stack.Screen
           name="ConfigPerfil"
@@ -57,20 +28,41 @@ export default function App() {
           component={ConfigPerfil}
         />
           
-         
-          
-      <Stack.Screen
-          name="PosAdd"
-          options={{ headerShown:false }}
-          component={PosAdd}
+            <Stack.Screen
+          name="Home"
+          options={{ headerShown:false  }}
+          component={HomeScreen}
         />
-    
-      <Stack.Screen
+            <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+     
+            <Stack.Screen
           name="HomeJur"
           options={{ headerShown:false  }}
           component={HomeScreenJur}
         />
-        
+          
+                  
+          <Stack.Screen
+          name="PessoaJuridicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaJuridicaCadastro}
+        /> 
+          
+            <Stack.Screen
+          name="Login"
+          options={{ headerShown:false }}
+          component={Login}
+        />
+            <Stack.Screen
+          name="PessoaFisicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaFisicaCadastro}
+        />
+  
           <Stack.Screen
           name="Favoritos"
           options={{ headerShown:false  }}

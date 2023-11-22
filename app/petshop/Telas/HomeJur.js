@@ -126,6 +126,7 @@ function Tabs({ navigation }) {
           label="Sair" 
           onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
           labelStyle={styles.drawerItem} />
+
         <View style={styles.darkModeSwitch}>
           <Text style={styles.darkModeLabel}>Modo Escuro</Text>
           <Switch value={isDarkMode} />
@@ -332,7 +333,7 @@ function Casa({ navigation, route }) {
 }
 
 const AnimalCard = ({ animal }) => (
-  <Card>
+  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
@@ -387,7 +388,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor:'#FFAE2E',
+    
   },
   animalText: {
     color: 'black',

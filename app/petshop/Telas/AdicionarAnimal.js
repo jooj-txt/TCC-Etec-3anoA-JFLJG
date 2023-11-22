@@ -119,6 +119,7 @@
           images,
           tipo,
           userId,
+          userType,
         };
 
         const animaisRef = collection(db, 'Animais');
@@ -165,15 +166,18 @@
                     label="Nome"
                   />
               </View>
-              <View style={[styles.detailsContainer, itemStyles[1]]}>
-                <FontAwesome5 name="venus-mars" size={24} color="black"/>
-                <TextInput
-                  style={[styles.input, styles.inputHeight]}
-                  onChangeText={onChangeSexo}
-                  value={sexo}
-                  label='Sexo'
-                />
-              </View>
+              <View style={styles.detailsContainer}>
+              <Picker
+          style={[styles.picker, itemStyles[1]]}
+          selectedValue={sexo}
+          onValueChange={(itemValue) => onChangeSexo(itemValue)}
+        >
+          <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o sexo" value="" />
+          <Picker.Item  style={[styles.picker, itemStyles[1]]} label="Femea" value="Femea" />
+          <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Macho" value="Macho" />
+        
+        </Picker>
+        </View>
               <View style={[styles.detailsContainer, itemStyles[0]]}>
                 <FontAwesome5 name="paw" size={24} color="black"/>
                 <TextInput
@@ -222,9 +226,8 @@
                   style={[styles.inputDesc, styles.input]}
                   onChangeText={onChangeDescricao}
                   value={descricao}
-                  label='Descrição'
                   multiline={true}
-                  numberOfLines={4}
+                  placeholder='DESCREVA ELE, COMPORTAMENTO, IDADE, ETC'
                 />
               </View>
           <TouchableOpacity
@@ -301,10 +304,12 @@
       backgroundColor: 'white',
     },
     inputHeight:{
-      height: 80,
+      height: 50,
     },
     inputDesc: {
-      height: 70,
+      height: 50,
+      width:225,
+
     },
     pickUpImage: {
       width: 250, 
@@ -344,14 +349,9 @@
       width: 200,
       height:200,
     },
-    ajust:{
-  marginTop:100,
-  width:100,
-  height:85,
-    },
+
     picker: {
-      height: 80,
-      width:280,
+      width:260,
       borderWidth:3,  
 
     },

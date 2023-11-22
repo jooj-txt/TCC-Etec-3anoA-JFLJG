@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, Switch, Alert } from 'react-native';
+import { View, Text, Pressable, ScrollView, Switch, Alert } from 'react-native';
+import { TextInput } from 'react-native-paper';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Entypo } from '@expo/vector-icons'; 
@@ -339,7 +340,7 @@ const ConfigPerfil = ({ route, navigation }) => {
           <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
 
           <View style={{flexDirection:'row'}}>
-          <Entypo style={{position:'absolute', marginLeft:"2.5%", marginTop:"2.5%"}}  name="instagram" size={24} color="black" />
+          <Entypo name="instagram" size={24} color="black" />
           <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
           </View>
         
@@ -352,7 +353,7 @@ const ConfigPerfil = ({ route, navigation }) => {
           
           <View style={{flexDirection:'row'}}>
           <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
-        <FontAwesome  style={{position:'absolute', marginLeft:"2.5%", marginTop:"2.5%"}} name="whatsapp" size={24} color="black" />
+        <FontAwesome   name="whatsapp" size={24} color="black" />
           </View>
           
 
@@ -383,6 +384,7 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Pressable  onPress={() => {
                 handleSaveProfile();
+                alert("PERFIL SALVO COM SUCESSO");
                 navigation.navigate('Home');
               }} style={{ alignItems: 'center',
               alignSelf:'center',

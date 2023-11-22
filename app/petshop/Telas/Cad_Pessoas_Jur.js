@@ -56,6 +56,26 @@
       const cnpjPattern = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
       return cnpjPattern.test(cnpj);
     };
+
+    const handleCelularChange = (text) => {
+      const numericText = text.replace(/\D/g, '');
+    
+      if (numericText.length <= 2) {
+        // Mantém o formato inicial
+        setCelular(numericText);
+      } else if (numericText.length <= 11) {
+        const ddd = numericText.slice(0, 2);
+        const rest = numericText.slice(2);
+    
+        if (rest.length >= 9) {
+          // Se houver 9 dígitos ou mais após o DDD, inclui o "9"
+          setCelular(`(${ddd})${rest.slice(0, 5)}-${rest.slice(5)}`);
+        } else {
+          // Se não, mantém o formato padrão
+          setCelular(`(${ddd})${rest}`);
+        }
+      }
+    };
     
     const handleCNPJChange = (text) => {
       const numericText = text.replace(/\D/g, ''); // Remover caracteres não numéricos
@@ -154,13 +174,13 @@
           keyboardType='email-address'
           onChangeText={setEmail}
         />
-        <TextInput
-          style={[styles.input,itemStyles[1]]}
-          placeholder="Celular"
-          value={celular}
-          keyboardType='numeric'
-          onChangeText={setCelular}
-        />
+     <TextInput
+        style={[styles.input,itemStyles[1]]}
+        placeholder="DDD+CELULAR(WHATSAPP)"
+        value={celular}
+        keyboardType='numeric'
+        onChangeText={handleCelularChange}
+      />
   
         <TextInput
           style={[styles.input,itemStyles[0]]}
