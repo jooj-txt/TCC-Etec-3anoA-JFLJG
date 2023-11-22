@@ -12,6 +12,11 @@ export default function App() {
    return (
     <NavigationContainer>
             <Stack.Navigator useLegacyImplementation>
+      <Stack.Screen
+          name="Add"
+          options={{ headerShown:false }}
+          component={Add}
+        />
             <Stack.Screen
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}
