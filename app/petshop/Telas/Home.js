@@ -6,7 +6,7 @@ import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, Inicio, PessoaFisicaCadastro, PessoaJuridicaCadastro} from './rotas';
+import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, Inicio, PessoaFisicaCadastro, PessoaJuridicaCadastro, TelaAdocao} from './rotas';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
@@ -249,6 +249,11 @@ return (
 
     }} /> 
             <Drawer.Screen name='PessoaFisicaCadastro' component={PessoaFisicaCadastro} options={{
+      title: null,
+      headerShown: false
+
+    }} /> 
+         <Drawer.Screen name='TelaAdocao' component={TelaAdocao} options={{
       title: null,
       headerShown: false
 

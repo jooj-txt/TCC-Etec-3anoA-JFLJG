@@ -28,6 +28,14 @@
     // Armazenando os dados de cadstro para posteriormente serem guardados no BD
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
+    const [senhaRequisitos, setSenhaRequisitos] = useState({
+      minLength: false,
+      uppercase: false,
+      lowercase: false,
+      number: false,
+    });
+  
+
     const validateFields = () => {
       if (
         nome &&
@@ -44,6 +52,24 @@
       } else {
         setIsButtonDisabled(true);
       }
+    };
+    const checkSenhaRequisitos = (text) => {
+      const hasUppercase = /[A-Z]/.test(text);
+      const hasLowercase = /[a-z]/.test(text);
+      const hasNumber = /\d/.test(text);
+      const hasMinLength = text.length >= 8;
+  
+      setSenhaRequisitos({
+        minLength: hasMinLength,
+        uppercase: hasUppercase,
+        lowercase: hasLowercase,
+        number: hasNumber,
+      });
+    };
+    
+    const handleSenhaChange = (text) => {
+      setSenha(text);
+      checkSenhaRequisitos(text);
     };
   
     useEffect(() => {
@@ -151,6 +177,7 @@
 
 
     return (
+      <ScrollView style={{backgroundColor:'#fff'}}>
         
       <View style={styles.container}>
 
@@ -195,12 +222,18 @@
           onChangeText={setEstado}
         />
         <TextInput
-          style={[styles.input,itemStyles[0]]}
-          placeholder="Senha"
-          secureTextEntry
-          value={senha}
-          onChangeText={setSenha}
-        />
+        style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
+        placeholder="Senha"
+        secureTextEntry
+        value={senha}
+        onChangeText={handleSenhaChange}
+      />
+      <Text style={styles.requisitosSenha}>
+        - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- letra minúscula {senhaRequisitos.lowercase && <Text style={{ color: 'green' }}>✓</Text>}
+        {'\n'}- número {senhaRequisitos.number && <Text style={{ color: 'green' }}>✓</Text>}
+      </Text>
         <TextInput
           style={[styles.input,itemStyles[1]]}
           placeholder="Confirmar Senha"
@@ -229,6 +262,7 @@
         </Pressable>
 
       </View>
+      </ScrollView>
     );
   };
 
@@ -238,6 +272,7 @@
       backgroundColor: 'white', // Cor de fundo branca
       alignItems: 'center',
       justifyContent: 'center',
+      margin:'25%'
 
     },
     heading: {
@@ -272,6 +307,11 @@
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 10,
+  },
+  requisitosSenha: {
+    color: 'gray',
+    fontSize: 12,
+    margin: 5,
   },
   });
 

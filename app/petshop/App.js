@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useState } from 'react';
 
 
-import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add, ConfigPerfil, HomeScreenJur, PosAdd, Favoritos, AnimalDesc} from './Telas/rotas';
+import {Inicio,PessoaFisicaCadastro,Login,HomeScreen,PessoaJuridicaCadastro,Add,TelaAdocao, ConfigPerfil, HomeScreenJur, PosAdd, Favoritos, AnimalDesc} from './Telas/rotas';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +12,22 @@ export default function App() {
    return (
     <NavigationContainer>
             <Stack.Navigator useLegacyImplementation>
+            <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+            <Stack.Screen
+          name="Home"
+          options={{ headerShown:false  }}
+          component={HomeScreen}
+        />
+            <Stack.Screen
+          name="TelaAdocao"
+          options={{  headerShown:false  }}
+          component={TelaAdocao}
+        />
+          
             <Stack.Screen
           name="PosAdd"
           options={{ headerShown:false }}
@@ -28,16 +44,8 @@ export default function App() {
           component={ConfigPerfil}
         />
           
-            <Stack.Screen
-          name="Home"
-          options={{ headerShown:false  }}
-          component={HomeScreen}
-        />
-            <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
-        />
+        
+         
      
             <Stack.Screen
           name="HomeJur"

@@ -4,6 +4,7 @@
   import { TextInput } from 'react-native-paper';
   import { Picker } from '@react-native-picker/picker';
   import { getFirestore, collection, addDoc,setDoc, doc } from 'firebase/firestore';
+  import { getDocs, query, where } from 'firebase/firestore';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
   import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
   import * as ImagePicker from 'expo-image-picker'; 
@@ -19,6 +20,7 @@
     const [tipo, onChangeTipo] = React.useState('');
     const [images, setImages] = React.useState([]);
     const [userId, setUserId] = React.useState(null);
+    const [userType, setUserType] = React.useState(null);
 
     const itemStyles = [
       { borderColor: '#2163D3' },
@@ -30,18 +32,7 @@
     const storage = getStorage();
 
 
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUserId(user.uid);
-        } else {
-          setUserId(null);
-        }
-      });
-
-      return unsubscribe;
-    }, []);
-
+    
     const uploadImageToStorage = async (uri) => {
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -101,6 +92,45 @@
     };
 
     const divulgarAnimal = async () => {
+      useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            console.log('Usuário autenticado:', user);
+    
+            const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+            const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
+    
+            const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+            const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
+    
+            try {
+              const querySnapshotFisicas = await getDocs(qFisicas);
+              const querySnapshotJuridicas = await getDocs(qJuridicas);
+    
+              if (!querySnapshotFisicas.empty) {
+                const userDocSnapshot = querySnapshotFisicas.docs[0];
+                const userData = userDocSnapshot.data();
+                setUserType(userData.userType);
+                setUserId(userData.userUid)
+              } else if (!querySnapshotJuridicas.empty) {
+                const userDocSnapshot = querySnapshotJuridicas.docs[0];
+                const userData = userDocSnapshot.data();
+                setUserType(userData.userType);
+                setUserId(userData.userUid)
+              } else {
+                console.log('Documento do usuário não encontrado');
+              }
+            } catch (error) {
+              console.error('Erro ao buscar informações do usuário no Firestore', error);
+            }
+          } else {
+            console.log('Usuário não está autenticado');
+          }
+        });
+    
+        // Certifique-se de cancelar a assinatura quando o componente for desmontado
+        return () => unsubscribe();
+      });
 
       try {
         if (!userId) {

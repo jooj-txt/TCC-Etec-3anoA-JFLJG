@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, Switch, Alert } from 'react-native';
+import { View, Text, Pressable, ScrollView, Switch, Alert, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Entypo } from '@expo/vector-icons'; 
 import { FontAwesome } from '@expo/vector-icons'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -53,6 +54,28 @@ const ConfigPerfil = ({ route, navigation }) => {
   });
 
   const [userId, setUserId] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  const saveSelections = async () => {
+    try {
+      await AsyncStorage.setItem('selectedButtons', JSON.stringify(selectedButtons));
+    } catch (error) {
+      console.error('Erro ao salvar seleções:', error);
+    }
+  };
+
+  // Função para carregar as seleções do AsyncStorage
+  const loadSelections = async () => {
+    try {
+      const savedSelections = await AsyncStorage.getItem('selectedButtons');
+      if (savedSelections) {
+        setSelectedButtons(JSON.parse(savedSelections));
+      }
+    } catch (error) {
+      console.error('Erro ao carregar seleções:', error);
+    }
+  };
+
  useEffect(() => {
 
   onAuthStateChanged(auth, async (user) => {
@@ -65,9 +88,10 @@ const ConfigPerfil = ({ route, navigation }) => {
         if (!querySnapshot.empty) {
           const userDocSnapshot = querySnapshot.docs[0];
           const userData = userDocSnapshot.data();
-          setUserId(userDocSnapshot.id); // Defina o ID do documento
+          setUserId(userDocSnapshot.id); 
+          const userDocRef = doc(db, 'PessoasFisicas', userDocSnapshot.id);
 
-          // Restante do seu código...
+
         } else {
           console.log('Documento do usuário não encontrado');
         }
@@ -89,6 +113,10 @@ const ConfigPerfil = ({ route, navigation }) => {
           setCelular(userData.celular);
           setCidade(userData.cidade);
           setEstado(userData.estado);
+          setOcupacao(userData.ocupacao);
+          setInstagram(userData.instagram);
+          setNumPessoas(userData.numPessoas);
+          setIsLoading(false);
 
 
                 } else {
@@ -101,6 +129,10 @@ const ConfigPerfil = ({ route, navigation }) => {
 
     fetchUserProfile();
   }, [userId, db]);
+  useEffect(() => {
+    // Carregar seleções salvas ao montar o componente
+    loadSelections();
+  }, []);
 
   const handleSaveProfile = async () => {
     try {
@@ -250,6 +282,7 @@ const ConfigPerfil = ({ route, navigation }) => {
       default:
         break;
     }
+    saveSelections();
   };
 
   const renderButton = (category, buttonName, buttonText) => (
@@ -278,14 +311,17 @@ const ConfigPerfil = ({ route, navigation }) => {
 
   return (
     <ScrollView>
-      <View>
+        {isLoading ? ( // Mostra o indicador de carregamento enquanto isLoading é verdadeiro
+        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:150 }} />
+      ) : (
+      <View style={styles.container}>
       <Text style={styles.title}>DADOS PESSOAIS:</Text>
         <TextInput  style={styles.input} value={nome} onChangeText={setNome} placeholder="NOME"/>
         <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} placeholder='XX/XX/XXXX' />
         <TextInput style={styles.input}  value={email} onChangeText={setEmail} placeholder='seunome@gmail.com' />
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Entypo style={{marginLeft:20, position:'absolute'}} name="location" size={24} color="black" />
-        <TextInput   style={styles.input}  value={[cidade +","+estado]} onChangeText={setEndereco}/>
+        <TextInput   style={styles.input}  value={cidade +","+ estado} onChangeText={setEndereco}/>
         </View>
 
 
@@ -297,37 +333,37 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Text style={styles.title} >Há crianças em sua residência?</Text>
         <View style={{ flexDirection: 'row' }}>
-          {renderButton('criancas', 'Sim', 'Sim')}
-          {renderButton('criancas', 'Nao', 'Não')}
+          {renderButton('criancas', 'sim', 'Sim')}
+          {renderButton('criancas', 'não', 'Não')}
         </View>
 
         <Text style={styles.title}>Você mora em:</Text>
         <View style={{ flexDirection: 'row' }}>
-          {renderButton('moradia', 'Casa', 'Casa')}
-          {renderButton('moradia', 'Apartamento', 'Apartamento')}
+          {renderButton('moradia', 'casa', 'Casa')}
+          {renderButton('moradia', 'apartamento', 'Apartamento')}
         </View>
 
         <Text style={styles.title}>Espaço de sua residência:</Text>
         <View style={{ flexDirection: 'row' }}>
-          {renderButton('espaco', 'Pequeno', 'Pequeno')}
-          {renderButton('espaco', 'Medio', 'Médio')}
-          {renderButton('espaco', 'Grande', 'Grande')}
+          {renderButton('espaco', 'pequeno', 'Pequeno')}
+          {renderButton('espaco', 'médio', 'Médio')}
+          {renderButton('espaco', 'grande', 'Grande')}
         </View>
 
         <Text style={styles.title}>Você possui outros pets?</Text>
         <View style={{ flexDirection: 'row' }}>
-          {renderButton('possuiPets', 'Sim', 'Sim')}
-          {renderButton('possuiPets', 'Nao', 'Não')}
+          {renderButton('possuiPets', 'sim', 'Sim')}
+          {renderButton('possuiPets', 'não', 'Não')}
         </View>
 
         <Text style={styles.title}>Quantas horas passa em casa por dia?</Text>
         <View style={{ flexDirection: 'row' }}>
-          {renderButton('horas', '4ouMenos', '4 ou menos')}
-          {renderButton('horas', '4a8', '4 a 8 horas')}
+          {renderButton('horas', '4 ou Menos', '4 ou menos')}
+          {renderButton('horas', '4 a 8', '4 a 8 horas')}
           </View>
           <View style={{ flexDirection: 'row' }}>
-          {renderButton('horas', '8a12', '8 a 12 horas')}
-          {renderButton('horas', '12ouMais', '12 ou mais horas')}
+          {renderButton('horas', '8 a 12', '8 a 12 horas')}
+          {renderButton('horas', '12 ou Mais', '12 ou mais horas')}
         </View>
         <Text style={styles.title}>Sua ocupação</Text>
         <TextInput  style={styles.input} value={ocupacao} onChangeText={setOcupacao} />
@@ -339,7 +375,10 @@ const ConfigPerfil = ({ route, navigation }) => {
           <Text style={styles.title}>Possui Instagram?</Text>
           <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
 
-          <View style={{flexDirection:'row'}}>
+          <View style={{ flexDirection: 'row',
+      alignItems: 'center',
+      padding: 8,
+      margin: 5,}}>
           <Entypo name="instagram" size={24} color="black" />
           <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
           </View>
@@ -351,9 +390,12 @@ const ConfigPerfil = ({ route, navigation }) => {
           <Text style={styles.title}>Whatsapp</Text>
           <Text style={styles.subtitle}>Pode fica tranquilo/a, suas informações não ficaram visíveis</Text>
           
-          <View style={{flexDirection:'row'}}>
-          <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
+          <View style={{ flexDirection: 'row',
+      alignItems: 'center',
+      padding: 8,
+      margin: 5,}}>
         <FontAwesome   name="whatsapp" size={24} color="black" />
+          <TextInput  style={styles.input} value={celular} onChangeText={setCelular} />
           </View>
           
 
@@ -384,8 +426,7 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Pressable  onPress={() => {
                 handleSaveProfile();
-                alert("PERFIL SALVO COM SUCESSO");
-                navigation.navigate('Home');
+                navigation.goBack();
               }} style={{ alignItems: 'center',
               alignSelf:'center',
               backgroundColor: '#FFAE2E',
@@ -396,11 +437,19 @@ const ConfigPerfil = ({ route, navigation }) => {
           <Text style={{ color: 'white' }}>Salvar Perfil</Text>
         </Pressable>
       </View>
+      )}
     </ScrollView>
   );
 };
 
 const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: 'white', // Cor de fundo branca
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
 
   button: {
     flexDirection: 'row',
@@ -420,7 +469,12 @@ const styles = {
     paddingHorizontal: 10,
     marginBottom: 10,
     margin:15,
-    textAlign:'center'
+    textAlign:'center',
+    flex: 1,
+    marginLeft: 8, 
+    color: '#000',
+    backgroundColor: 'white',
+    
   },
   title:{
     fontSize: 15,

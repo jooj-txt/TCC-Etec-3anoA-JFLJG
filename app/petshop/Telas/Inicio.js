@@ -3,14 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-nat
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
 
-
-
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
-
-
-
 
 export default function Inicio({navigation}) {
 

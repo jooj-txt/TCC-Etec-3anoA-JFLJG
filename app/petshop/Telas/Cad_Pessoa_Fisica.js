@@ -208,12 +208,13 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
 
   return (
+    <ScrollView style={{backgroundColor:'#fff'}}>
+
   
     <View style={styles.container}>
 
       <Text style={styles.heading}>Cadastro Pessoa Física</Text>
       <TextInput
-        inputMode='name'
         style={[styles.input,itemStyles[0]]}
         placeholder="Nome"
         value={nome}
@@ -315,6 +316,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
       </Pressable>
 
     </View>
+    </ScrollView>
   );
 };
 
@@ -324,6 +326,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white', // Cor de fundo branca
     alignItems: 'center',
     justifyContent: 'center',
+    margin:'20%'
 
   },
   heading: {

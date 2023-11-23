@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image,ActivityIndicator } from 'react-native';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -28,7 +28,8 @@ const AnimalDesc = ({ route, navigation }) => {
   }, [animalId]);
 
   if (!animalInfo) {
-    return <Text>Carregando...</Text>;
+    return  <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:150 }} />
+
   }
 
   return (
@@ -65,9 +66,11 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoLabel}>Descrição:</Text>
       </View>
 
-      <Pressable style={styles.Button} onPress={console.log(animalInfo.userId)}>
-      <Text style={styles.infoText}>ME ADOTE</Text>
-      </Pressable>
+      <Pressable
+        style={styles.Button}
+        onPress={() => navigation.navigate('TelaAdocao', { animalId: animalInfo.ID })} >        
+         <Text style={styles.infoText}>ME ADOTE</Text>
+     </Pressable>
 
 
 
