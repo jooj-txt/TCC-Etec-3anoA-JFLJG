@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Image,ActivityIndicator } from 'react-native';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons'; 
+
 
 const AnimalDesc = ({ route, navigation }) => {
   const { animalId } = route.params;
@@ -51,10 +55,9 @@ const AnimalDesc = ({ route, navigation }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.infoLabel}>Nome:</Text>
-        <Text style={styles.infoText}>{animalInfo.name}</Text>
+        <Text style={styles.infoText}>{animalInfo.name},{animalInfo.idade} anos</Text>
 
-        <Text style={styles.infoLabel}>Sexo:</Text>
+        <MaterialCommunityIcons name="gender-male-female" size={24} color="#FFAE2E" />
         <Text style={styles.infoText}>{animalInfo.sexo}</Text>
 
         <Text style={styles.infoLabel}>Raça:</Text>

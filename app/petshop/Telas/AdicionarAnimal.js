@@ -1,8 +1,10 @@
   import React, { useEffect, useRef, useState} from 'react';
   import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
   import { FontAwesome5 } from '@expo/vector-icons';
+  import { Octicons } from '@expo/vector-icons'; 
   import { TextInput } from 'react-native-paper';
   import { Picker } from '@react-native-picker/picker';
+  import { MaterialCommunityIcons } from '@expo/vector-icons'; 
   import { getFirestore, collection, addDoc,setDoc, doc } from 'firebase/firestore';
   import { getDocs, query, where } from 'firebase/firestore';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -15,7 +17,8 @@
     const [sexo, onChangeSexo] = React.useState('');
     const [raça, onChangeRaça] = React.useState('');
     const [cidade, setCidade] = useState('');
-    const [estado, setEstado] = useState('');    
+    const [estado, setEstado] = useState('');  
+    const [idade,setIdade] = useState('');      
     const [descricao, onChangeDescricao] = React.useState('');
     const [tipo, onChangeTipo] = React.useState('');
     const [images, setImages] = React.useState([]);
@@ -92,45 +95,6 @@
     };
 
     const divulgarAnimal = async () => {
-      useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-          if (user) {
-            console.log('Usuário autenticado:', user);
-    
-            const pessoasFisicasRef = collection(db, 'PessoasFisicas');
-            const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
-    
-            const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
-            const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
-    
-            try {
-              const querySnapshotFisicas = await getDocs(qFisicas);
-              const querySnapshotJuridicas = await getDocs(qJuridicas);
-    
-              if (!querySnapshotFisicas.empty) {
-                const userDocSnapshot = querySnapshotFisicas.docs[0];
-                const userData = userDocSnapshot.data();
-                setUserType(userData.userType);
-                setUserId(userData.userUid)
-              } else if (!querySnapshotJuridicas.empty) {
-                const userDocSnapshot = querySnapshotJuridicas.docs[0];
-                const userData = userDocSnapshot.data();
-                setUserType(userData.userType);
-                setUserId(userData.userUid)
-              } else {
-                console.log('Documento do usuário não encontrado');
-              }
-            } catch (error) {
-              console.error('Erro ao buscar informações do usuário no Firestore', error);
-            }
-          } else {
-            console.log('Usuário não está autenticado');
-          }
-        });
-    
-        // Certifique-se de cancelar a assinatura quando o componente for desmontado
-        return () => unsubscribe();
-      });
 
       try {
         if (!userId) {
@@ -141,6 +105,7 @@
         const animalData = {
           ID: '',
           name,
+          idade,
           sexo,
           raça,
           cidade,
@@ -167,6 +132,45 @@
         console.error('Erro ao adicionar o animal: ', error);
       }
     };
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          console.log('Usuário autenticado:', user);
+  
+          const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+          const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
+  
+          const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+          const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
+  
+          try {
+            const querySnapshotFisicas = await getDocs(qFisicas);
+            const querySnapshotJuridicas = await getDocs(qJuridicas);
+  
+            if (!querySnapshotFisicas.empty) {
+              const userDocSnapshot = querySnapshotFisicas.docs[0];
+              const userData = userDocSnapshot.data();
+              setUserType(userData.userType);
+              setUserId(userData.userUid)
+            } else if (!querySnapshotJuridicas.empty) {
+              const userDocSnapshot = querySnapshotJuridicas.docs[0];
+              const userData = userDocSnapshot.data();
+              setUserType(userData.userType);
+              setUserId(userData.userUid)
+            } else {
+              console.log('Documento do usuário não encontrado');
+            }
+          } catch (error) {
+            console.error('Erro ao buscar informações do usuário no Firestore', error);
+          }
+        } else {
+          console.log('Usuário não está autenticado');
+        }
+      });
+  
+      // Certifique-se de cancelar a assinatura quando o componente for desmontado
+      return () => unsubscribe();
+    });
 
     return (
       <ScrollView>
@@ -188,15 +192,26 @@
             </TouchableOpacity>
           </View>
           <View style={[styles.detailsContainer, itemStyles[0]]}>
-                  <FontAwesome5 name="user" size={24} color="black" />
+                  <FontAwesome5 name="user" size={24} color="#FFAE2E" />
                   <TextInput
                     style={[styles.input, styles.inputHeight]}
                     onChangeText={onChangeName}
                     value={name}
-                    label="Nome"
+                    label="Qual o seu nome?"
+                  />
+              </View>
+              <View style={[styles.detailsContainer, itemStyles[0]]}>
+              <Octicons name="number" size={24} color="#FFAE2E" />                
+                <TextInput
+                    style={[styles.input, styles.inputHeight]}
+                    keyboardType='numeric'
+                    onChangeText={setIdade}
+                    value={idade}
+                    label="Quantos anos ele tem?"
                   />
               </View>
               <View style={styles.detailsContainer}>
+              <MaterialCommunityIcons name="gender-male-female" size={24} color="#FFAE2E" />
               <Picker
           style={[styles.picker, itemStyles[1]]}
           selectedValue={sexo}
@@ -209,7 +224,7 @@
         </Picker>
         </View>
               <View style={[styles.detailsContainer, itemStyles[0]]}>
-                <FontAwesome5 name="paw" size={24} color="black"/>
+                <FontAwesome5 name="paw" size={24} color="#FFAE2E"/>
                 <TextInput
                   style={[styles.input, styles.inputHeight]}
                   onChangeText={onChangeRaça}
@@ -220,7 +235,10 @@
               </View>
 
               <View style={styles.detailsContainer}>
-              <Picker
+              <MaterialCommunityIcons name="cat" size={24} color="#2163D3" />
+              <MaterialCommunityIcons name="dog" size={24} color="#FFAE2E" />
+
+                 <Picker
           style={[styles.picker, itemStyles[1]]}
           selectedValue={tipo}
           onValueChange={(itemValue) => onChangeTipo(itemValue)}
@@ -232,7 +250,7 @@
         </Picker>
         </View>
         <View style={[styles.detailsContainer, itemStyles[0]]}>
-                <FontAwesome5 name="house-user" size={24} color="black"/>
+                <FontAwesome5 name="house-user" size={24} color="#FFAE2E"/>
                 <TextInput
                   style={[styles.input, styles.inputHeight]}
                   onChangeText={setEstado}
@@ -242,7 +260,7 @@
               </View>
             
               <View style={[styles.detailsContainer, itemStyles[0]]}>
-                <FontAwesome5 name="house-user" size={24} color="black"/>
+                <FontAwesome5 name="house-user" size={24} color="#FFAE2E"/>
                 <TextInput
                   style={[styles.input, styles.inputHeight]}
                   onChangeText={setCidade}
@@ -251,13 +269,13 @@
                 />
               </View>
               <View style={styles.detailsContainer}>
-                <FontAwesome5 name="keyboard" size={24} color="black"/>
+                <FontAwesome5 name="keyboard" size={24} color="#FFAE2E"/>
                 <TextInput
                   style={[styles.inputDesc, styles.input]}
                   onChangeText={onChangeDescricao}
                   value={descricao}
                   multiline={true}
-                  placeholder='DESCREVA ELE, COMPORTAMENTO, IDADE, ETC'
+                  label='Descreva o pet, cada detalhe importa!'
                 />
               </View>
           <TouchableOpacity
@@ -294,7 +312,7 @@
       borderColor: '#2163D3', 
       borderRadius: 5, 
       padding: 8,
-      margin: 5,
+      margin: 5
     },
     animalName: {
       fontSize: 24,
@@ -332,12 +350,13 @@
       marginLeft: 8, 
       color: '#000',
       backgroundColor: 'white',
+      
     },
     inputHeight:{
       height: 50,
     },
     inputDesc: {
-      height: 50,
+      height: 100,
       width:225,
 
     },
@@ -357,7 +376,9 @@
       backgroundColor: 'grey',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight:60,
+      marginTop:5,
+      
+
     },
     removeImageButton: {
       position: 'absolute',
