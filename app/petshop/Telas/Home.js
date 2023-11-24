@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Pressable } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
@@ -10,6 +11,7 @@ import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
+import Modal from 'react-native-modal';
 import { getFirestore, collection, doc, getDocs,setDoc, query, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
@@ -267,6 +269,7 @@ const Casa = ({ navigation, route }) => {
   const [animais, setAnimais] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [userId, setUserId] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -346,9 +349,69 @@ const Casa = ({ navigation, route }) => {
     }
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      // Mostra o modal quando o botão de retorno é pressionado
+      setModalVisible(true);
+      // Retorna true para impedir o comportamento padrão (fechar o aplicativo)
+      return true;
+    });
+
+    return () => {
+      // Remove o ouvinte do BackHandler ao desmontar o componente
+      backHandler.remove();
+    };
+  }, []); // Certifique-se de passar um array vazio para useEffect para que ele só seja executado uma vez
+
+  const handleExitApp = () => {
+    // Adicione qualquer lógica adicional antes de fechar o aplicativo
+    // ...
+
+    // Fecha o modal
+    setModalVisible(false);
+
+    // Fecha o aplicativo
+    BackHandler.exitApp();
+  };
+
+  const handleCancelExit = () => {
+    // Fecha o modal sem fechar o aplicativo
+    setModalVisible(false);
+  };
+  
+
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible(false);
+        }}>
+        <View style={styles.exitModalContainer}>
+          <Text style={styles.exitModalText}>Deseja fechar o aplicativo?</Text>
+          <View style={styles.exitModalButtons}>
+            <FontAwesome5
+              name="check-circle"
+              size={30}
+              color="green"
+              onPress={() => {
+                handleExitApp();
+              }}
+            />
+            <FontAwesome5
+              name="times-circle"
+              size={30}
+              color="red"
+              onPress={() => {
+                handleCancelExit();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
         <View style={styles.animalList}>
           <View style={styles.filterContainer}>
             <Pressable
@@ -559,5 +622,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color:'#000'
+  },
+  exitModalContainer: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  exitModalText: {
+    fontSize: 20,
+    marginBottom: 12,
+  },
+  exitModalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
