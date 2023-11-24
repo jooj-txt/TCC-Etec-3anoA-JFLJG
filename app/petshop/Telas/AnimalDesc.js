@@ -55,7 +55,7 @@ const AnimalDesc = ({ route, navigation }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>{animalInfo.name},{animalInfo.idade} anos</Text>
+        <Text style={styles.infoText}>{animalInfo.name},{animalInfo.idade} </Text>
 
         <MaterialCommunityIcons name="gender-male-female" size={24} color="#FFAE2E" />
         <Text style={styles.infoText}>{animalInfo.sexo}</Text>

@@ -34,6 +34,20 @@
     const auth = getAuth();
     const storage = getStorage();
 
+    const resetState = () => {
+      onChangeName('');
+      onChangeSexo('');
+      onChangeRaça('');
+      setCidade('');
+      setEstado('');
+      setIdade('');
+      onChangeDescricao('');
+      onChangeTipo('');
+      setImages([]);
+      setUserId(null);
+      setUserType(null);
+    };
+
 
     
     const uploadImageToStorage = async (uri) => {
@@ -125,13 +139,13 @@
 
     // Atualize o documento com o ID
     await setDoc(doc(animaisRef, docId), animalData);
-
-
         console.log('Animal adicionado com ID: ', docRef.id);
+        resetState(); // Call the reset function after adding the data
       } catch (error) {
         console.error('Erro ao adicionar o animal: ', error);
       }
     };
+
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -151,12 +165,12 @@
               const userDocSnapshot = querySnapshotFisicas.docs[0];
               const userData = userDocSnapshot.data();
               setUserType(userData.userType);
-              setUserId(userData.userUid)
+              setUserId(userData.userUid);
             } else if (!querySnapshotJuridicas.empty) {
               const userDocSnapshot = querySnapshotJuridicas.docs[0];
               const userData = userDocSnapshot.data();
               setUserType(userData.userType);
-              setUserId(userData.userUid)
+              setUserId(userData.userUid);
             } else {
               console.log('Documento do usuário não encontrado');
             }
@@ -168,9 +182,8 @@
         }
       });
   
-      // Certifique-se de cancelar a assinatura quando o componente for desmontado
       return () => unsubscribe();
-    });
+    }, []);
 
     return (
       <ScrollView>
@@ -204,10 +217,9 @@
               <Octicons name="number" size={24} color="#FFAE2E" />                
                 <TextInput
                     style={[styles.input, styles.inputHeight]}
-                    keyboardType='numeric'
                     onChangeText={setIdade}
                     value={idade}
-                    label="Quantos anos ele tem?"
+                    label="Ele tem qunatos meses ou anos?"
                   />
               </View>
               <View style={styles.detailsContainer}>
