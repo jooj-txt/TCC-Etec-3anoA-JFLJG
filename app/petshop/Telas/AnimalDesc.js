@@ -55,7 +55,7 @@ const AnimalDesc = ({ route, navigation }) => {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>{animalInfo.name},{animalInfo.idade} </Text>
+        <Text style={styles.infoText}>{animalInfo.name}, {animalInfo.idade} </Text>
 
         <MaterialCommunityIcons name="gender-male-female" size={24} color="#FFAE2E" />
         <Text style={styles.infoText}>{animalInfo.sexo}</Text>
@@ -72,7 +72,7 @@ const AnimalDesc = ({ route, navigation }) => {
       <Pressable
         style={styles.Button}
         onPress={() => navigation.navigate('TelaAdocao', { animalId: animalInfo.ID })} >        
-         <Text style={styles.infoText}>ME ADOTE</Text>
+         <Text style={styles.infoTextButton}>ME ADOTE</Text>
      </Pressable>
 
 
@@ -111,13 +111,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   infoLabel: {
-    fontSize: 16,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   infoText: {
+    fontSize: 24,
+    marginBottom: 15,
+  },
+  infoTextButton: {
     fontSize: 16,
     marginBottom: 15,
+    color:"#FFAE2E",
+    fontWeight:'bold',
   },
   backButton: {
     backgroundColor: '#2163D3',
@@ -132,12 +138,15 @@ const styles = StyleSheet.create({
   },
   Button: {
     backgroundColor: '#2163D3',
-    padding: 7,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 150,
     marginLeft: 250,
-    width:100,
+    width:180,
+    height: 50,
+    borderColor: 'darkblue',
+    borderBottomWidth: 5,
+    justifyContent:'center'
   },
   backButtonText: {
     color: 'white',
