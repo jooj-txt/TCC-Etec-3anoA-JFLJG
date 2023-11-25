@@ -58,16 +58,19 @@ const ConfigPerfil = ({ route, navigation }) => {
 
   const saveSelections = async () => {
     try {
-      await AsyncStorage.setItem('selectedButtons', JSON.stringify(selectedButtons));
+      const userSelectionsKey = `selectedButtons_${userId}`;
+      await AsyncStorage.setItem(userSelectionsKey, JSON.stringify(selectedButtons));
     } catch (error) {
       console.error('Erro ao salvar seleções:', error);
     }
   };
+  
 
   // Função para carregar as seleções do AsyncStorage
   const loadSelections = async () => {
     try {
-      const savedSelections = await AsyncStorage.getItem('selectedButtons');
+      const userSelectionsKey = `selectedButtons_${userId}`;
+      const savedSelections = await AsyncStorage.getItem(userSelectionsKey);
       if (savedSelections) {
         setSelectedButtons(JSON.parse(savedSelections));
       }
@@ -75,7 +78,7 @@ const ConfigPerfil = ({ route, navigation }) => {
       console.error('Erro ao carregar seleções:', error);
     }
   };
-
+  
  useEffect(() => {
 
   onAuthStateChanged(auth, async (user) => {
@@ -130,63 +133,59 @@ const ConfigPerfil = ({ route, navigation }) => {
     fetchUserProfile();
   }, [userId, db]);
   useEffect(() => {
-    // Carregar seleções salvas ao montar o componente
     loadSelections();
-  }, []);
+  }, [userId]);
+  
 
   const handleSaveProfile = async () => {
     try {
+      // Adicione verificações para garantir que todas as seleções foram feitas
+      if (!selectedButtons.genero || !selectedButtons.criancas || !selectedButtons.moradia || !selectedButtons.espaco || !selectedButtons.possuiPets || !selectedButtons.horas) {
+        Alert.alert('Por favor, preencha todas as seleções.');
+        return;
+      }
+  
+      // Adicione verificações para garantir que todos os campos obrigatórios foram preenchidos
+      else if (!nome || !dataNascimento || !email || !celular || !cidade || !estado || !ocupacao || !numPessoas) {
+        Alert.alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      } else {
+        navigation.goBack();
+        Alert.alert('Perfil atualizado com sucesso!');
+      }
+  
       // Use o ID do documento recuperado da consulta
       const userDocRef = doc(db, 'PessoasFisicas', userId);
+  
       const profileData = {};
 
-    // Adicione as categorias selecionadas ao objeto profileData
-    if (selectedButtons.genero) {
+      // Adicione as categorias selecionadas ao objeto profileData
       profileData.genero = selectedButtons.genero;
-    }
-
-    if (selectedButtons.criancas) {
       profileData.criancas = selectedButtons.criancas;
-    }
-
-    if (selectedButtons.moradia) {
       profileData.moradia = selectedButtons.moradia;
-    }
-
-    if (selectedButtons.espaco) {
       profileData.espaco = selectedButtons.espaco;
-    }
-
-    if (selectedButtons.possuiPets) {
       profileData.possuiPets = selectedButtons.possuiPets;
-    }
-
-    if (selectedButtons.horas) {
       profileData.horas = selectedButtons.horas;
-    }
-    if (selectedButtons.conheceuRedes) {
       profileData.conheceuRedes = selectedButtons.conheceuRedes;
-    }
-
-    // Adicione outras categorias conforme necessário
-
-    // Adicione campos adicionais
-    profileData.nome = nome;
-    profileData.dataNascimento = dataNascimento;
-    profileData.email = email;
-    profileData.celular = celular;
-    profileData.ocupacao = ocupacao;
-    profileData.instagram = instagram;
-    profileData.numPessoas = numPessoas;
   
-    
+      // Adicione campos adicionais
+      profileData.nome = nome;
+      profileData.dataNascimento = dataNascimento;
+      profileData.email = email;
+      profileData.celular = celular;
+      profileData.ocupacao = ocupacao;
+      profileData.instagram = instagram;
+      profileData.numPessoas = numPessoas;
+  
+      console.log('Atualizando perfil com os seguintes dados:', profileData);
+  
       await updateDoc(userDocRef, profileData);
-      Alert.alert('Perfil atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o perfil do usuário', error);
       Alert.alert('Erro ao atualizar o perfil. Tente novamente mais tarde.');
     }
   };
+  
   
 
   const handleGeneroChange = (femininoSelected, masculinoSelected) => {
@@ -282,9 +281,9 @@ const ConfigPerfil = ({ route, navigation }) => {
       default:
         break;
     }
-    saveSelections();
-  };
+     saveSelections();
 
+};
   const renderButton = (category, buttonName, buttonText) => (
     <Pressable
       key={buttonName}
@@ -369,7 +368,7 @@ const ConfigPerfil = ({ route, navigation }) => {
         <TextInput  style={styles.input} value={ocupacao} onChangeText={setOcupacao} />
 
         <Text style={styles.title}>Número de pessoas que moram com você</Text>
-        <TextInput  style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
+        <TextInput keyboardType='numeric' style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
         
         <View>
           <Text style={styles.title}>Possui Instagram?</Text>
@@ -426,7 +425,6 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Pressable  onPress={() => {
                 handleSaveProfile();
-                navigation.goBack();
               }} style={{ alignItems: 'center',
               alignSelf:'center',
               backgroundColor: '#FFAE2E',

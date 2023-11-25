@@ -1,5 +1,5 @@
 import React, { useState, useContext,useEffect   } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Linking } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -17,7 +17,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
-  const [genero, setGenero] = useState('');
   const [cidade, setCidade] = useState('');
   const [estado, setEstado] = useState('');
   const [senha, setSenha] = useState('');
@@ -67,7 +66,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
         cidade &&
         estado &&
         dataNascimento &&
-        genero &&
         senha &&
         senha === confirmarSenha &&
         aceitarTermos
@@ -80,7 +78,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
     useEffect(() => {
       validateFields();
-    }, [nome, cpf, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
+    }, [nome, cpf, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos, dataNascimento]);
   
   
     const isValidCPF = (cpf) => {
@@ -179,7 +177,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
           cpf,
           email,
           celular,
-          genero,
           cidade,
           estado,
           dataNascimento,
@@ -201,8 +198,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
    
     }
     else{
-      alert(
-        'Preencha TUDO')
+      Alert.alert("PREENCHA TODOS OS DADOS CORRETAMENTE")
     }
   };
   
@@ -245,16 +241,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
         
       />
 
-      <Picker
-        style={[styles.picker, itemStyles[0]]}
-        selectedValue={genero}
-        onValueChange={(itemValue) => setGenero(itemValue)}
-      >
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Masculino" value="masculino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Feminino" value="feminino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Outro" value="outro" />
-      </Picker>
+  
 
       <TextInput
         style={[styles.input,itemStyles[1]]}

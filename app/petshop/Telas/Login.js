@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -37,8 +37,12 @@ export default function Login({ navigation }) {
         await AsyncStorage.setItem('firstTimeLogin', 'true');
       }
     } catch (error) {
-      // Lidar com erros de autenticação, por exemplo, exibir uma mensagem de erro
-      console.error('Erro de autenticação:', error.message);
+      setIsLoading(false);
+      alert('Usuário ou senha incorretos. Verifique e tente novamente.');
+
+ 
+        console.error('Erro de autenticação:', error.message);
+      
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

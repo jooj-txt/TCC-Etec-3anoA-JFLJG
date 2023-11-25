@@ -167,8 +167,8 @@
   
       } else {
 
-        alert(
-          'Preencha TUDO')
+        Alert.alert("PREENCHA TODOS OS DADOS CORRETAMENTE")
+
         }
       
     };
