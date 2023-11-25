@@ -33,11 +33,7 @@ export default function App() {
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
-          <Stack.Screen
-          name="Inicio"
-          options={{  headerShown:false  }}
-          component={Inicio}
-        />
+         
           
             <Stack.Screen
           name="TelaAdocao"
