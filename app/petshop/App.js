@@ -33,6 +33,12 @@ export default function App() {
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
+          <Stack.Screen
+          name="Inicio"
+          options={{  headerShown:false  }}
+          component={Inicio}
+        />
+          
             <Stack.Screen
           name="TelaAdocao"
           options={{  headerShown:false  }}
@@ -44,7 +50,11 @@ export default function App() {
           options={{ headerShown:false }}
           component={PosAdd}
         />
-         
+            <Stack.Screen
+          name="Add"
+          options={{ headerShown:false }}
+          component={Add}
+        />
             <Stack.Screen
           name="ConfigPerfil"
           options={{ headerShown:false  }}
@@ -52,6 +62,8 @@ export default function App() {
         />
           
         
+         
+     
             <Stack.Screen
           name="HomeJur"
           options={{ headerShown:false  }}
@@ -65,6 +77,11 @@ export default function App() {
           component={PessoaJuridicaCadastro}
         /> 
           
+            <Stack.Screen
+          name="Login"
+          options={{ headerShown:false }}
+          component={Login}
+        />
             <Stack.Screen
           name="PessoaFisicaCadastro"
           options={{ headerShown:false }}

@@ -219,7 +219,7 @@
                     style={[styles.input, styles.inputHeight]}
                     onChangeText={setIdade}
                     value={idade}
-                    label="Ele tem qunatos meses ou anos?"
+                    label="Ele tem quantos meses ou anos?"
                   />
               </View>
               <View style={styles.detailsContainer}>
@@ -230,7 +230,7 @@
           onValueChange={(itemValue) => onChangeSexo(itemValue)}
         >
           <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o sexo" value="" />
-          <Picker.Item  style={[styles.picker, itemStyles[1]]} label="Femea" value="Femea" />
+          <Picker.Item  style={[styles.picker, itemStyles[1]]} label="Fêmea" value="Fêmea" />
           <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Macho" value="Macho" />
         
         </Picker>
