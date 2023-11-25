@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal, KeyboardAvoidingView,
-  TouchableWithoutFeedback, Platform, Keyboard , ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -9,7 +8,6 @@ import { getFirestore, collection, getDocs, query, where } from 'firebase/firest
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -17,8 +15,6 @@ export default function Login({ navigation }) {
   const db = getFirestore();
   const [userType, setUserType] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
 
   const handleLogin = (auth, async (user) => {
     try {
@@ -29,7 +25,9 @@ export default function Login({ navigation }) {
       const firstTimeLogin = await AsyncStorage.getItem('firstTimeLogin');
       if (!firstTimeLogin) {
         // Se for a primeira vez que o usuário fez login, exiba o modal
+ setTimeout(() => {
         setShowModal(true);
+      }, 6000);
 
         // Marque que o usuário já fez login para que o modal não seja exibido novamente
         await AsyncStorage.setItem('firstTimeLogin', 'true');
@@ -43,14 +41,11 @@ export default function Login({ navigation }) {
       if (user) {
         console.log('Usuário autenticado:', user);
 
-
         const pessoasFisicasRef = collection(db, 'PessoasFisicas');
         const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
 
         const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
         const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
-
-        setIsLoading(true);
 
         try {
           const querySnapshotFisicas = await getDocs(qFisicas);
@@ -83,34 +78,23 @@ export default function Login({ navigation }) {
 
   // Quando o usuário efetuar login, redirecione-o com base no userType
   useEffect(() => {
-    const checkFirstTimeLogin = async () => {
-      const firstTimeLogin = await AsyncStorage.getItem('firstTimeLogin');
+    if (userType === 'user') {
+      navigation.navigate('Home');
+    } 
+    if (userType === 'user' && !AsyncStorage.getItem('firstTimeLogin')) {
       
-      if (userType === 'user' && !firstTimeLogin) {
         setShowModal(true);
-      } else if (userType === 'user') {
-        navigation.navigate('Home');
-      } else if (userType === 'userJur') {
-        navigation.navigate('HomeJur');
-      }
-    };
-  
-    checkFirstTimeLogin();
+    
+    }else if (userType === 'userJur') {
+      navigation.navigate('HomeJur');
+    }
   }, [userType]);
-  
+
   const closeModal = () => {
     setShowModal(false);
   };
 
   return (
-    <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-  >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          {isLoading ? ( 
-        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:150 }} />
-      ) : (
     <View style={styles.container}>
       <Modal
         animationType="slide"
@@ -208,9 +192,6 @@ export default function Login({ navigation }) {
         ></View>
       </View>
     </View>
-     )}
-    </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
   );
 }
 

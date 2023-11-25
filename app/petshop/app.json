@@ -3,6 +3,7 @@
     "name": "petshop",
     "slug": "petshop",
     "version": "1.0.0",
+    "icon":"./imgs/LOGO.png",
     "assetBundlePatterns": [
       "**/*"
     ],

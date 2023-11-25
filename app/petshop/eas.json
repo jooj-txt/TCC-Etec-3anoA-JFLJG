@@ -13,7 +13,8 @@
           "gradleCommand": ":app:assembleRelease"
         }
       },
-    
+        
+
     "production": {}
   },
   "submit": {
