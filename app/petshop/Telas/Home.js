@@ -11,6 +11,7 @@ import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
+import logo2 from '../imgs/LOGO.png';
 import Modal from 'react-native-modal';
 import { getFirestore, collection, doc, getDocs,setDoc, query, where } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
@@ -140,13 +141,10 @@ function CustomDrawerContent({ navigation, ...props }) {
         onPress={() => navigation.navigate('AdicionarAnimal')} 
         labelStyle={styles.drawerItem} />
       <DrawerItem 
-        label="Sair" 
+        label="LOGOUT" 
         onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
         labelStyle={styles.drawerItem} />
-      <View style={styles.darkModeSwitch}>
-        <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-        <Switch value={isDarkMode} />
-      </View>
+      
     </DrawerContentScrollView>
   );
 }
@@ -162,49 +160,26 @@ const handleLogout = async (navigation) => {
   }
 };
 function DrawerNavigator() {
-  const [searchText, setSearchText] = useState('');
-  const [animais, setAnimais] = useState([]);
-
-  const fetchAnimais = async () => {
-    const animaisCollection = collection(db, 'Animais');
-    const animaisQuery = await getDocs(animaisCollection);
-
-    const animaisData = [];
-    animaisQuery.forEach((doc) => {
-      const animal = doc.data();
-      animaisData.push(animal);
-    });
-
-    setAnimais(animaisData);
-  };
+ 
   
 
-  const searchAnimals = () => {
-    if (searchText === '') {
-      return animais; // Retorna todos os animais se a barra de pesquisa estiver vazia
-    } else {
-      return animais.filter(animal =>
-        animal.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.raça.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.estado.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.cidade.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-  };
 return (
   <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-    <Drawer.Screen name="Home" component={Tabs} options={{
-      title: null,
+  <Drawer.Screen name="Home" component={Tabs} options={{
+      title: "ADOTE SEM RÓTULOS",
       headerStyle: {
         backgroundColor: "#2163D3",
       },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
       headerRight: () => (
-        <Searchbar
-          placeholder="Pesquisar"
-          onChangeText={setSearchText}
-          value={searchText}
-          style={styles.searchInput}
-        />
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     />
       ),
     }} />
     <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
@@ -295,13 +270,27 @@ const Casa = ({ navigation, route }) => {
     });
   }, []);
 
+  const fetchFavoritos = async () => {
+    try {
+      const userDocRef = doc(db, 'PessoasFisicas', userId);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        setFavoritos(userData.favoritos || []);
+      } else {
+        console.log('Documento do usuário não encontrado');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar favoritos do usuário no Firestore', error);
+    }
+  };
+
   const handleAdicionarFavorito = async (animal) => {
+    alert("ANIMAL ADICIONADO AOS FAVORITOS");
     try {
       // Adiciona o animal aos favoritos do usuário
       const updatedFavoritos = [...favoritos, { ...animal, userId: userId }];
-  
-      // Atualiza o estado local
-      setFavoritos(updatedFavoritos);
   
       // Obtém uma referência para o documento do usuário no Firestore
       const userDocRef = doc(db, 'PessoasFisicas', userId);
@@ -309,11 +298,16 @@ const Casa = ({ navigation, route }) => {
       // Atualiza o campo de favoritos no documento do usuário
       await setDoc(userDocRef, { favoritos: updatedFavoritos }, { merge: true });
   
+      // Busca os favoritos mais recentes após a adição
+      await fetchFavoritos();
+  
       console.log('Animal favoritado com sucesso!');
     } catch (error) {
       console.error('Erro ao favoritar o animal:', error);
     }
   };
+  
+  
   
   
   const fetchAnimais = async () => {
@@ -364,9 +358,7 @@ const Casa = ({ navigation, route }) => {
   }, []); // Certifique-se de passar um array vazio para useEffect para que ele só seja executado uma vez
 
   const handleExitApp = () => {
-    // Adicione qualquer lógica adicional antes de fechar o aplicativo
-    // ...
-
+  
     // Fecha o modal
     setModalVisible(false);
 
@@ -394,6 +386,7 @@ const Casa = ({ navigation, route }) => {
           <Text style={styles.exitModalText}>Deseja fechar o aplicativo?</Text>
           <View style={styles.exitModalButtons}>
             <FontAwesome5
+            style={{margin:40}}
               name="check-circle"
               size={30}
               color="green"
@@ -402,6 +395,7 @@ const Casa = ({ navigation, route }) => {
               }}
             />
             <FontAwesome5
+              style={{margin:40}}
               name="times-circle"
               size={30}
               color="red"
@@ -487,7 +481,7 @@ const AnimalCard = ({ animal, onAdicionarFavorito  }) => (
       )}
 
       <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
-        <FontAwesome5 name="heart" size={16} color="black" />
+        <FontAwesome5 name="heart" size={22} color="black" />
       </Pressable>
     </Card.Content>
   </Card>
@@ -624,11 +618,11 @@ const styles = StyleSheet.create({
     color:'#000'
   },
   exitModalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFAE2E',
     padding: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 4,
+    borderRadius: 5,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   exitModalText: {
@@ -640,3 +634,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 });
+
+
+
+

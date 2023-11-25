@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -7,6 +7,7 @@ import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebas
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 import { BlurView } from 'expo-blur';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -15,9 +16,11 @@ export default function Login({ navigation }) {
   const db = getFirestore();
   const [userType, setUserType] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (auth, async (user) => {
     try {
+      setIsLoading(true);
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
 
@@ -27,7 +30,8 @@ export default function Login({ navigation }) {
         // Se for a primeira vez que o usuário fez login, exiba o modal
  setTimeout(() => {
         setShowModal(true);
-      }, 6000);
+      }, 8000);
+
 
         // Marque que o usuário já fez login para que o modal não seja exibido novamente
         await AsyncStorage.setItem('firstTimeLogin', 'true');
@@ -95,112 +99,121 @@ export default function Login({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showModal}
-        onRequestClose={closeModal}
-      >
-    <BlurView style={styles.containerModal} intensity={35} tint="light">
+    <ScrollView style={{backgroundColor:'white'}}>
+        {isLoading ? ( // Mostra o indicador de carregamento enquanto isLoading é verdadeiro
+        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'60%' }} />
+      ) : (
+       <View style={styles.container}>
+ 
+ <Modal
+   animationType="slide"
+   transparent={true}
+   visible={showModal}
+   onRequestClose={closeModal}
+ >
+<BlurView style={styles.containerModal} intensity={35} tint="light">
 
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>
-              Complete seu perfil para aproveitar ao máximo nosso aplicativo!
-            </Text>
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                closeModal();
-                navigation.navigate('ConfigPerfil');
-              }}
-            >
-              <Text style={styles.buttonText}>Completar Perfil</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        </BlurView>
-      </Modal>
-      <TouchableOpacity
-        style={{
-          height: 40,
-          width: 40,
-          margin: 15,
-          marginLeft: -200,
-          backgroundColor: '#2163D3',
-          borderRadius: 200,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        onPress={() => {
-          navigation.navigate('Inicio');
-        }}
-      >
-        <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
-      </TouchableOpacity>
-      <Image source={logo} style={styles.logo} />
-      <Image source={logo2} style={styles.logo2} />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <View style={styles.divider}>
-        <View
-          style={{
-            width: 35,
-            height: 3,
-            backgroundColor: '#FFAE2E',
-            marginHorizontal: '4px',
-          }}
-        ></View>
-        <View
-          style={{
-            width: 35,
-            height: 3,
-            backgroundColor: '#2163D3',
-            marginHorizontal: '4px',
-          }}
-        ></View>
-        <View
-          style={{
-            width: 35,
-            height: 3,
-            backgroundColor: '#FFAE2E',
-            marginHorizontal: '4px',
-          }}
-        ></View>
-        <View
-          style={{
-            width: 35,
-            height: 3,
-            backgroundColor: '#2163D3',
-            marginHorizontal: '4px',
-          }}
-        ></View>
-      </View>
-    </View>
-  );
-}
-
+   <View style={styles.modalContainer}>
+     <View style={styles.modalContent}>
+       <Text style={styles.modalText}>
+         Complete seu perfil para aproveitar ao máximo nosso aplicativo!
+       </Text>
+       <TouchableOpacity
+         style={styles.modalButton}
+         onPress={() => {
+           closeModal();
+           navigation.navigate('ConfigPerfil');
+         }}
+       >
+         <Text style={styles.buttonText}>Completar Perfil</Text>
+       </TouchableOpacity>
+     </View>
+   </View>
+   </BlurView>
+ </Modal>
+ <TouchableOpacity
+   style={{
+     height: 40,
+     width: 40,
+     margin: 15,
+     marginLeft: -200,
+     backgroundColor: '#2163D3',
+     borderRadius: 200,
+     alignItems: 'center',
+     justifyContent: 'center',
+   }}
+   onPress={() => {
+     navigation.navigate('Inicio');
+   }}
+ >
+   <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
+ </TouchableOpacity>
+ <Image source={logo} style={styles.logo} />
+ <Image source={logo2} style={styles.logo2} />
+ <TextInput
+   style={styles.input}
+   placeholder="Email"
+   value={email}
+   onChangeText={setEmail}
+ />
+ <TextInput
+   style={styles.input}
+   placeholder="Senha"
+   secureTextEntry
+   value={senha}
+   onChangeText={setSenha}
+ />
+ <TouchableOpacity style={styles.button} onPress={handleLogin}>
+   <Text style={styles.buttonText}>Login</Text>
+ </TouchableOpacity>
+ <View style={styles.divider}>
+   <View
+     style={{
+       width: 35,
+       height: 3,
+       backgroundColor: '#FFAE2E',
+       marginHorizontal: '4px',
+     }}
+   ></View>
+   <View
+     style={{
+       width: 35,
+       height: 3,
+       backgroundColor: '#2163D3',
+       marginHorizontal: '4px',
+     }}
+   ></View>
+   <View
+     style={{
+       width: 35,
+       height: 3,
+       backgroundColor: '#FFAE2E',
+       marginHorizontal: '4px',
+     }}
+   ></View>
+   <View
+     style={{
+       width: 35,
+       height: 3,
+       backgroundColor: '#2163D3',
+       marginHorizontal: '4px',
+     }}
+   ></View>
+ </View>
+</View>
+)}
+    </ScrollView>
+    );
+  }
+  
+   
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
+    margin:'25%'
   },
   input: {
     height: 40,

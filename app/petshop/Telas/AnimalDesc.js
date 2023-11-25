@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, Image,ActivityIndicator } from 'react-native';
+import Swiper from 'react-native-swiper';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons'; 
 import { Octicons } from '@expo/vector-icons'; 
 
 
@@ -46,27 +48,38 @@ const AnimalDesc = ({ route, navigation }) => {
       </View>
       
 
-      <View style={styles.swiper} showsButtons>
-        {animalInfo.images.map((image, index) => (
-          <View key={index} style={styles.slide}>
-            <Image style={styles.image} source={{ uri: image }} />
-          </View>
-        ))}
-      </View>
+          <Swiper style={styles.swiper} showsButtons>
+            {animalInfo.images.map((image, index) => (
+              <View key={index} style={styles.slide}>
+                <Image style={styles.image} source={{ uri: image }} />
+              </View>
+            ))}
+          </Swiper>
 
       <View style={styles.infoContainer}>
         <Text style={styles.infoText}>{animalInfo.name}, {animalInfo.idade} </Text>
-
-        <MaterialCommunityIcons name="gender-male-female" size={24} color="#FFAE2E" />
+        
+        <View style={{flexDirection:'row',  margin:5}}>
+        {animalInfo.sexo === 'Femea'?(
+        <MaterialCommunityIcons name="gender-male-female"  size={35} color="pink" />
+        ) :(  <MaterialCommunityIcons name="gender-male-female"  size={35} color="blue" />
+        )}
         <Text style={styles.infoText}>{animalInfo.sexo}</Text>
-
-        <Text style={styles.infoLabel}>Raça:</Text>
+        </View>
+       
+        <View style={{flexDirection:'row', margin:5}}>
+          {animalInfo.tipo === 'gato'?(
+            <MaterialCommunityIcons name="cat" size={35} color="#2163D3" />
+          ) :(<MaterialCommunityIcons name="dog"  size={35} color="#2163D3" />)}
         <Text style={styles.infoText}>{animalInfo.raça}</Text>
-
-        <Text style={styles.infoLabel}>Local:</Text>
+        </View>
+        
+        <View style={{flexDirection:'row', margin:5}}>
+        <Feather name="map-pin" size={35} color="#FFAE2E" />
         <Text style={styles.infoText}>{animalInfo.cidade}-{animalInfo.estado}</Text>
+        </View>
 
-        <Text style={styles.infoLabel}>Descrição:</Text>
+        <Text style={{fontSize:22, fontWeight:'bold'}}>SOBRE MIM:</Text>
 <Text style={styles.infoText}>{animalInfo.descricao}</Text>
       </View>
 
@@ -87,6 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor:'white'
   },
   title: {
     fontSize: 25,
@@ -110,15 +124,13 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     marginTop: 20,
-  },
-  infoLabel: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    backgroundColor:'white'
   },
   infoText: {
     fontSize: 24,
     marginBottom: 15,
+    fontWeight: 'bold',
+
   },
   infoTextButton: {
     fontSize: 16,
@@ -141,13 +153,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#2163D3',
     borderRadius: 10,
     alignItems: 'center',
-    marginTop: 150,
-    marginLeft: 250,
+    marginTop: '30%',
+    marginLeft: '50%',
+    marginBottom:'10%',
     width:180,
     height: 50,
     borderColor: 'darkblue',
     borderBottomWidth: 5,
-    justifyContent:'center'
+    justifyContent:'center',
   },
   backButtonText: {
     color: 'white',

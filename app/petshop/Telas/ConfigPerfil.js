@@ -312,7 +312,7 @@ const ConfigPerfil = ({ route, navigation }) => {
   return (
     <ScrollView>
         {isLoading ? ( // Mostra o indicador de carregamento enquanto isLoading é verdadeiro
-        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:150 }} />
+        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'60%' }} />
       ) : (
       <View style={styles.container}>
       <Text style={styles.title}>DADOS PESSOAIS:</Text>

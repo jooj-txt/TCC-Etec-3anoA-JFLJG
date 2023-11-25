@@ -123,14 +123,11 @@ function Tabs({ navigation }) {
         </View>
   
         <DrawerItem 
-          label="Sair" 
+          label="LOGOUT" 
           onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
           labelStyle={styles.drawerItem} />
 
-        <View style={styles.darkModeSwitch}>
-          <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-          <Switch value={isDarkMode} />
-        </View>
+      
       </DrawerContentScrollView>
     );
   }
@@ -146,30 +143,26 @@ function Tabs({ navigation }) {
     }
   };
   function DrawerNavigator() {
-    const [searchText, setSearchText] = useState('');
-    const searchAnimals = () => {
-      if (searchText === '') {
-        return animalAdd; 
-      } else {
-        return animalAdd.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
-      }
-    };
+   
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={Tabs} options={{
-        title: null,
-        headerStyle: {
-          backgroundColor: "#2163D3",
-        },
-        headerRight: () => (
-          <Searchbar
-            placeholder="Pesquisar"
-            onChangeText={setSearchText}
-            value={searchText}
-            style={styles.searchInput}
-          />
-        ),
-      }} />
+       <Drawer.Screen name="Home" component={Tabs} options={{
+      title: "ADOTE SEM RÓTULOS",
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     />
+      ),
+    }} />
        <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
       headerShown: false
@@ -229,6 +222,7 @@ function Casa({ navigation, route }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const [animais, setAnimais] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetchAnimais = async () => {
     const auth = getAuth();
@@ -269,9 +263,67 @@ function Casa({ navigation, route }) {
     }
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      // Mostra o modal quando o botão de retorno é pressionado
+      setModalVisible(true);
+      // Retorna true para impedir o comportamento padrão (fechar o aplicativo)
+      return true;
+    });
+
+    return () => {
+      // Remove o ouvinte do BackHandler ao desmontar o componente
+      backHandler.remove();
+    };
+  }, []); // Certifique-se de passar um array vazio para useEffect para que ele só seja executado uma vez
+
+  const handleExitApp = () => {
+  
+    // Fecha o modal
+    setModalVisible(false);
+
+    // Fecha o aplicativo
+    BackHandler.exitApp();
+  };
+
+  const handleCancelExit = () => {
+    // Fecha o modal sem fechar o aplicativo
+    setModalVisible(false);
+  };
+  
+
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible(false);
+        }}>
+        <View style={styles.exitModalContainer}>
+          <Text style={styles.exitModalText}>Deseja fechar o aplicativo?</Text>
+          <View style={styles.exitModalButtons}>
+            <FontAwesome5
+              name="check-circle"
+              size={30}
+              color="green"
+              onPress={() => {
+                handleExitApp();
+              }}
+            />
+            <FontAwesome5
+              name="times-circle"
+              size={30}
+              color="red"
+              onPress={() => {
+                handleCancelExit();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
         <View style={styles.animalList}>
           {isLoading ? (
             <Text style={styles.AnimalsText}>Carregando...</Text>
@@ -488,5 +540,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color:'#000'
+  },
+  exitModalContainer: {
+    backgroundColor: '#FFAE2E',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  exitModalText: {
+    fontSize: 20,
+    marginBottom: 12,
+  },
+  exitModalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin:10,
   },
 });
