@@ -6,7 +6,6 @@ import logo2 from '../imgs/logo_Inicio2.png';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 import { BlurView } from 'expo-blur';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Login({ navigation }) {
@@ -15,6 +14,7 @@ export default function Login({ navigation }) {
   const auth = getAuth();
   const db = getFirestore();
   const [userType, setUserType] = useState('');
+  const [first, SetFirst] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,19 +23,13 @@ export default function Login({ navigation }) {
       setIsLoading(true);
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-
-      // Verificar se é a primeira vez que o usuário fez login
-      const firstTimeLogin = await AsyncStorage.getItem('firstTimeLogin');
-      if (!firstTimeLogin) {
-        // Se for a primeira vez que o usuário fez login, exiba o modal
- setTimeout(() => {
+       if (first === "") {
         setShowModal(true);
-      }, 8000);
+        setIsLoading(false)
+        return;
+    }
 
-
-        // Marque que o usuário já fez login para que o modal não seja exibido novamente
-        await AsyncStorage.setItem('firstTimeLogin', 'true');
-      }
+    
     } catch (error) {
       setIsLoading(false);
       alert('Usuário ou senha incorretos. Verifique e tente novamente.');
@@ -59,10 +53,12 @@ export default function Login({ navigation }) {
           const querySnapshotFisicas = await getDocs(qFisicas);
           const querySnapshotJuridicas = await getDocs(qJuridicas);
 
-          if (!querySnapshotFisicas.empty) {
+          if (!querySnapshotFisicas.empty ) {
             const userDocSnapshot = querySnapshotFisicas.docs[0];
             const userData = userDocSnapshot.data();
             setUserType(userData.userType);
+            SetFirst(userData.horas);
+            console.log(first)
           } else if (!querySnapshotJuridicas.empty) {
             const userDocSnapshot = querySnapshotJuridicas.docs[0];
             const userData = userDocSnapshot.data();
@@ -89,11 +85,7 @@ export default function Login({ navigation }) {
     if (userType === 'user') {
       navigation.navigate('Home');
     } 
-    if (userType === 'user' && !AsyncStorage.getItem('firstTimeLogin')) {
-      
-        setShowModal(true);
-    
-    }else if (userType === 'userJur') {
+   else if (userType === 'userJur') {
       navigation.navigate('HomeJur');
     }
   }, [userType]);
@@ -107,7 +99,7 @@ export default function Login({ navigation }) {
         {isLoading ? ( // Mostra o indicador de carregamento enquanto isLoading é verdadeiro
         <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'60%' }} />
       ) : (
-       <View style={styles.container}>
+   <View style={styles.container}>
  
  <Modal
    animationType="slide"
