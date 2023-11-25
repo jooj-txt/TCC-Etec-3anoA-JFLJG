@@ -67,7 +67,7 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoText}>{animalInfo.cidade}-{animalInfo.estado}</Text>
 
         <Text style={styles.infoLabel}>Descrição:</Text>
-Text style={styles.infoText}>{animalInfo.descricao}</Text>
+<Text style={styles.infoText}>{animalInfo.descricao}</Text>
       </View>
 
       <Pressable
