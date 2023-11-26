@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,ActivityIndicator} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
@@ -13,6 +14,7 @@ export default function Inicio({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
+  const [m, setM] = useState(false)
   const auth = getAuth();
   const db = getFirestore();
 
@@ -82,7 +84,7 @@ export default function Inicio({ navigation }) {
   };
   
   return (
-
+<ScrollView style={{backgroundColor:'white'}}>
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
@@ -213,6 +215,7 @@ export default function Inicio({ navigation }) {
 )}
 
     </View>
+    </ScrollView>
   );
 }
 const estilo = StyleSheet.create({

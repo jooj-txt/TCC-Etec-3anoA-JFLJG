@@ -397,7 +397,7 @@ const Casa = ({ navigation, route }) => {
 
       // Atualize o estado local para refletir a remoção do animal
       setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== animalId));
-      Alert.alert("FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHONÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTA SENDO BEM CUIDADO (:")
+      Alert.alert("PARABENS POR DOAR UM PET","FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHONÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTA SENDO BEM CUIDADO (:")
     } catch (error) {
       console.error('Erro ao marcar como adotado:', error);
     }
