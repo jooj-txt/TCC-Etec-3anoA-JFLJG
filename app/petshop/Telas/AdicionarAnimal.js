@@ -44,8 +44,7 @@
       onChangeDescricao('');
       onChangeTipo('');
       setImages([]);
-      setUserId(null);
-      setUserType(null);
+    
     };
 
 

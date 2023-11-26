@@ -14,7 +14,6 @@ export default function Login({ navigation }) {
   const auth = getAuth();
   const db = getFirestore();
   const [userType, setUserType] = useState('');
-  const [first, SetFirst] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,12 +22,10 @@ export default function Login({ navigation }) {
       setIsLoading(true);
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-       
-
     
     } catch (error) {
       setIsLoading(false);
-      alert('Usuário ou senha incorretos. Verifique e tente novamente.');
+      Alert.alert('Usuário ou senha incorretos. Verifique e tente novamente.');
 
  
         console.error('Erro de autenticação:', error.message);

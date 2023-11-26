@@ -50,7 +50,7 @@ const Favoritos = ({ route, navigation }) => {
   );
  
   const removeFavorito = async (id) => {
-    alert("FAVORITO REMOVIDO")
+    Alert.alert("FAVORITO REMOVIDO")
     if (user && user.uid) {
       try {
         // Atualize apenas o favorito removido no Firestore

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Pressable, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
+import { View, Pressable, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Modal, Alert } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,7 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
+import logo2 from '../imgs/LOGO.png';
+import { getFirestore, collection, docs, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
@@ -169,10 +171,22 @@ function Tabs({ navigation }) {
 
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
-      title: null,
-      headerShown: false
- 
-    }} /> 
+      title: "ADOTE SEM RÓTULOS",
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     />
+      ),
+    }} />
       <Drawer.Screen name='Login' component={Login} options={{
       title: null,
       headerShown: false
@@ -291,6 +305,20 @@ function Casa({ navigation, route }) {
     setModalVisible(false);
   };
   
+  const markAsAdopted = async (animalId) => {
+    try {
+      // Remova o animal do banco de dados Firestore
+      const animaisRef = collection(db, 'Animais');
+      await deleteDoc(doc(animaisRef, animalId));
+
+      // Atualize o estado local para refletir a remoção do animal
+      setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== animalId));
+      Alert.alert("FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTA SENDO BEM CUIDADO (:")
+    } catch (error) {
+      console.error('Erro ao marcar como adotado:', error);
+    }
+  };
+
 
   return (
     <Provider>
@@ -377,7 +405,7 @@ function Casa({ navigation, route }) {
                     style={styles.animalCard}
                     onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
                   >
-                    <AnimalCard animal={item} />
+                      <AnimalCard animal={item} onMarkAsAdopted={markAsAdopted} />
                   </Pressable>
                 )}
               />
@@ -389,7 +417,7 @@ function Casa({ navigation, route }) {
   );
 }
 
-const AnimalCard = ({ animal }) => (
+const AnimalCard = ({ animal, onMarkAsAdopted }) => (
   <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
@@ -397,8 +425,8 @@ const AnimalCard = ({ animal }) => (
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
-      <Pressable onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
-        <FontAwesome5 name="heart" size={16} color="black" />
+      <Pressable onPress={() => onMarkAsAdopted(animal.ID)} style={{ alignSelf: "flex-start", borderWidth:2, borderRadius:4,padding:5 }}>
+              <Text  style={{fontWeight:'bold', fontSize:16, color: 'white'}}>ANIMAL DOADO</Text>
       </Pressable>
     </Card.Content>
   </Card>
@@ -449,7 +477,7 @@ const styles = StyleSheet.create({
     
   },
   animalText: {
-    color: 'black',
+    color: 'white',
   },
   animalLocal: {
     textAlign: 'right',

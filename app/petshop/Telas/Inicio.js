@@ -1,31 +1,85 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
 
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 
-export default function Inicio({navigation}) {
-
-
+export default function Inicio({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
-
   const [isButtonsVisible, setButtonsVisible] = useState(true);
+  const auth = getAuth();
+  const db = getFirestore();
 
+  // Verificar se o usuário já está autenticado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userType = await determineUserType();
+        navigateToAppropriateScreen(userType);
+      }
+    });
   
+    // Certifique-se de cancelar a assinatura quando o componente for desmontado
+    return () => unsubscribe();
+  }, []);
+
+  const determineUserType = async () => {
+    const user = auth.currentUser;
+  
+    if (user) {
+      const pessoasFisicasRef = collection(db, 'PessoasFisicas');
+      const pessoasJuridicasRef = collection(db, 'PessoasJuridicas');
+  
+      const qFisicas = query(pessoasFisicasRef, where('userUid', '==', user.uid));
+      const qJuridicas = query(pessoasJuridicasRef, where('userUid', '==', user.uid));
+  
+      try {
+        const querySnapshotFisicas = await getDocs(qFisicas);
+        const querySnapshotJuridicas = await getDocs(qJuridicas);
+  
+        if (!querySnapshotFisicas.empty) {
+          const userDocSnapshot = querySnapshotFisicas.docs[0];
+          const userData = userDocSnapshot.data();
+          return userData.userType || ''; // Retorna o tipo de usuário se existir
+        } else if (!querySnapshotJuridicas.empty) {
+          const userDocSnapshot = querySnapshotJuridicas.docs[0];
+          const userData = userDocSnapshot.data();
+          return userData.userType || ''; // Retorna o tipo de usuário se existir
+        } else {
+          console.log('Documento do usuário não encontrado');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar informações do usuário no Firestore', error);
+      }
+    }
+  
+    return ''; // Retorna uma string vazia se o tipo de usuário não for encontrado
+  };
+
+  const navigateToAppropriateScreen = (userType) => {
+    if (userType === 'user') {
+      navigation.navigate('Home');
+    } else if (userType === 'userJur') {
+      navigation.navigate('HomeJur');
+    }
+  };
+  
+
   const handlePessoaFisicaPress = () => {
     setButtonsVisible(false);
     setShowModal(true);
   };
+
   const handlePessoaJuridicaPress = () => {
     setButtonsVisible(false);
     setShowModal2(true);
   };
-
-
   
   return (
 
