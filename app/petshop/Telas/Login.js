@@ -23,11 +23,7 @@ export default function Login({ navigation }) {
       setIsLoading(true);
       // Autenticar o usuário com o Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-       if (first === "") {
-        setShowModal(true);
-        setIsLoading(false)
-        return;
-    }
+       
 
     
     } catch (error) {
@@ -57,9 +53,15 @@ export default function Login({ navigation }) {
             const userDocSnapshot = querySnapshotFisicas.docs[0];
             const userData = userDocSnapshot.data();
             setUserType(userData.userType);
-            SetFirst(userData.horas);
-            console.log(first)
-          } else if (!querySnapshotJuridicas.empty) {
+             if (userData.horas != "4 a 8" && userData.horas != "8 a 12" && userData.horas != "4 ou Menos"  && userData.horas != "12 ou Mais") {
+              setShowModal(true);
+              setIsLoading(false)
+              return;
+          }
+            
+          } 
+       
+        else if (!querySnapshotJuridicas.empty) {
             const userDocSnapshot = querySnapshotJuridicas.docs[0];
             const userData = userDocSnapshot.data();
             setUserType(userData.userType);

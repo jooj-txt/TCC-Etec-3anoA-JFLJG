@@ -150,7 +150,7 @@ const ConfigPerfil = ({ route, navigation }) => {
         Alert.alert('Por favor, preencha todos os campos obrigatórios.');
         return;
       } else {
-        navigation.goBack();
+        navigation.navigate('Home');
         Alert.alert('Perfil atualizado com sucesso!');
       }
   
