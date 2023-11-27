@@ -14,7 +14,6 @@ export default function Inicio({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
-  const [m, setM] = useState(false)
   const auth = getAuth();
   const db = getFirestore();
 

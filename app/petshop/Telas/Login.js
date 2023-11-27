@@ -14,7 +14,6 @@ export default function Login({ navigation }) {
   const auth = getAuth();
   const db = getFirestore();
   const [userType, setUserType] = useState('');
-  const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = (auth, async (user) => {
@@ -49,12 +48,7 @@ export default function Login({ navigation }) {
           if (!querySnapshotFisicas.empty ) {
             const userDocSnapshot = querySnapshotFisicas.docs[0];
             const userData = userDocSnapshot.data();
-            setUserType(userData.userType);
-             if (userData.horas != "4 a 8" && userData.horas != "8 a 12" && userData.horas != "4 ou Menos"  && userData.horas != "12 ou Mais") {
-              setShowModal(true);
-              setIsLoading(false)
-              return;
-          }
+          
             
           } 
        
@@ -100,32 +94,6 @@ export default function Login({ navigation }) {
       ) : (
    <View style={styles.container}>
  
- <Modal
-   animationType="slide"
-   transparent={true}
-   visible={showModal}
-   onRequestClose={closeModal}
- >
-<BlurView style={styles.containerModal} intensity={35} tint="light">
-
-   <View style={styles.modalContainer}>
-     <View style={styles.modalContent}>
-       <Text style={styles.modalText}>
-         Complete seu perfil para aproveitar ao máximo nosso aplicativo!
-       </Text>
-       <TouchableOpacity
-         style={styles.modalButton}
-         onPress={() => {
-           closeModal();
-           navigation.navigate('ConfigPerfil');
-         }}
-       >
-         <Text style={styles.buttonText}>Completar Perfil</Text>
-       </TouchableOpacity>
-     </View>
-   </View>
-   </BlurView>
- </Modal>
  <TouchableOpacity
    style={{
      height: 40,
