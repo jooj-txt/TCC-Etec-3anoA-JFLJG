@@ -219,7 +219,7 @@
                     style={[styles.input, styles.inputHeight]}
                     onChangeText={onChangeName}
                     value={name}
-                    label="Qual o seu nome?"
+                    label="Qual o nome dele?"
                   />
               </View>
               <View style={[styles.detailsContainer, itemStyles[0]]}>

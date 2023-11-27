@@ -50,23 +50,25 @@ const Favoritos = ({ route, navigation }) => {
   );
  
   const removeFavorito = async (id) => {
-    Alert.alert("FAVORITO REMOVIDO")
-    if (user && user.uid) {
-      try {
+    try {
         // Atualize apenas o favorito removido no Firestore
         const updatedFavoritos = favoritos.filter((favorito) => favorito.ID !== id);
+        setFavoritos(updatedFavoritos);
         const userDocRef = doc(db, 'PessoasFisicas', user.uid);
+        
+  
+        // Aguarde a conclusão da operação de atualização no Firestore
         await setDoc(userDocRef, { favoritos: updatedFavoritos });
-
         // Busque os favoritos mais recentes após a remoção
         await fetchFavoritos();
-
-        console.log('Favorito removido com sucesso!');
-      } catch (error) {
-        console.error('Erro ao remover favorito:', error);
-      }
+  
+        Alert.alert('Favorito removido com sucesso!');
+      
+    } catch (error) {
+      console.error('Erro ao remover favorito:', error);
     }
   };
+  
   
   
   const RenderItem = ({ item }) => (

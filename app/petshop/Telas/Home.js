@@ -13,7 +13,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/LOGO.png';
 import Modal from 'react-native-modal';
-import { getFirestore, collection, docs, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, docs, getDocs, query, where, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { BlurView } from 'expo-blur';
 
@@ -287,7 +287,6 @@ const Casa = ({ navigation, route }) => {
       } 
     });
   }, []);
-
   const fetchFavoritos = async () => {
     try {
       const userDocRef = doc(db, 'PessoasFisicas', userId);
@@ -303,23 +302,17 @@ const Casa = ({ navigation, route }) => {
       console.error('Erro ao buscar favoritos do usuário no Firestore', error);
     }
   };
-
+  
   const handleAdicionarFavorito = async (animal) => {
     Alert.alert("ANIMAL ADICIONADO AOS FAVORITOS");
     try {
-      // Adiciona o animal aos favoritos do usuário
       const updatedFavoritos = [...favoritos, { ...animal, userId: userId }];
-  
-      // Obtém uma referência para o documento do usuário no Firestore
       const userDocRef = doc(db, 'PessoasFisicas', userId);
-  
-      // Atualiza o campo de favoritos no documento do usuário
       await setDoc(userDocRef, { favoritos: updatedFavoritos }, { merge: true });
   
-      // Busca os favoritos mais recentes após a adição
-      await fetchFavoritos();
-  
-      console.log('Animal favoritado com sucesso!');
+      // Atualize o estado local para refletir as alterações
+      setFavoritos(updatedFavoritos);
+      
     } catch (error) {
       console.error('Erro ao favoritar o animal:', error);
     }
