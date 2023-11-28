@@ -72,7 +72,7 @@ const Favoritos = ({ route, navigation }) => {
   
   
   const RenderItem = ({ item }) => (
-    <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+    <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{ uri: item.images && item.images.length > 0 ? item.images[0] : '' }} />
       <Card.Content>
         <Text variant="titleLarge" style={styles.animalText}>{item.name || 'Nome não disponível'}</Text>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor:'#FFAE2E',
+    backgroundColor:'white',
     
   },
   emptyText: {

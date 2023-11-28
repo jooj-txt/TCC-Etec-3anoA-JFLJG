@@ -698,8 +698,9 @@ const styles = StyleSheet.create({
   exitModalText: {
     fontSize: 20,
     marginBottom: 12,
-    fontWeight:'bold'
-  },
+    fontWeight:'bold',
+    color:"black"
+    },
   exitModalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
