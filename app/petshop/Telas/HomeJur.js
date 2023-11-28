@@ -237,6 +237,8 @@ function Casa({ navigation, route }) {
   const [animais, setAnimais] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+
 
   const fetchAnimais = async () => {
     const auth = getAuth();
@@ -323,6 +325,35 @@ function Casa({ navigation, route }) {
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible2(false);
+        }}>
+        <View style={styles.exitModalContainer}>
+          <Text style={styles.exitModalText}>VAI DELETAR O ANIMAL POIS JA DOOU ELE?</Text>
+          <View style={styles.exitModalButtons}>
+            <FontAwesome5
+              name="check-circle"
+              size={30}
+              color="green"
+              onPress={() => {
+                handleExitApp();
+              }}
+            />
+            <FontAwesome5
+              name="times-circle"
+              size={30}
+              color="red"
+              onPress={() => {
+                handleCancelExit();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
       <Modal  animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -418,7 +449,7 @@ function Casa({ navigation, route }) {
 }
 
 const AnimalCard = ({ animal, onMarkAsAdopted }) => (
-  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+  <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
@@ -426,7 +457,7 @@ const AnimalCard = ({ animal, onMarkAsAdopted }) => (
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
       <Pressable onPress={() => onMarkAsAdopted(animal.ID)} style={{ alignSelf: "flex-start", borderWidth:2, borderRadius:4,padding:5 }}>
-              <Text  style={{fontWeight:'bold', fontSize:16, color: 'white'}}>ANIMAL DOADO</Text>
+              <Text  style={{fontWeight:'bold', fontSize:16, color: 'white'}}>DELETAR</Text>
       </Pressable>
     </Card.Content>
   </Card>
@@ -473,7 +504,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor:'#FFAE2E',
+    backgroundColor:'white',
     
   },
   animalText: {
@@ -570,16 +601,17 @@ const styles = StyleSheet.create({
     color:'#000'
   },
   exitModalContainer: {
-    backgroundColor: '#FFAE2E',
+    backgroundColor: 'white',
     padding: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   exitModalText: {
     fontSize: 20,
     marginBottom: 12,
+    fontWeight:'bold'
   },
   exitModalButtons: {
     flexDirection: 'row',

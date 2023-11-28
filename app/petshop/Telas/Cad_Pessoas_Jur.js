@@ -27,6 +27,7 @@
     const [aceitarTermos, setAceitarTermos] = useState(false);
     // Armazenando os dados de cadstro para posteriormente serem guardados no BD
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const [senhaRequisitos, setSenhaRequisitos] = useState({
       minLength: false,
@@ -224,10 +225,16 @@
         <TextInput
         style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
         placeholder="Senha"
-        secureTextEntry
+        secureTextEntry={!mostrarSenha}
         value={senha}
         onChangeText={handleSenhaChange}
       />
+        <Pressable
+          style={styles.revealButton}
+          onPress={() => setMostrarSenha(!mostrarSenha)}
+        >
+          <Text style={{fontWeight:'bold', marginRight:200}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+        </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
         {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}

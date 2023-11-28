@@ -48,7 +48,7 @@ export default function Login({ navigation }) {
           if (!querySnapshotFisicas.empty ) {
             const userDocSnapshot = querySnapshotFisicas.docs[0];
             const userData = userDocSnapshot.data();
-          
+            setUserType(userData.userType);
             
           } 
        
@@ -98,8 +98,10 @@ export default function Login({ navigation }) {
    style={{
      height: 40,
      width: 40,
-     margin: 15,
-     marginLeft: -200,
+     marginTop:-30,
+     margin: 10,
+     marginLeft: -250,
+     marginBottom:70,
      backgroundColor: '#2163D3',
      borderRadius: 200,
      alignItems: 'center',

@@ -53,7 +53,6 @@ const Favoritos = ({ route, navigation }) => {
     try {
         // Atualize apenas o favorito removido no Firestore
         const updatedFavoritos = favoritos.filter((favorito) => favorito.ID !== id);
-        setFavoritos(updatedFavoritos);
         const userDocRef = doc(db, 'PessoasFisicas', user.uid);
         
   
@@ -61,7 +60,8 @@ const Favoritos = ({ route, navigation }) => {
         await setDoc(userDocRef, { favoritos: updatedFavoritos });
         // Busque os favoritos mais recentes após a remoção
         await fetchFavoritos();
-  
+        setFavoritos(updatedFavoritos);
+
         Alert.alert('Favorito removido com sucesso!');
       
     } catch (error) {

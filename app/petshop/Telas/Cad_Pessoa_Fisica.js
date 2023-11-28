@@ -23,6 +23,8 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [aceitarTermos, setAceitarTermos] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+
 
   const [senhaRequisitos, setSenhaRequisitos] = useState({
     minLength: false,
@@ -266,10 +268,16 @@ const PessoaFisicaCadastro = ({navigation},) => {
      <TextInput
         style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
         placeholder="Senha"
-        secureTextEntry
+        secureTextEntry={!mostrarSenha}
         value={senha}
         onChangeText={handleSenhaChange}
       />
+      <Pressable
+          style={styles.revealButton}
+          onPress={() => setMostrarSenha(!mostrarSenha)}
+        >
+          <Text style={{fontWeight:'bold', marginRight:200}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+        </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
         {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}

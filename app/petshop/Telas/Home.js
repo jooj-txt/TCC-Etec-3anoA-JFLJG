@@ -256,7 +256,9 @@ const Casa = ({ navigation, route }) => {
   const [animais, setAnimais] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [userId, setUserId] = useState('');
+  const [sId, setsId] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
 
@@ -312,7 +314,6 @@ const Casa = ({ navigation, route }) => {
   
       // Atualize o estado local para refletir as alterações
       setFavoritos(updatedFavoritos);
-      
     } catch (error) {
       console.error('Erro ao favoritar o animal:', error);
     }
@@ -332,6 +333,7 @@ const Casa = ({ navigation, route }) => {
     });
 
     setAnimais(animaisData);
+
   };
 
   useEffect(() => {
@@ -382,18 +384,73 @@ const Casa = ({ navigation, route }) => {
     setModalVisible(false);
   };
 
-  const markAsAdopted = async (animalId) => {
-    try {
-      // Remova o animal do banco de dados Firestore
-      const animaisRef = collection(db, 'Animais');
-      await deleteDoc(doc(animaisRef, animalId));
+  const handleMarkAsAdopted = async (animalId, action) => {
+    setsId(animalId)
 
-      // Atualize o estado local para refletir a remoção do animal
-      setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== animalId));
-      Alert.alert("PARABENS POR DOAR UM PET","FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTA SENDO BEM CUIDADO (:")
-    } catch (error) {
-      console.error('Erro ao marcar como adotado:', error);
+    
+  };
+
+  const ado = async (action) => {
+    setModalVisible2(true);
+if(action === 'adopted'){
+  try {
+    // Remova o animal do banco de dados Firestore
+    const animaisRef = collection(db, 'Animais');
+    await deleteDoc(doc(animaisRef, sId));
+    Alert.alert(
+      "PARABENS POR DOAR UM PET",
+      "FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO. NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTÁ SENDO BEM CUIDADO (:"
+    );
+    // Atualize o estado local para refletir a remoção do animal
+    setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+  } catch (error) {
+    console.error('Erro ao marcar como adotado:', error);
+  }
+  finally {
+    // Fecha o modal
+    setModalVisible2(false);
+  }
+}
+    
+  };
+  
+
+  const handleDeleteAnimal = async (animalId) => {
+    setsId(animalId)
+   
+  };
+
+  const del = async (action) => {
+    setModalVisible2(true);
+    if (action === 'delete'){
+      try {
+        // Remova o animal do banco de dados Firestore
+        const animaisRef = collection(db, 'Animais');
+        await deleteDoc(doc(animaisRef, sId));
+        Alert.alert("ANIMAL DELETADO")     
+  
+        // Atualize o estado local para refletir a remoção do animal
+        setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+      } catch (error) {
+        console.error('Erro ao marcar como adotado:', error);
+      }
+      finally {
+        // Fecha o modal
+        setModalVisible2(false);
+      }
     }
+  }   
+  
+
+  
+
+  const openModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(true);
+  };
+  const closeModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(false);
   };
   
   const closeModal = () => {
@@ -404,6 +461,23 @@ const Casa = ({ navigation, route }) => {
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible2(false);
+        }}>
+        <View style={styles.doaModal}>
+          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET???</Text>
+          <View>
+          <Text onPress={() => del('delete')} style={[styles.animalText2, styles.doado]}>NÃO IREI DELETAR POR OUTRO MOTIVO</Text>
+           <Text onPress={() => ado('adopted')} style={[styles.animalText2, styles.doado]}>SIM, CONSEGUI</Text>
+           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>APERTEI SEM QUERER</Text>
+
+          </View>
+        </View>
+      </Modal>
       <Modal
    animationType="slide"
    transparent={true}
@@ -506,13 +580,18 @@ const Casa = ({ navigation, route }) => {
             renderItem={({ item }) => (
               <Pressable
               style={[styles.animalCard]}
-               onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
+              onPress={() => {
+                navigation.navigate('AnimalDesc', { animalId: item.ID });
+              }}
               >
              <AnimalCard
               animal={item}
               onAdicionarFavorito={() => handleAdicionarFavorito(item)}
               userId={userId}
-              onMarkAsAdopted={markAsAdopted}
+              onOpenModal2={openModal2}
+              onDeleted={handleDeleteAnimal}
+              onAdopted={handleMarkAsAdopted}
+
               />
 
                
@@ -525,10 +604,10 @@ const Casa = ({ navigation, route }) => {
   );
 }
 
-const AnimalCard = ({ animal, onAdicionarFavorito, userId, onMarkAsAdopted   }) => (
-  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+const AnimalCard = ({ animal, onAdicionarFavorito, userId, onOpenModal2,onAdopted, onDeleted  }) => (
+  <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={[styles.animalImage]} source={{uri: animal.images[0]}} />
-    <Card.Content style={{backgroundColor:"#2163D3", borderRadius:10}}>
+    <Card.Content style={{backgroundColor:"white", borderRadius:10}}>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
@@ -537,7 +616,11 @@ const AnimalCard = ({ animal, onAdicionarFavorito, userId, onMarkAsAdopted   }) 
         <Text variant="bodyMedium" style={[styles.animalText2, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
       )}
         {animal.userId === userId && (
-        <Text variant="bodyMedium" onPress={() => onMarkAsAdopted(animal.ID)} style={[styles.animalText2, styles.doado]}>JA DOADO</Text>
+                    <Text variant="bodyMedium"style={[styles.animalText2, styles.deletar]} onPress={() => {
+                      onOpenModal2();
+                      onAdopted(animal.ID);
+                      onDeleted(animal.ID);
+                    }} >DELETAR</Text>
       )}
 
       <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
@@ -557,33 +640,23 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 15,
   },
-  searchInput: {
-    marginRight: '20%',
-    borderRadius: 20,
-    fontSize: 16,
-    color: 'black',
-    width: "80%",
-    height: "85%",
-    paddingLeft: 10, 
-    paddingRight: 10, 
-    borderColor: '#FFAE2E', 
-    borderWidth: 2, 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3, 
-    shadowRadius: 4, 
-  },
+ 
   animalCard: {
     flex: 1,
     margin: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor:'#FFAE2E',
+    backgroundColor:'white',
     
+  },
+  deletar:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
   },
   doado:{
     textAlign:'center',
@@ -592,9 +665,10 @@ const styles = StyleSheet.create({
     borderWidth:2,
     borderRadius:4,
     marginBottom:10,
+    margin:50,
   },
   animalText: {
-    color: 'white',
+    color: 'black',
   },
   animalText2: {
     color: '#FFAE2E',
@@ -686,21 +760,31 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color:'#000'
   },
+  doaModal: {
+    backgroundColor: 'lightgrey',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
   exitModalContainer: {
-    backgroundColor: '#FFAE2E',
+    backgroundColor: 'lightgrey',
     padding: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   exitModalText: {
     fontSize: 20,
     marginBottom: 12,
+    fontWeight:'bold'
   },
   exitModalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    margin:10,
   },
   modalContainer: {
     flex: 1,
