@@ -384,7 +384,7 @@ const Casa = ({ navigation, route }) => {
     setModalVisible(false);
   };
 
-  const handleMarkAsAdopted = async (animalId, action) => {
+  const handleMarkAsAdopted = async (animalId) => {
     setsId(animalId)
 
     
@@ -469,11 +469,11 @@ if(action === 'adopted'){
           setModalVisible2(false);
         }}>
         <View style={styles.doaModal}>
-          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET???</Text>
+          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET?</Text>
           <View>
           <Text onPress={() => del('delete')} style={[styles.animalText2, styles.doado]}>NÃO IREI DELETAR POR OUTRO MOTIVO</Text>
            <Text onPress={() => ado('adopted')} style={[styles.animalText2, styles.doado]}>SIM, CONSEGUI</Text>
-           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>APERTEI SEM QUERER</Text>
+           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>FECHAR</Text>
 
           </View>
         </View>
@@ -613,10 +613,10 @@ const AnimalCard = ({ animal, onAdicionarFavorito, userId, onOpenModal2,onAdopte
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
       {animal.userType === "userJur" && (
-        <Text variant="bodyMedium" style={[styles.animalText2, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
+        <Text variant="bodyMedium" style={[style={color:'#FFAE2E'}, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
       )}
         {animal.userId === userId && (
-                    <Text variant="bodyMedium"style={[styles.animalText2, styles.deletar]} onPress={() => {
+                    <Text variant="bodyMedium"style={[styles.animalText3, styles.deletar]} onPress={() => {
                       onOpenModal2();
                       onAdopted(animal.ID);
                       onDeleted(animal.ID);
@@ -671,7 +671,11 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   animalText2: {
-    color: '#FFAE2E',
+    color: '#2163D3',
+    marginTop:12
+  },
+  animalText3: {
+    color: 'red',
     marginTop:12
   },
   animalLocal: {

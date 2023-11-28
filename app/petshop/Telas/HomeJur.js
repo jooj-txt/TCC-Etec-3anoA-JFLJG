@@ -238,6 +238,8 @@ function Casa({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [sId, setsId] = useState('');
+
 
 
   const fetchAnimais = async () => {
@@ -307,18 +309,73 @@ function Casa({ navigation, route }) {
     setModalVisible(false);
   };
   
-  const markAsAdopted = async (animalId) => {
-    try {
-      // Remova o animal do banco de dados Firestore
-      const animaisRef = collection(db, 'Animais');
-      await deleteDoc(doc(animaisRef, animalId));
+  const handleMarkAsAdopted = async (animalId) => {
+    setsId(animalId)
 
-      // Atualize o estado local para refletir a remoção do animal
-      setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== animalId));
-      Alert.alert("FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTA SENDO BEM CUIDADO (:")
-    } catch (error) {
-      console.error('Erro ao marcar como adotado:', error);
+    
+  };
+
+  const ado = async (action) => {
+    setModalVisible2(true);
+if(action === 'adopted'){
+  try {
+    // Remova o animal do banco de dados Firestore
+    const animaisRef = collection(db, 'Animais');
+    await deleteDoc(doc(animaisRef, sId));
+    Alert.alert(
+      "PARABENS POR DOAR UM PET",
+      "FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO. NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTÁ SENDO BEM CUIDADO (:"
+    );
+    // Atualize o estado local para refletir a remoção do animal
+    setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+  } catch (error) {
+    console.error('Erro ao marcar como adotado:', error);
+  }
+  finally {
+    // Fecha o modal
+    setModalVisible2(false);
+  }
+}
+    
+  };
+  
+
+  const handleDeleteAnimal = async (animalId) => {
+    setsId(animalId)
+   
+  };
+
+  const del = async (action) => {
+    setModalVisible2(true);
+    if (action === 'delete'){
+      try {
+        // Remova o animal do banco de dados Firestore
+        const animaisRef = collection(db, 'Animais');
+        await deleteDoc(doc(animaisRef, sId));
+        Alert.alert("ANIMAL DELETADO")     
+  
+        // Atualize o estado local para refletir a remoção do animal
+        setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+      } catch (error) {
+        console.error('Erro ao marcar como adotado:', error);
+      }
+      finally {
+        // Fecha o modal
+        setModalVisible2(false);
+      }
     }
+  }   
+  
+
+  
+
+  const openModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(true);
+  };
+  const closeModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(false);
   };
 
 
@@ -332,25 +389,13 @@ function Casa({ navigation, route }) {
           // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
           setModalVisible2(false);
         }}>
-        <View style={styles.exitModalContainer}>
-          <Text style={styles.exitModalText}>VAI DELETAR O ANIMAL POIS JA DOOU ELE?</Text>
-          <View style={styles.exitModalButtons}>
-            <FontAwesome5
-              name="check-circle"
-              size={30}
-              color="green"
-              onPress={() => {
-                handleExitApp();
-              }}
-            />
-            <FontAwesome5
-              name="times-circle"
-              size={30}
-              color="red"
-              onPress={() => {
-                handleCancelExit();
-              }}
-            />
+        <View style={styles.doaModal}>
+          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET?</Text>
+          <View>
+          <Text onPress={() => del('delete')} style={[styles.animalText2, styles.doado]}>NÃO, IREI DELETAR POR OUTRO MOTIVO</Text>
+           <Text onPress={() => ado('adopted')} style={[styles.animalText2, styles.doado]}>SIM, CONSEGUI</Text>
+           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>FECHAR</Text>
+
           </View>
         </View>
       </Modal>
@@ -436,7 +481,10 @@ function Casa({ navigation, route }) {
                     style={styles.animalCard}
                     onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
                   >
-                      <AnimalCard animal={item} onMarkAsAdopted={markAsAdopted} />
+                      <AnimalCard animal={item} 
+                      onOpenModal2={openModal2}
+                      onDeleted={handleDeleteAnimal}
+                      onAdopted={handleMarkAsAdopted} />
                   </Pressable>
                 )}
               />
@@ -448,7 +496,7 @@ function Casa({ navigation, route }) {
   );
 }
 
-const AnimalCard = ({ animal, onMarkAsAdopted }) => (
+const AnimalCard = ({ animal, onOpenModal2,onAdopted, onDeleted }) => (
   <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
@@ -456,9 +504,11 @@ const AnimalCard = ({ animal, onMarkAsAdopted }) => (
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
-      <Pressable onPress={() => onMarkAsAdopted(animal.ID)} style={{ alignSelf: "flex-start", borderWidth:2, borderRadius:4,padding:5 }}>
-              <Text  style={{fontWeight:'bold', fontSize:16, color: 'white'}}>DELETAR</Text>
-      </Pressable>
+      <Text variant="bodyMedium"style={[styles.animalText3, styles.deletar]} onPress={() => {
+                      onOpenModal2();
+                      onAdopted(animal.ID);
+                      onDeleted(animal.ID);
+                    }} >DELETAR</Text>
     </Card.Content>
   </Card>
 );
@@ -466,6 +516,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5'
+  },
+  animalText2: {
+    color: '#2163D3',
+    marginTop:12
+  },
+  animalText3: {
+    color: 'red',
+    marginTop:12
+  },
+  doado:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+    margin:50,
+  },
+  deletar:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+  },
+ 
+  doaModal: {
+    backgroundColor: 'lightgrey',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    width:'95%',
+    marginTop:'80%',
+    alignSelf:'center'
   },
   header: {
     flexDirection: 'row',
@@ -508,7 +595,7 @@ const styles = StyleSheet.create({
     
   },
   animalText: {
-    color: 'white',
+    color: 'black',
   },
   animalLocal: {
     textAlign: 'right',

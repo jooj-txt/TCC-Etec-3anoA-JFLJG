@@ -233,7 +233,7 @@
           style={styles.revealButton}
           onPress={() => setMostrarSenha(!mostrarSenha)}
         >
-          <Text style={{fontWeight:'bold', marginRight:200}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+          <Text style={{fontWeight:'bold',fontSize:12}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
         </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
@@ -318,7 +318,12 @@
   requisitosSenha: {
     color: 'gray',
     fontSize: 12,
-    margin: 5,
+    margin: 20,
+  },
+  revealButton: {
+    alignSelf: 'flex-end',
+    marginRight: -20,
+    marginTop: -36,
   },
   });
 

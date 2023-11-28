@@ -276,7 +276,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
           style={styles.revealButton}
           onPress={() => setMostrarSenha(!mostrarSenha)}
         >
-          <Text style={{fontWeight:'bold', marginRight:200}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+          <Text style={{fontWeight:'bold', fontSize:12}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
         </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
@@ -324,6 +324,11 @@ const styles = StyleSheet.create({
     margin:'20%'
 
   },
+  revealButton: {
+    alignSelf: 'flex-end',
+    marginRight: 0,
+    marginTop: -36,
+  },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -361,7 +366,7 @@ picker: {
 requisitosSenha: {
   color: 'gray',
   fontSize: 12,
-  margin: 5,
+  margin: 20,
 },
 });
 
