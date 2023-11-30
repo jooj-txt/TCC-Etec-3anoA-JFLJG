@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
@@ -13,7 +13,17 @@ export default function Inicio({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
-  
+  const [isLoading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 8000);
+
+    return () => clearTimeout(delay);
+  }, []);
+
 
   const handlePessoaFisicaPress = () => {
     setButtonsVisible(false);
@@ -24,6 +34,12 @@ export default function Inicio({ navigation }) {
     setButtonsVisible(false);
     setShowModal2(true);
   };
+
+  if (isLoading) {
+    return (
+       <Image source={require('../imgs/tela.png')} style={{resizeMode: 'cover',width:"100%",height:"100%"}}/>
+    );
+  }
   
   return (
 <ScrollView style={{backgroundColor:'white'}}>
