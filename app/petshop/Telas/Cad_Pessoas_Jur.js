@@ -2,7 +2,7 @@
   import { View, Text, TextInput, Pressable, StyleSheet, ScrollView} from 'react-native';
   import { Alert } from 'react-native';
   import {  CheckBox } from 'react-native-elements';  
-  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+  import { createUserWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
 

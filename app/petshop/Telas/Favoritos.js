@@ -80,7 +80,7 @@ const Favoritos = ({ route, navigation }) => {
         <Text variant="bodyMedium" style={styles.animalText}>{item.sexo || 'Sexo não disponível'}</Text>
         <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{item.cidade +" - " +item.estado || 'Endereço não disponível'}</Text>
         <TouchableOpacity onPress={() => removeFavorito(item.ID)} style={{ alignSelf: "flex-start" }}>
-          <Text style={{fontWeight:'bold', fontSize:16}}>Remover dos Favoritos</Text>
+          <Text style={{fontWeight:'bold', fontSize:16, color:'red'}}>Remover dos Favoritos</Text>
         </TouchableOpacity>
       </Card.Content>
     </Card>

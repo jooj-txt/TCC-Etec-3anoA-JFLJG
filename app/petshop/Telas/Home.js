@@ -337,13 +337,16 @@ const Casa = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    fetchAnimais(); // Chama a função para buscar os dados quando o componente é montado
+    fetchAnimais(); 
+    fetchFavoritos();// Chama a função para buscar os dados quando o componente é montado
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       // Executa essa função sempre que a tela é focada
-      fetchAnimais(); // Chama a função para buscar os dados novamente
+      fetchAnimais();
+      fetchFavoritos();
+       // Chama a função para buscar os dados novamente
     }, [])
   );
   
@@ -624,7 +627,7 @@ const AnimalCard = ({ animal, onAdicionarFavorito, userId, onOpenModal2,onAdopte
       )}
 
       <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
-        <FontAwesome5 name="heart" size={22} color="black" />
+        <FontAwesome5 name="heart" size={22} color="#2163D3" />
       </Pressable>
     </Card.Content>
   </Card>

@@ -3,8 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Modal,ActivityIndicato
 import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
+
 
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';

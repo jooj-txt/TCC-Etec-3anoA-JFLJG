@@ -3,9 +3,8 @@ import { StyleSheet, Text, View, Pressable, Image, TextInput, Modal, ActivityInd
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { getFirestore, collection, getDocs, query, where } from 'firebase/firestore';
-import { BlurView } from 'expo-blur';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Login({ navigation }) {
@@ -16,7 +15,10 @@ export default function Login({ navigation }) {
   const [userType, setUserType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [mostrarSenha, setMostrarSenha] = useState(false);
-
+  
+useEffect(()=>{
+  signOut(auth);
+})
 
   const handleLogin = (auth, async (user) => {
     try {
@@ -26,10 +28,10 @@ export default function Login({ navigation }) {
     
     } catch (error) {
       setIsLoading(false);
+      navigation.navigate("Login");
       Alert.alert('Usuário ou senha incorretos. Verifique e tente novamente.');
-
- 
-        console.error('Erro de autenticação:', error.message);
+      console.error('Erro de autenticação:', error.message);
+     
       
     }
 
@@ -70,10 +72,7 @@ export default function Login({ navigation }) {
     });
 
     // Certifique-se de cancelar a assinatura quando o componente for desmontado
-    return () => unsubscribe();
   });
-
-
 
   // Quando o usuário efetuar login, redirecione-o com base no userType
   useEffect(() => {
