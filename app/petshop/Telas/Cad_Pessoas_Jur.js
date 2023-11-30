@@ -5,8 +5,7 @@
   import { createUserWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
-
-
+  import { signOut } from 'firebase/auth';
 
 
   const itemStyles = [
@@ -171,7 +170,6 @@
         Alert.alert("PREENCHA TODOS OS DADOS CORRETAMENTE")
 
         }
-      
     };
     
 

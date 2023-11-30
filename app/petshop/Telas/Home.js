@@ -261,7 +261,6 @@ const Casa = ({ navigation, route }) => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-
   useEffect(() => {
     const auth = getAuth();
     const db = getFirestore();

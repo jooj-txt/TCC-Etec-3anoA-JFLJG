@@ -4,6 +4,7 @@ import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '../Services/firebaseConfig';
+import { signOut } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 
 

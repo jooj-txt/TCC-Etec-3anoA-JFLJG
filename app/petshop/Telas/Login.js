@@ -16,9 +16,6 @@ export default function Login({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [mostrarSenha, setMostrarSenha] = useState(false);
   
-useEffect(()=>{
-  signOut(auth);
-})
 
   const handleLogin = (auth, async (user) => {
     try {

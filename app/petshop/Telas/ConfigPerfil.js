@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, Switch, Alert, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -53,7 +54,7 @@ const ConfigPerfil = ({ route, navigation }) => {
   });
 
   const [userId, setUserId] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const saveSelections = async () => {
     try {
@@ -89,7 +90,6 @@ const ConfigPerfil = ({ route, navigation }) => {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userDocSnapshot = querySnapshot.docs[0];
-          const userData = userDocSnapshot.data();
           setUserId(userDocSnapshot.id); 
           const userDocRef = doc(db, 'PessoasFisicas', userDocSnapshot.id);
 
@@ -130,10 +130,11 @@ const ConfigPerfil = ({ route, navigation }) => {
 
     fetchUserProfile();
   }, [userId, db]);
+
+  
   useEffect(() => {
     loadSelections();
   }, [userId]);
-  
 
   const handleSaveProfile = async () => {
     try {
