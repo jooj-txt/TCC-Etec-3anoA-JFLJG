@@ -122,8 +122,8 @@ const TelaAdocao = ({ route, navigation }) => {
   
           // Agora você tem o celular do dono e pode usar conforme necessário
           const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Ola sou o ${nome} vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim, moro em ${moradia}, de tamanho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas} pessoas, ${possuiPets} possuo outros pets e minha ocupação é ${ocupacao}.
-          
-        *Aqui esta documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
+
+*Aqui está o documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
           Linking.openURL(mensagem);
 
         } 
@@ -135,7 +135,7 @@ const TelaAdocao = ({ route, navigation }) => {
             // Agora você tem o celular do dono e pode usar conforme necessário
             const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Ola sou o ${nome} vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim, moro em ${moradia}, de tamanho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas} pessoas, ${possuiPets} possuo outros pets e minha ocupação é ${ocupacao}.
           
-            *Aqui esta documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
+*Aqui esta documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
               Linking.openURL(mensagem);
 
         }else {

@@ -37,7 +37,6 @@ const ConfigPerfil = ({ route, navigation }) => {
   const [horas12ouMais, setHoras12ouMais] = useState(false);
   const [ocupacao, setOcupacao] = useState('');
   const [numPessoas, setNumPessoas] = useState('');
-  const [instagram, setInstagram] = useState('');
   const [conheceuRedes, setConheceuRedes] = useState({
     instagram: false,
     facebook: false,
@@ -117,7 +116,6 @@ const ConfigPerfil = ({ route, navigation }) => {
           setCidade(userData.cidade);
           setEstado(userData.estado);
           setOcupacao(userData.ocupacao);
-          setInstagram(userData.instagram);
           setNumPessoas(userData.numPessoas);
           setIsLoading(false);
 
@@ -174,7 +172,6 @@ const ConfigPerfil = ({ route, navigation }) => {
       profileData.email = email;
       profileData.celular = celular;
       profileData.ocupacao = ocupacao;
-      profileData.instagram = instagram;
       profileData.numPessoas = numPessoas;
   
       console.log('Atualizando perfil com os seguintes dados:', profileData);
@@ -314,7 +311,7 @@ const ConfigPerfil = ({ route, navigation }) => {
         <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'60%' }} />
       ) : (
       <View style={styles.container}>
-      <Text style={styles.title}>DADOS PESSOAIS:</Text>
+      <Text style={styles.title2}>DADOS PESSOAIS:</Text>
         <TextInput  style={styles.input} value={nome} onChangeText={setNome} placeholder="NOME"/>
         <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} placeholder='XX/XX/XXXX' />
         <TextInput style={styles.input}  value={email} onChangeText={setEmail} placeholder='seunome@gmail.com' />
@@ -369,21 +366,6 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Text style={styles.title}>Número de pessoas que moram com você</Text>
         <TextInput keyboardType='numeric' style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
-        
-        <View>
-          <Text style={styles.title}>Possui Instagram?</Text>
-          <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
-
-          <View style={{ flexDirection: 'row',
-      alignItems: 'center',
-      padding: 8,
-      margin: 5,}}>
-          <Entypo name="instagram" size={24} color="black" />
-          <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
-          </View>
-        
-        
-        </View>
 
         <View>
           <Text style={styles.title}>Whatsapp</Text>
@@ -431,6 +413,7 @@ const ConfigPerfil = ({ route, navigation }) => {
               padding: 10,
               borderRadius: 5,
               marginTop: 10,
+              marginBottom:30,
               width:120,}}>
           <Text style={{ color: 'white' }}>Salvar Perfil</Text>
         </Pressable>
@@ -477,7 +460,12 @@ const styles = {
   title:{
     fontSize: 15,
     fontWeight: 'bold',
-    margin:8,
+    margin:5,
+  },
+  title2:{
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginTop:45,
   },
   subtitle:{
     marginLeft:20,

@@ -179,7 +179,7 @@ return (
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     style={{height:40, width:40, marginRight:80, borderRadius:10}}
      />
       ),
     }} />
@@ -208,7 +208,7 @@ return (
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     style={{height:40, width:40, marginRight:'70%', borderRadius:10}}
      />
       ),
     }} />

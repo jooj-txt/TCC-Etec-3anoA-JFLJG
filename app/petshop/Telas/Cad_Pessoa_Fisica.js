@@ -112,7 +112,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
           setDataNascimento(`${day}/${month}/${year}`);
         }
         else{
-          Alert.alert("COLOQUE UMA DATA DE NASCIMENTO DE VÁLIDO")
+          Alert.alert("COLOQUE UMA DATA DE NASCIMENTO VÁLIDA")
           setDataNascimento("");
         }
       }

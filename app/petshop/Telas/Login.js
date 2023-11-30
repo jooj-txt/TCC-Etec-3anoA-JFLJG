@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput, Modal, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image, TextInput, Modal, ActivityIndicator, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
@@ -15,6 +15,8 @@ export default function Login({ navigation }) {
   const db = getFirestore();
   const [userType, setUserType] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+
 
   const handleLogin = (auth, async (user) => {
     try {
@@ -83,9 +85,7 @@ export default function Login({ navigation }) {
     }
   }, [userType]);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+
 
   return (
     <ScrollView style={{backgroundColor:'white'}}>
@@ -94,7 +94,7 @@ export default function Login({ navigation }) {
       ) : (
    <View style={styles.container}>
  
- <TouchableOpacity
+ <Pressable
    style={{
      height: 40,
      width: 40,
@@ -112,7 +112,7 @@ export default function Login({ navigation }) {
    }}
  >
    <Ionicons name="ios-arrow-back-sharp" size={30} color="#FFAE2E" />
- </TouchableOpacity>
+ </Pressable>
  <Image source={logo} style={styles.logo} />
  <Image source={logo2} style={styles.logo2} />
  <TextInput
@@ -124,13 +124,19 @@ export default function Login({ navigation }) {
  <TextInput
    style={styles.input}
    placeholder="Senha"
-   secureTextEntry
+   secureTextEntry={!mostrarSenha}
    value={senha}
    onChangeText={setSenha}
  />
- <TouchableOpacity style={styles.button} onPress={handleLogin}>
+ <Pressable
+          style={styles.revealButton}
+          onPress={() => setMostrarSenha(!mostrarSenha)}
+        >
+          <Text style={{fontWeight:'bold',fontSize:12}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+        </Pressable>
+ <Pressable style={styles.button} onPress={handleLogin}>
    <Text style={styles.buttonText}>Login</Text>
- </TouchableOpacity>
+ </Pressable>
  <View style={styles.divider}>
    <View
      style={{
@@ -215,32 +221,9 @@ const styles = StyleSheet.create({
     height: 220,
     marginBottom: 10,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 20,
-  },
-  modalButton: {
-    backgroundColor: '#2163D3',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    width: 200,
-  },
-  containerModal: {
-    flex: 1,
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
+  revealButton: {
+    alignSelf: 'flex-end',
+    marginRight: -20,
+    marginTop: -32,
   },
 });
