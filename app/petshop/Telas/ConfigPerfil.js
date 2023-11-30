@@ -53,7 +53,7 @@ const ConfigPerfil = ({ route, navigation }) => {
   });
 
   const [userId, setUserId] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const saveSelections = async () => {
     try {
