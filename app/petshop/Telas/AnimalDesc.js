@@ -60,7 +60,7 @@ const AnimalDesc = ({ route, navigation }) => {
         <Text style={styles.infoText}>{animalInfo.name}, {animalInfo.idade} </Text>
         
         <View style={{flexDirection:'row',  margin:5}}>
-        {animalInfo.sexo === 'Femea'?(
+        {animalInfo.sexo === 'Fêmea'?(
         <MaterialCommunityIcons name="gender-male-female"  size={35} color="pink" />
         ) :(  <MaterialCommunityIcons name="gender-male-female"  size={35} color="blue" />
         )}
