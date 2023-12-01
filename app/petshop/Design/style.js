@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white', // Cor de fundo branca
       alignItems: 'center',
       justifyContent: 'center',
+      marginTop:'50%',
     },
     containerModal: {
       flex: 1,

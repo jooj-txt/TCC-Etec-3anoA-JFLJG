@@ -1,5 +1,5 @@
   import React, { useEffect, useRef, useState} from 'react';
-  import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+  import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
   import { FontAwesome5 } from '@expo/vector-icons';
   import { Octicons } from '@expo/vector-icons'; 
   import { TextInput } from 'react-native-paper';
@@ -44,8 +44,7 @@
       onChangeDescricao('');
       onChangeTipo('');
       setImages([]);
-      setUserId(null);
-      setUserType(null);
+    
     };
 
 
@@ -113,6 +112,16 @@
       try {
         if (!userId) {
           console.log('O usuário não está autenticado.');
+          return;
+        }
+
+        if (!name || !idade || !sexo || !raça || !estado || !cidade || !descricao || !tipo) {
+          Alert.alert("Preencha todos os campos antes de divulgar o animal.");
+          return;
+        }
+    
+        if (images.length === 0) {
+          Alert.alert("Adicione pelo menos uma imagem antes de divulgar o animal.");
           return;
         }
 
@@ -210,7 +219,7 @@
                     style={[styles.input, styles.inputHeight]}
                     onChangeText={onChangeName}
                     value={name}
-                    label="Qual o seu nome?"
+                    label="Qual o nome dele?"
                   />
               </View>
               <View style={[styles.detailsContainer, itemStyles[0]]}>

@@ -61,14 +61,18 @@ export default function PosAdd({ navigation }) {
       <View style={styles.centeredContent}>
         <Image source={require('../imgs/logo_Inicio.png')} style={styles.image} />
         <Text style={styles.text}>Tudo pronto!</Text>
-        <Text style={{color:'darkgrey'}}>Agora só esperar a família perfeita para o animalzinho!</Text>
+        <Text style={{color:'black'}}>Agora só esperar a família perfeita escolher o animalzinho!</Text>
 
       </View>
-      <TouchableOpacity onPress={handleRefresh} style={{ width: 200,backgroundColor: '#2163D3',
-    paddingVertical: 12,
-    borderRadius: 8,
+      <TouchableOpacity onPress={handleRefresh} style={{ backgroundColor: '#2163D3',
+    borderRadius: 10,
     alignItems: 'center',
-    margin: 20, }}>
+    margin:'10%', 
+    width:180,
+    height: 50,
+    borderColor: 'darkblue',
+    borderBottomWidth: 5,
+    justifyContent:'center',}}>
         <Text>Voltar para a Home</Text>
       </TouchableOpacity>
     </View>

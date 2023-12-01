@@ -2,11 +2,10 @@
   import { View, Text, TextInput, Pressable, StyleSheet, ScrollView} from 'react-native';
   import { Alert } from 'react-native';
   import {  CheckBox } from 'react-native-elements';  
-  import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+  import { createUserWithEmailAndPassword } from 'firebase/auth';
   import { auth, firestore } from '../Services/firebaseConfig';
   import { collection, addDoc } from 'firebase/firestore';
-
-
+  import { signOut } from 'firebase/auth';
 
 
   const itemStyles = [
@@ -27,6 +26,7 @@
     const [aceitarTermos, setAceitarTermos] = useState(false);
     // Armazenando os dados de cadstro para posteriormente serem guardados no BD
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const [mostrarSenha, setMostrarSenha] = useState(false);
 
     const [senhaRequisitos, setSenhaRequisitos] = useState({
       minLength: false,
@@ -167,10 +167,9 @@
   
       } else {
 
-        alert(
-          'Preencha TUDO')
+        Alert.alert("PREENCHA TODOS OS DADOS CORRETAMENTE")
+
         }
-      
     };
     
 
@@ -224,10 +223,16 @@
         <TextInput
         style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
         placeholder="Senha"
-        secureTextEntry
+        secureTextEntry={!mostrarSenha}
         value={senha}
         onChangeText={handleSenhaChange}
       />
+        <Pressable
+          style={styles.revealButton}
+          onPress={() => setMostrarSenha(!mostrarSenha)}
+        >
+          <Text style={{fontWeight:'bold',fontSize:12}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+        </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
         {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}
@@ -311,7 +316,12 @@
   requisitosSenha: {
     color: 'gray',
     fontSize: 12,
-    margin: 5,
+    margin: 20,
+  },
+  revealButton: {
+    alignSelf: 'flex-end',
+    marginRight: -20,
+    marginTop: -36,
   },
   });
 

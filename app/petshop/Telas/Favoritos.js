@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import { Card } from 'react-native-paper';
 import { getFirestore, collection, getDoc, query, where, doc, setDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, auth } from 'firebase/auth';
@@ -13,7 +13,7 @@ const Favoritos = ({ route, navigation }) => {
   const db = getFirestore();
   const auth = getAuth();
 
-  const fetchData = async () => {
+  const fetchFavoritos = async () => {
     try {
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -45,37 +45,42 @@ const Favoritos = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       // Executa essa função sempre que a tela é focada
-      fetchData(); // Chama a função para buscar os dados novamente
+      fetchFavoritos(); // Chama a função para buscar os dados novamente
     }, [])
   );
  
   const removeFavorito = async (id) => {
-    if (user && user.uid) {
-      try {
-        // Remova o favorito do estado local
-        const updatedFavoritos = favoritos.filter((animal) => animal.id !== id);
+    try {
+        // Atualize apenas o favorito removido no Firestore
+        const updatedFavoritos = favoritos.filter((favorito) => favorito.ID !== id);
+        const userDocRef = doc(db, 'PessoasFisicas', user.uid);
+        
+  
+        // Aguarde a conclusão da operação de atualização no Firestore
+        await setDoc(userDocRef, { favoritos: updatedFavoritos });
+        // Busque os favoritos mais recentes após a remoção
+        await fetchFavoritos();
         setFavoritos(updatedFavoritos);
 
-        // Atualize os favoritos no Firestore
-        const userDocRef = doc(db, 'PessoasFisicas', user.uid);
-        await setDoc(userDocRef, { favoritos: updatedFavoritos });
-        
-        console.log('Favorito removido com sucesso!');
-      } catch (error) {
-        console.error('Erro ao remover favorito:', error);
-      }
+        Alert.alert('Favorito removido com sucesso!');
+      
+    } catch (error) {
+      console.error('Erro ao remover favorito:', error);
     }
   };
+  
+  
+  
   const RenderItem = ({ item }) => (
-    <Card>
-      <Card.Cover style={styles.animalImage} source={{ uri: item.images && item.images.length > 0 ? item.images[0] : '' }} />
+    <Card style={{backgroundColor:"white", borderRadius:10}}>
+    <Card.Cover style={styles.animalImage} source={{ uri: item.images && item.images.length > 0 ? item.images[0] : '' }} />
       <Card.Content>
         <Text variant="titleLarge" style={styles.animalText}>{item.name || 'Nome não disponível'}</Text>
         <Text variant="bodyMedium" style={styles.animalText}>{item.raça || 'Raça não disponível'}</Text>
         <Text variant="bodyMedium" style={styles.animalText}>{item.sexo || 'Sexo não disponível'}</Text>
-        <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{item.endereço || 'Endereço não disponível'}</Text>
-        <TouchableOpacity onPress={() => removeFavorito(item.id)} style={{ alignSelf: "flex-start" }}>
-          <Text>Remover dos Favoritos</Text>
+        <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{item.cidade +" - " +item.estado || 'Endereço não disponível'}</Text>
+        <TouchableOpacity onPress={() => removeFavorito(item.ID)} style={{ alignSelf: "flex-start" }}>
+          <Text style={{fontWeight:'bold', fontSize:16, color:'red'}}>Remover dos Favoritos</Text>
         </TouchableOpacity>
       </Card.Content>
     </Card>
@@ -121,12 +126,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor:'white',
+    
   },
   emptyText: {
     fontSize: 18,
     textAlign: 'center',
-    marginTop: 32,
+    fontWeight:'bold'
   },
   animalText: {
     color: 'black',

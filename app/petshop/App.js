@@ -23,18 +23,25 @@ export default function App() {
           component={Login}
         />
             <Stack.Screen
-          name="Add"
+          name="PessoaJuridicaCadastro"
           options={{ headerShown:false }}
-          component={Add}
+          component={PessoaJuridicaCadastro}
+        /> 
+            <Stack.Screen
+          name="PessoaFisicaCadastro"
+          options={{ headerShown:false }}
+          component={PessoaFisicaCadastro}
         />
-        
+  
+      
             <Stack.Screen
           name="Home"
           options={{ headerShown:false  }}
           component={HomeScreen}
         />
          
-          
+        
+         
             <Stack.Screen
           name="TelaAdocao"
           options={{  headerShown:false  }}
@@ -57,8 +64,6 @@ export default function App() {
           component={ConfigPerfil}
         />
           
-        
-         
      
             <Stack.Screen
           name="HomeJur"
@@ -66,24 +71,10 @@ export default function App() {
           component={HomeScreenJur}
         />
           
-                  
-          <Stack.Screen
-          name="PessoaJuridicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaJuridicaCadastro}
-        /> 
           
-            <Stack.Screen
-          name="Login"
-          options={{ headerShown:false }}
-          component={Login}
-        />
-            <Stack.Screen
-          name="PessoaFisicaCadastro"
-          options={{ headerShown:false }}
-          component={PessoaFisicaCadastro}
-        />
-  
+          
+      
+      
           <Stack.Screen
           name="Favoritos"
           options={{ headerShown:false  }}

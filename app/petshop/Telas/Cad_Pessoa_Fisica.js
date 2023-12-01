@@ -1,9 +1,10 @@
 import React, { useState, useContext,useEffect   } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Linking } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Linking, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import {Picker} from '@react-native-picker/picker';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, firestore } from '../Services/firebaseConfig';
+import { signOut } from 'firebase/auth';
 import { collection, addDoc } from 'firebase/firestore';
 
 
@@ -17,13 +18,14 @@ const PessoaFisicaCadastro = ({navigation},) => {
   const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
   const [celular, setCelular] = useState('');
-  const [genero, setGenero] = useState('');
   const [cidade, setCidade] = useState('');
   const [estado, setEstado] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [aceitarTermos, setAceitarTermos] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+
 
   const [senhaRequisitos, setSenhaRequisitos] = useState({
     minLength: false,
@@ -67,7 +69,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
         cidade &&
         estado &&
         dataNascimento &&
-        genero &&
         senha &&
         senha === confirmarSenha &&
         aceitarTermos
@@ -80,7 +81,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
   
     useEffect(() => {
       validateFields();
-    }, [nome, cpf, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos, genero, dataNascimento]);
+    }, [nome, cpf, email, celular, cidade, estado, senha, confirmarSenha, aceitarTermos, dataNascimento]);
   
   
     const isValidCPF = (cpf) => {
@@ -112,7 +113,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
           setDataNascimento(`${day}/${month}/${year}`);
         }
         else{
-          alert("COLOQUE UMA DATA DE NASCIMENTO DE VÁLIDO")
+          Alert.alert("COLOQUE UMA DATA DE NASCIMENTO VÁLIDA")
           setDataNascimento("");
         }
       }
@@ -179,7 +180,6 @@ const PessoaFisicaCadastro = ({navigation},) => {
           cpf,
           email,
           celular,
-          genero,
           cidade,
           estado,
           dataNascimento,
@@ -201,8 +201,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
    
     }
     else{
-      alert(
-        'Preencha TUDO')
+      Alert.alert("PREENCHA TODOS OS DADOS CORRETAMENTE")
     }
   };
   
@@ -245,16 +244,7 @@ const PessoaFisicaCadastro = ({navigation},) => {
         
       />
 
-      <Picker
-        style={[styles.picker, itemStyles[0]]}
-        selectedValue={genero}
-        onValueChange={(itemValue) => setGenero(itemValue)}
-      >
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Selecione o gênero" value="" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Masculino" value="masculino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Feminino" value="feminino" />
-        <Picker.Item  style={[styles.picker, itemStyles[0]]} label="Outro" value="outro" />
-      </Picker>
+  
 
       <TextInput
         style={[styles.input,itemStyles[1]]}
@@ -279,10 +269,16 @@ const PessoaFisicaCadastro = ({navigation},) => {
      <TextInput
         style={[styles.input, itemStyles[0], senhaRequisitos.minLength && { color: 'green' }]}
         placeholder="Senha"
-        secureTextEntry
+        secureTextEntry={!mostrarSenha}
         value={senha}
         onChangeText={handleSenhaChange}
       />
+      <Pressable
+          style={styles.revealButton}
+          onPress={() => setMostrarSenha(!mostrarSenha)}
+        >
+          <Text style={{fontWeight:'bold', fontSize:12}}>{mostrarSenha ? 'Ocultar Senha' : 'Revelar Senha'}</Text>
+        </Pressable>
       <Text style={styles.requisitosSenha}>
         - 8 caracteres {senhaRequisitos.minLength && <Text style={{ color: 'green' }}>✓</Text>}
         {'\n'}- letra maiúscula {senhaRequisitos.uppercase && <Text style={{ color: 'green' }}>✓</Text>}
@@ -329,6 +325,11 @@ const styles = StyleSheet.create({
     margin:'20%'
 
   },
+  revealButton: {
+    alignSelf: 'flex-end',
+    marginRight: 0,
+    marginTop: -36,
+  },
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -366,7 +367,7 @@ picker: {
 requisitosSenha: {
   color: 'gray',
   fontSize: 12,
-  margin: 5,
+  margin: 20,
 },
 });
 

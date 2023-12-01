@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, ScrollView, Linking } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, ScrollView, Linking, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';import { Ionicons } from '@expo/vector-icons';
@@ -86,6 +86,12 @@ const TelaAdocao = ({ route, navigation }) => {
 
   const handleIniciarAdocao = async () => {
     try {
+      if (motivoAdocao === "" || !aceitarTermos) {
+        Alert.alert("Preencha o motivo da adoção e aceite os termos para prosseguir.");
+        return; // Interrompe a execução da função se os requisitos não forem atendidos
+      }
+      
+      
       // Obtendo o documento do animal
       const animalDocRef = doc(db, 'Animais', animalId);
       const animalDocSnap = await getDoc(animalDocRef);
@@ -115,23 +121,22 @@ const TelaAdocao = ({ route, navigation }) => {
           const celularDono = donoData.celular;
   
           // Agora você tem o celular do dono e pode usar conforme necessário
-          const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Ola sou o ${nome} vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim moro em ${moradia}, de tamnaho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas}, ${possuiPets} possuo outros pets e minha profissão é ${ocupacao}.
-          
-            *Aqui esta documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
+          const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Ola sou o ${nome} vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim, moro em ${moradia}, de tamanho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas} pessoas, ${possuiPets} possuo outros pets e minha ocupação é ${ocupacao}.
+
+*Aqui está o documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
           Linking.openURL(mensagem);
 
         } 
-        if(!querySnapshotJuridicas.empty){
+        if(!querySnapshotJuridicas.empty ){
             const donoDocSnap = querySnapshotJuridicas.docs[0];
             const donoData = donoDocSnap.data();
             const celularDono = donoData.celular;
     
             // Agora você tem o celular do dono e pode usar conforme necessário
-            const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Olá me chamo ${nome}, vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim moro em ${moradia}, de tamnaho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas}, ${possuiPets} possuo outros pets e minha profissão é ${ocupacao}.
-            E estou querendo adotar seu pet pelo seguinte motivo,${motivoAdocao}
-            
-            *Aqui esta documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
-          Linking.openURL(mensagem);
+            const mensagem = `https://api.whatsapp.com/send?phone=+55${celularDono}&text=Ola sou o ${nome} vi seu pet no Vira-lar estou interessado aqui estão algumas informações sobre mim, moro em ${moradia}, de tamanho ${espaco}, ${criancas} possuo crianças em casa, passo ${horas} horas em casa, comigo moram ${numPessoas} pessoas, ${possuiPets} possuo outros pets e minha ocupação é ${ocupacao}.
+          
+*Aqui está o documento que devemos assinar para concretizar esta adoção:* https://drive.google.com/file/d/1OyKnTEXPmKcUpb_WndFN_GPMIjqyG-uV/view?usp=sharing`;
+              Linking.openURL(mensagem);
 
         }else {
           console.warn('Documento do dono não encontrado');
@@ -142,6 +147,7 @@ const TelaAdocao = ({ route, navigation }) => {
     } catch (error) {
       console.error('Erro ao buscar informações do animal e do dono no Firestore', error);
     }
+  
   };
   
   

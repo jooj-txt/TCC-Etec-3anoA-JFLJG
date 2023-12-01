@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Pressable, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch } from 'react-native';
+import { View, Pressable, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Modal, Alert } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,7 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 import logo from '../imgs/logo_Inicio.png';
-import { getFirestore, collection, docs, getDocs, query, where } from 'firebase/firestore';
+import logo2 from '../imgs/LOGO.png';
+import { getFirestore, collection, docs, getDocs, query, where, deleteDoc, doc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Drawer = createDrawerNavigator();
@@ -123,14 +125,11 @@ function Tabs({ navigation }) {
         </View>
   
         <DrawerItem 
-          label="Sair" 
+          label="LOGOUT" 
           onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
           labelStyle={styles.drawerItem} />
 
-        <View style={styles.darkModeSwitch}>
-          <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-          <Switch value={isDarkMode} />
-        </View>
+      
       </DrawerContentScrollView>
     );
   }
@@ -146,40 +145,48 @@ function Tabs({ navigation }) {
     }
   };
   function DrawerNavigator() {
-    const [searchText, setSearchText] = useState('');
-    const searchAnimals = () => {
-      if (searchText === '') {
-        return animalAdd; 
-      } else {
-        return animalAdd.filter(animal => animal.name.toLowerCase().includes(searchText.toLowerCase()));
-      }
-    };
+   
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-      <Drawer.Screen name="Home" component={Tabs} options={{
-        title: null,
-        headerStyle: {
-          backgroundColor: "#2163D3",
-        },
-        headerRight: () => (
-          <Searchbar
-            placeholder="Pesquisar"
-            onChangeText={setSearchText}
-            value={searchText}
-            style={styles.searchInput}
-          />
-        ),
-      }} />
+       <Drawer.Screen name="Home" component={Tabs} options={{
+      title: "ADOTE SEM RÓTULOS",
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:80, borderRadius:10}}
+     />
+      ),
+    }} />
        <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
       headerShown: false
 
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
-      title: null,
-      headerShown: false
- 
-    }} /> 
+      title: "ADOTE SEM RÓTULOS",
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
+     />
+      ),
+    }} />
       <Drawer.Screen name='Login' component={Login} options={{
       title: null,
       headerShown: false
@@ -229,6 +236,11 @@ function Casa({ navigation, route }) {
   const [selectedFilter, setSelectedFilter] = useState('TODOS');
   const [animais, setAnimais] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [sId, setsId] = useState('');
+
+
 
   const fetchAnimais = async () => {
     const auth = getAuth();
@@ -269,9 +281,153 @@ function Casa({ navigation, route }) {
     }
   };
 
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      // Mostra o modal quando o botão de retorno é pressionado
+      setModalVisible(true);
+      // Retorna true para impedir o comportamento padrão (fechar o aplicativo)
+      return true;
+    });
+
+    return () => {
+      // Remove o ouvinte do BackHandler ao desmontar o componente
+      backHandler.remove();
+    };
+  }, []); // Certifique-se de passar um array vazio para useEffect para que ele só seja executado uma vez
+
+  const handleExitApp = () => {
+  
+    // Fecha o modal
+    setModalVisible(false);
+
+    // Fecha o aplicativo
+    BackHandler.exitApp();
+  };
+
+  const handleCancelExit = () => {
+    // Fecha o modal sem fechar o aplicativo
+    setModalVisible(false);
+  };
+  
+  const handleMarkAsAdopted = async (animalId) => {
+    setsId(animalId)
+
+    
+  };
+
+  const ado = async (action) => {
+    setModalVisible2(true);
+if(action === 'adopted'){
+  try {
+    // Remova o animal do banco de dados Firestore
+    const animaisRef = collection(db, 'Animais');
+    await deleteDoc(doc(animaisRef, sId));
+    Alert.alert(
+      "PARABENS POR DOAR UM PET",
+      "FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO. NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTÁ SENDO BEM CUIDADO (:"
+    );
+    // Atualize o estado local para refletir a remoção do animal
+    setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+  } catch (error) {
+    console.error('Erro ao marcar como adotado:', error);
+  }
+  finally {
+    // Fecha o modal
+    setModalVisible2(false);
+  }
+}
+    
+  };
+  
+
+  const handleDeleteAnimal = async (animalId) => {
+    setsId(animalId)
+   
+  };
+
+  const del = async (action) => {
+    setModalVisible2(true);
+    if (action === 'delete'){
+      try {
+        // Remova o animal do banco de dados Firestore
+        const animaisRef = collection(db, 'Animais');
+        await deleteDoc(doc(animaisRef, sId));
+        Alert.alert("ANIMAL DELETADO")     
+  
+        // Atualize o estado local para refletir a remoção do animal
+        setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+      } catch (error) {
+        console.error('Erro ao marcar como adotado:', error);
+      }
+      finally {
+        // Fecha o modal
+        setModalVisible2(false);
+      }
+    }
+  }   
+  
+
+  
+
+  const openModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(true);
+  };
+  const closeModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(false);
+  };
+
+
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible2(false);
+        }}>
+        <View style={styles.doaModal}>
+          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET?</Text>
+          <View>
+          <Text onPress={() => del('delete')} style={[styles.animalText2, styles.doado]}>NÃO, IREI DELETAR POR OUTRO MOTIVO</Text>
+           <Text onPress={() => ado('adopted')} style={[styles.animalText2, styles.doado]}>SIM, CONSEGUI</Text>
+           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>FECHAR</Text>
+
+          </View>
+        </View>
+      </Modal>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible(false);
+        }}>
+        <View style={styles.exitModalContainer}>
+          <Text style={styles.exitModalText}>Deseja fechar o aplicativo?</Text>
+          <View style={styles.exitModalButtons}>
+            <FontAwesome5
+              name="check-circle"
+              size={30}
+              color="green"
+              onPress={() => {
+                handleExitApp();
+              }}
+            />
+            <FontAwesome5
+              name="times-circle"
+              size={30}
+              color="red"
+              onPress={() => {
+                handleCancelExit();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
         <View style={styles.animalList}>
           {isLoading ? (
             <Text style={styles.AnimalsText}>Carregando...</Text>
@@ -325,7 +481,10 @@ function Casa({ navigation, route }) {
                     style={styles.animalCard}
                     onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
                   >
-                    <AnimalCard animal={item} />
+                      <AnimalCard animal={item} 
+                      onOpenModal2={openModal2}
+                      onDeleted={handleDeleteAnimal}
+                      onAdopted={handleMarkAsAdopted} />
                   </Pressable>
                 )}
               />
@@ -337,17 +496,19 @@ function Casa({ navigation, route }) {
   );
 }
 
-const AnimalCard = ({ animal }) => (
-  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+const AnimalCard = ({ animal, onOpenModal2,onAdopted, onDeleted }) => (
+  <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={styles.animalImage} source={{uri: animal.images[0]}} />
     <Card.Content>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
-      <Pressable onPress={() => console.log('Adicionar aos Favoritos')} style={{ alignSelf: "flex-start" }}>
-        <FontAwesome5 name="heart" size={16} color="black" />
-      </Pressable>
+      <Text variant="bodyMedium"style={[styles.animalText3, styles.deletar]} onPress={() => {
+                      onOpenModal2();
+                      onAdopted(animal.ID);
+                      onDeleted(animal.ID);
+                    }} >DELETAR</Text>
     </Card.Content>
   </Card>
 );
@@ -355,6 +516,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5'
+  },
+  animalText2: {
+    color: '#2163D3',
+    marginTop:12
+  },
+  animalText3: {
+    color: 'red',
+    marginTop:12
+  },
+  doado:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+    margin:50,
+  },
+  deletar:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+  },
+ 
+  doaModal: {
+    backgroundColor: 'lightgrey',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+    width:'95%',
+    marginTop:'80%',
+    alignSelf:'center'
   },
   header: {
     flexDirection: 'row',
@@ -393,7 +591,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor:'#FFAE2E',
+    backgroundColor:'white',
     
   },
   animalText: {
@@ -488,5 +686,24 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
     color:'#000'
+  },
+  exitModalContainer: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  exitModalText: {
+    fontSize: 20,
+    marginBottom: 12,
+    fontWeight:'bold',
+    color:"black"
+    },
+  exitModalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin:10,
   },
 });

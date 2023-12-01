@@ -1,34 +1,48 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Modal} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons'; 
+
 
 import styles from '../Design/style.js';
 import logo from '../imgs/logo_Inicio.png';
 import logo2 from '../imgs/logo_Inicio2.png';
 
-export default function Inicio({navigation}) {
-
-
+export default function Inicio({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
-
   const [isButtonsVisible, setButtonsVisible] = useState(true);
+  const [isLoading, setLoading] = useState(true);
 
-  
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 8000);
+
+    return () => clearTimeout(delay);
+  }, []);
+
+
   const handlePessoaFisicaPress = () => {
     setButtonsVisible(false);
     setShowModal(true);
   };
+
   const handlePessoaJuridicaPress = () => {
     setButtonsVisible(false);
     setShowModal2(true);
   };
 
-
+  if (isLoading) {
+    return (
+       <Image source={require('../imgs/tela.png')} style={{resizeMode: 'cover',width:"100%",height:"100%"}}/>
+    );
+  }
   
   return (
-
+<ScrollView style={{backgroundColor:'white'}}>
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <Image source={logo2} style={styles.logo2} />
@@ -159,6 +173,7 @@ export default function Inicio({navigation}) {
 )}
 
     </View>
+    </ScrollView>
   );
 }
 const estilo = StyleSheet.create({

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BackHandler } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Pressable } from 'react-native';
+import { View, ScrollView, FlatList, StyleSheet, Image, SafeAreaView, Switch, Pressable, Alert } from 'react-native';
 import {  Provider , Card, Text, Searchbar } from 'react-native-paper';
 import { createDrawerNavigator,DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -11,9 +11,11 @@ import {Add, PosAdd, ConfigPerfil, Favoritos, AnimalDesc, HomeScreenJur, Login, 
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import logo from '../imgs/logo_Inicio.png';
+import logo2 from '../imgs/LOGO.png';
 import Modal from 'react-native-modal';
-import { getFirestore, collection, doc, getDocs,setDoc, query, where } from 'firebase/firestore';
+import { getFirestore, collection, docs, getDocs, query, where, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { BlurView } from 'expo-blur';
 
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -140,13 +142,10 @@ function CustomDrawerContent({ navigation, ...props }) {
         onPress={() => navigation.navigate('AdicionarAnimal')} 
         labelStyle={styles.drawerItem} />
       <DrawerItem 
-        label="Sair" 
+        label="LOGOUT" 
         onPress={() => handleLogout(navigation)} // Utiliza a função handleLogout
         labelStyle={styles.drawerItem} />
-      <View style={styles.darkModeSwitch}>
-        <Text style={styles.darkModeLabel}>Modo Escuro</Text>
-        <Switch value={isDarkMode} />
-      </View>
+      
     </DrawerContentScrollView>
   );
 }
@@ -162,49 +161,26 @@ const handleLogout = async (navigation) => {
   }
 };
 function DrawerNavigator() {
-  const [searchText, setSearchText] = useState('');
-  const [animais, setAnimais] = useState([]);
-
-  const fetchAnimais = async () => {
-    const animaisCollection = collection(db, 'Animais');
-    const animaisQuery = await getDocs(animaisCollection);
-
-    const animaisData = [];
-    animaisQuery.forEach((doc) => {
-      const animal = doc.data();
-      animaisData.push(animal);
-    });
-
-    setAnimais(animaisData);
-  };
+ 
   
 
-  const searchAnimals = () => {
-    if (searchText === '') {
-      return animais; // Retorna todos os animais se a barra de pesquisa estiver vazia
-    } else {
-      return animais.filter(animal =>
-        animal.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.raça.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.estado.toLowerCase().includes(searchText.toLowerCase()) ||
-        animal.cidade.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-  };
 return (
   <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
-    <Drawer.Screen name="Home" component={Tabs} options={{
-      title: null,
+  <Drawer.Screen name="Home" component={Tabs} options={{
+      title: "ADOTE SEM RÓTULOS",
       headerStyle: {
         backgroundColor: "#2163D3",
       },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
       headerRight: () => (
-        <Searchbar
-          placeholder="Pesquisar"
-          onChangeText={setSearchText}
-          value={searchText}
-          style={styles.searchInput}
-        />
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:80, borderRadius:10}}
+     />
       ),
     }} />
     <Drawer.Screen name='AdicionarAnimal' component={Add} options={{
@@ -220,11 +196,22 @@ return (
       },
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
-      title: null,
+      title: "ADOTE SEM RÓTULOS",
       headerStyle: {
         backgroundColor: "#2163D3",
       },
-    }} /> 
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+        marginLeft:'10%'
+      },
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:40, width:40, marginRight:'70%', borderRadius:10}}
+     />
+      ),
+    }} />
       <Drawer.Screen name='HomeJur' component={HomeScreenJur} options={{
       title: null,
       headerShown: false
@@ -269,7 +256,10 @@ const Casa = ({ navigation, route }) => {
   const [animais, setAnimais] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [userId, setUserId] = useState('');
+  const [sId, setsId] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();
@@ -286,6 +276,10 @@ const Casa = ({ navigation, route }) => {
             const userData = userDocSnapshot.data();
           
             setUserId(userData.userUid);
+            if (userData.horas != "4 a 8" && userData.horas != "8 a 12" && userData.horas != "4 ou Menos"  && userData.horas != "12 ou Mais") {
+              setShowModal(true);
+              return;
+          }
 
           } 
         } catch (error) {
@@ -294,26 +288,37 @@ const Casa = ({ navigation, route }) => {
       } 
     });
   }, []);
-
-  const handleAdicionarFavorito = async (animal) => {
+  const fetchFavoritos = async () => {
     try {
-      // Adiciona o animal aos favoritos do usuário
-      const updatedFavoritos = [...favoritos, { ...animal, userId: userId }];
-  
-      // Atualiza o estado local
-      setFavoritos(updatedFavoritos);
-  
-      // Obtém uma referência para o documento do usuário no Firestore
       const userDocRef = doc(db, 'PessoasFisicas', userId);
+      const userDocSnap = await getDoc(userDocRef);
   
-      // Atualiza o campo de favoritos no documento do usuário
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        setFavoritos(userData.favoritos || []);
+      } else {
+        console.log('Documento do usuário não encontrado');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar favoritos do usuário no Firestore', error);
+    }
+  };
+  
+  const handleAdicionarFavorito = async (animal) => {
+    Alert.alert("ANIMAL ADICIONADO AOS FAVORITOS");
+    try {
+      const updatedFavoritos = [...favoritos, { ...animal, userId: userId }];
+      const userDocRef = doc(db, 'PessoasFisicas', userId);
       await setDoc(userDocRef, { favoritos: updatedFavoritos }, { merge: true });
   
-      console.log('Animal favoritado com sucesso!');
+      // Atualize o estado local para refletir as alterações
+      setFavoritos(updatedFavoritos);
     } catch (error) {
       console.error('Erro ao favoritar o animal:', error);
     }
   };
+  
+  
   
   
   const fetchAnimais = async () => {
@@ -327,16 +332,20 @@ const Casa = ({ navigation, route }) => {
     });
 
     setAnimais(animaisData);
+
   };
 
   useEffect(() => {
-    fetchAnimais(); // Chama a função para buscar os dados quando o componente é montado
+    fetchAnimais(); 
+    fetchFavoritos();// Chama a função para buscar os dados quando o componente é montado
   }, []);
 
   useFocusEffect(
     React.useCallback(() => {
       // Executa essa função sempre que a tela é focada
-      fetchAnimais(); // Chama a função para buscar os dados novamente
+      fetchAnimais();
+      fetchFavoritos();
+       // Chama a função para buscar os dados novamente
     }, [])
   );
   
@@ -364,9 +373,7 @@ const Casa = ({ navigation, route }) => {
   }, []); // Certifique-se de passar um array vazio para useEffect para que ele só seja executado uma vez
 
   const handleExitApp = () => {
-    // Adicione qualquer lógica adicional antes de fechar o aplicativo
-    // ...
-
+  
     // Fecha o modal
     setModalVisible(false);
 
@@ -378,11 +385,127 @@ const Casa = ({ navigation, route }) => {
     // Fecha o modal sem fechar o aplicativo
     setModalVisible(false);
   };
+
+  const handleMarkAsAdopted = async (animalId) => {
+    setsId(animalId)
+
+    
+  };
+
+  const ado = async (action) => {
+    setModalVisible2(true);
+if(action === 'adopted'){
+  try {
+    // Remova o animal do banco de dados Firestore
+    const animaisRef = collection(db, 'Animais');
+    await deleteDoc(doc(animaisRef, sId));
+    Alert.alert(
+      "PARABENS POR DOAR UM PET",
+      "FICAMOS FELIZES QUE TENHA CONSEGUIDO DOAR SEU ANIMALZINHO. NÃO ESQUEÇA DE SEMPRE ESTAR VERIFICANDO SE ELE ESTÁ SENDO BEM CUIDADO (:"
+    );
+    // Atualize o estado local para refletir a remoção do animal
+    setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+  } catch (error) {
+    console.error('Erro ao marcar como adotado:', error);
+  }
+  finally {
+    // Fecha o modal
+    setModalVisible2(false);
+  }
+}
+    
+  };
   
+
+  const handleDeleteAnimal = async (animalId) => {
+    setsId(animalId)
+   
+  };
+
+  const del = async (action) => {
+    setModalVisible2(true);
+    if (action === 'delete'){
+      try {
+        // Remova o animal do banco de dados Firestore
+        const animaisRef = collection(db, 'Animais');
+        await deleteDoc(doc(animaisRef, sId));
+        Alert.alert("ANIMAL DELETADO")     
+  
+        // Atualize o estado local para refletir a remoção do animal
+        setAnimais((prevAnimais) => prevAnimais.filter((animal) => animal.ID !== sId));
+      } catch (error) {
+        console.error('Erro ao marcar como adotado:', error);
+      }
+      finally {
+        // Fecha o modal
+        setModalVisible2(false);
+      }
+    }
+  }   
+  
+
+  
+
+  const openModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(true);
+  };
+  const closeModal2 = () => {
+    // Fecha o modal
+    setModalVisible2(false);
+  };
+  
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
 
   return (
     <Provider>
       <ScrollView style={styles.container}>
+      <Modal  animationType="slide"
+        transparent={true}
+        visible={modalVisible2}
+        onRequestClose={() => {
+          // Trata o fechamento do modal (pode ser vazio se você quiser permitir o fechamento padrão do modal)
+          setModalVisible2(false);
+        }}>
+        <View style={styles.doaModal}>
+          <Text style={styles.exitModalText}>CONSEGUIU DOAR O PET?</Text>
+          <View>
+          <Text onPress={() => del('delete')} style={[styles.animalText2, styles.doado]}>NÃO IREI DELETAR POR OUTRO MOTIVO</Text>
+           <Text onPress={() => ado('adopted')} style={[styles.animalText2, styles.doado]}>SIM, CONSEGUI</Text>
+           <Text onPress={() => closeModal2()} style={[styles.animalText2, styles.doado]}>FECHAR</Text>
+
+          </View>
+        </View>
+      </Modal>
+      <Modal
+   animationType="slide"
+   transparent={true}
+   visible={showModal}
+   onRequestClose={closeModal}
+ >
+<BlurView style={styles.containerModal} intensity={35} tint="light">
+
+   <View style={styles.modalContainer}>
+     <View style={styles.modalContent}>
+       <Text style={styles.modalText}>
+         Complete seu perfil para aproveitar ao máximo nosso aplicativo!
+       </Text>
+       <Pressable
+         style={styles.modalButton}
+         onPress={() => {
+           closeModal();
+           navigation.navigate('ConfigPerfil');
+         }}
+       >
+         <Text style={styles.buttonText}>Completar Perfil</Text>
+       </Pressable>
+     </View>
+   </View>
+   </BlurView>
+ </Modal>
       <Modal  animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -394,6 +517,7 @@ const Casa = ({ navigation, route }) => {
           <Text style={styles.exitModalText}>Deseja fechar o aplicativo?</Text>
           <View style={styles.exitModalButtons}>
             <FontAwesome5
+            style={{margin:40}}
               name="check-circle"
               size={30}
               color="green"
@@ -402,6 +526,7 @@ const Casa = ({ navigation, route }) => {
               }}
             />
             <FontAwesome5
+              style={{margin:40}}
               name="times-circle"
               size={30}
               color="red"
@@ -449,7 +574,7 @@ const Casa = ({ navigation, route }) => {
               <FontAwesome5 name="dog" size={24} color={selectedFilter === 'Cachorro' ? '#FFAE2E' : 'black'} />
             </Pressable>
           </View>
-          <Text  style={styles.AnimalsText}>ANIMAIS DISPOIVEIS PARA ADOÇÃO:</Text>
+          <Text  style={styles.AnimalsText}>ANIMAIS PARA ADOÇÃO:</Text>
           <FlatList
             data={filterAnimals()}
             numColumns={2}
@@ -457,11 +582,18 @@ const Casa = ({ navigation, route }) => {
             renderItem={({ item }) => (
               <Pressable
               style={[styles.animalCard]}
-               onPress={() => navigation.navigate('AnimalDesc', { animalId: item.ID })}
+              onPress={() => {
+                navigation.navigate('AnimalDesc', { animalId: item.ID });
+              }}
               >
              <AnimalCard
               animal={item}
               onAdicionarFavorito={() => handleAdicionarFavorito(item)}
+              userId={userId}
+              onOpenModal2={openModal2}
+              onDeleted={handleDeleteAnimal}
+              onAdopted={handleMarkAsAdopted}
+
               />
 
                
@@ -474,20 +606,27 @@ const Casa = ({ navigation, route }) => {
   );
 }
 
-const AnimalCard = ({ animal, onAdicionarFavorito  }) => (
-  <Card style={{backgroundColor:"#2163D3", borderRadius:10}}>
+const AnimalCard = ({ animal, onAdicionarFavorito, userId, onOpenModal2,onAdopted, onDeleted  }) => (
+  <Card style={{backgroundColor:"white", borderRadius:10}}>
     <Card.Cover style={[styles.animalImage]} source={{uri: animal.images[0]}} />
-    <Card.Content style={{backgroundColor:"#2163D3", borderRadius:10}}>
+    <Card.Content style={{backgroundColor:"white", borderRadius:10}}>
       <Text variant="titleLarge" style={styles.animalText}>{animal.name}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.raça}</Text>
       <Text variant="bodyMedium" style={styles.animalText}>{animal.sexo}</Text>
       <Text variant="bodyMedium" style={[styles.animalText, styles.animalLocal]}>{animal.cidade}-{animal.estado}</Text>
       {animal.userType === "userJur" && (
-        <Text variant="bodyMedium" style={[styles.animalText2, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
+        <Text variant="bodyMedium" style={[style={color:'#FFAE2E'}, styles.animalLocal]}>DIVULGADO POR UMA ONG :)</Text>
+      )}
+        {animal.userId === userId && (
+                    <Text variant="bodyMedium"style={[styles.animalText3, styles.deletar]} onPress={() => {
+                      onOpenModal2();
+                      onAdopted(animal.ID);
+                      onDeleted(animal.ID);
+                    }} >DELETAR</Text>
       )}
 
       <Pressable onPress={onAdicionarFavorito} style={{ alignSelf: "flex-start" }}>
-        <FontAwesome5 name="heart" size={16} color="black" />
+        <FontAwesome5 name="heart" size={22} color="#2163D3" />
       </Pressable>
     </Card.Content>
   </Card>
@@ -503,39 +642,43 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 15,
   },
-  searchInput: {
-    marginRight: '20%',
-    borderRadius: 20,
-    fontSize: 16,
-    color: 'black',
-    width: "80%",
-    height: "85%",
-    paddingLeft: 10, 
-    paddingRight: 10, 
-    borderColor: '#FFAE2E', 
-    borderWidth: 2, 
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3, 
-    shadowRadius: 4, 
-  },
+ 
   animalCard: {
     flex: 1,
     margin: 10,
     borderWidth: 1,
     padding: 10,
     borderRadius: 10,
-    backgroundColor:'#FFAE2E',
+    backgroundColor:'white',
     
+  },
+  deletar:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+  },
+  doado:{
+    textAlign:'center',
+    padding:5,
+    fontWeight: 'bold',
+    borderWidth:2,
+    borderRadius:4,
+    marginBottom:10,
+    margin:50,
   },
   animalText: {
     color: 'black',
   },
   animalText2: {
-    color: '#FFAE2E',
+    color: '#2163D3',
+    marginTop:12
+  },
+  animalText3: {
+    color: 'red',
+    marginTop:12
   },
   animalLocal: {
     textAlign: 'right',
@@ -623,20 +766,66 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color:'#000'
   },
+  doaModal: {
+    backgroundColor: 'lightgrey',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
   exitModalContainer: {
-    backgroundColor: 'white',
+    backgroundColor: 'lightgrey',
     padding: 22,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 4,
+    borderRadius: 10,
     borderColor: 'rgba(0, 0, 0, 0.1)',
   },
   exitModalText: {
     fontSize: 20,
     marginBottom: 12,
+    fontWeight:'bold',
+    color:'black'
   },
   exitModalButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    margin:10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:'100%',
+    width:'100%'
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
+    color:'black'
+  },
+  modalButton: {
+    backgroundColor: '#2163D3',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    width: 200,
+  },
+  containerModal: {
+    flex: 1,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
   },
 });
+
+
+
+

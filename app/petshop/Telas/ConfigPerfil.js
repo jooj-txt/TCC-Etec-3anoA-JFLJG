@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, ScrollView, Switch, Alert, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { TextInput } from 'react-native-paper';
 import { getFirestore, doc, updateDoc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -37,7 +38,6 @@ const ConfigPerfil = ({ route, navigation }) => {
   const [horas12ouMais, setHoras12ouMais] = useState(false);
   const [ocupacao, setOcupacao] = useState('');
   const [numPessoas, setNumPessoas] = useState('');
-  const [instagram, setInstagram] = useState('');
   const [conheceuRedes, setConheceuRedes] = useState({
     instagram: false,
     facebook: false,
@@ -58,16 +58,19 @@ const ConfigPerfil = ({ route, navigation }) => {
 
   const saveSelections = async () => {
     try {
-      await AsyncStorage.setItem('selectedButtons', JSON.stringify(selectedButtons));
+      const userSelectionsKey = `selectedButtons_${userId}`;
+      await AsyncStorage.setItem(userSelectionsKey, JSON.stringify(selectedButtons));
     } catch (error) {
       console.error('Erro ao salvar seleções:', error);
     }
   };
+  
 
   // Função para carregar as seleções do AsyncStorage
   const loadSelections = async () => {
     try {
-      const savedSelections = await AsyncStorage.getItem('selectedButtons');
+      const userSelectionsKey = `selectedButtons_${userId}`;
+      const savedSelections = await AsyncStorage.getItem(userSelectionsKey);
       if (savedSelections) {
         setSelectedButtons(JSON.parse(savedSelections));
       }
@@ -75,7 +78,7 @@ const ConfigPerfil = ({ route, navigation }) => {
       console.error('Erro ao carregar seleções:', error);
     }
   };
-
+  
  useEffect(() => {
 
   onAuthStateChanged(auth, async (user) => {
@@ -87,7 +90,6 @@ const ConfigPerfil = ({ route, navigation }) => {
         const querySnapshot = await getDocs(q);
         if (!querySnapshot.empty) {
           const userDocSnapshot = querySnapshot.docs[0];
-          const userData = userDocSnapshot.data();
           setUserId(userDocSnapshot.id); 
           const userDocRef = doc(db, 'PessoasFisicas', userDocSnapshot.id);
 
@@ -114,7 +116,6 @@ const ConfigPerfil = ({ route, navigation }) => {
           setCidade(userData.cidade);
           setEstado(userData.estado);
           setOcupacao(userData.ocupacao);
-          setInstagram(userData.instagram);
           setNumPessoas(userData.numPessoas);
           setIsLoading(false);
 
@@ -129,64 +130,60 @@ const ConfigPerfil = ({ route, navigation }) => {
 
     fetchUserProfile();
   }, [userId, db]);
+
+  
   useEffect(() => {
-    // Carregar seleções salvas ao montar o componente
     loadSelections();
-  }, []);
+  }, [userId]);
 
   const handleSaveProfile = async () => {
     try {
+      // Adicione verificações para garantir que todas as seleções foram feitas
+      if (!selectedButtons.genero || !selectedButtons.criancas || !selectedButtons.moradia || !selectedButtons.espaco || !selectedButtons.possuiPets || !selectedButtons.horas) {
+        Alert.alert('Por favor, preencha todas as seleções.');
+        return;
+      }
+  
+      // Adicione verificações para garantir que todos os campos obrigatórios foram preenchidos
+      else if (!nome || !dataNascimento || !email || !celular || !cidade || !estado || !ocupacao || !numPessoas) {
+        Alert.alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      } else {
+        navigation.navigate('Home');
+        Alert.alert('Perfil atualizado com sucesso!');
+      }
+  
       // Use o ID do documento recuperado da consulta
       const userDocRef = doc(db, 'PessoasFisicas', userId);
+  
       const profileData = {};
 
-    // Adicione as categorias selecionadas ao objeto profileData
-    if (selectedButtons.genero) {
+      // Adicione as categorias selecionadas ao objeto profileData
       profileData.genero = selectedButtons.genero;
-    }
-
-    if (selectedButtons.criancas) {
       profileData.criancas = selectedButtons.criancas;
-    }
-
-    if (selectedButtons.moradia) {
       profileData.moradia = selectedButtons.moradia;
-    }
-
-    if (selectedButtons.espaco) {
       profileData.espaco = selectedButtons.espaco;
-    }
-
-    if (selectedButtons.possuiPets) {
       profileData.possuiPets = selectedButtons.possuiPets;
-    }
-
-    if (selectedButtons.horas) {
       profileData.horas = selectedButtons.horas;
-    }
-    if (selectedButtons.conheceuRedes) {
       profileData.conheceuRedes = selectedButtons.conheceuRedes;
-    }
-
-    // Adicione outras categorias conforme necessário
-
-    // Adicione campos adicionais
-    profileData.nome = nome;
-    profileData.dataNascimento = dataNascimento;
-    profileData.email = email;
-    profileData.celular = celular;
-    profileData.ocupacao = ocupacao;
-    profileData.instagram = instagram;
-    profileData.numPessoas = numPessoas;
   
-    
+      // Adicione campos adicionais
+      profileData.nome = nome;
+      profileData.dataNascimento = dataNascimento;
+      profileData.email = email;
+      profileData.celular = celular;
+      profileData.ocupacao = ocupacao;
+      profileData.numPessoas = numPessoas;
+  
+      console.log('Atualizando perfil com os seguintes dados:', profileData);
+  
       await updateDoc(userDocRef, profileData);
-      Alert.alert('Perfil atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar o perfil do usuário', error);
       Alert.alert('Erro ao atualizar o perfil. Tente novamente mais tarde.');
     }
   };
+  
   
 
   const handleGeneroChange = (femininoSelected, masculinoSelected) => {
@@ -282,9 +279,9 @@ const ConfigPerfil = ({ route, navigation }) => {
       default:
         break;
     }
-    saveSelections();
-  };
+     saveSelections();
 
+};
   const renderButton = (category, buttonName, buttonText) => (
     <Pressable
       key={buttonName}
@@ -312,10 +309,10 @@ const ConfigPerfil = ({ route, navigation }) => {
   return (
     <ScrollView>
         {isLoading ? ( // Mostra o indicador de carregamento enquanto isLoading é verdadeiro
-        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:150 }} />
+        <ActivityIndicator size="large" color="#2163D3" style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop:'60%' }} />
       ) : (
       <View style={styles.container}>
-      <Text style={styles.title}>DADOS PESSOAIS:</Text>
+      <Text style={styles.title2}>DADOS PESSOAIS:</Text>
         <TextInput  style={styles.input} value={nome} onChangeText={setNome} placeholder="NOME"/>
         <TextInput style={styles.input}  value={dataNascimento} onChangeText={setDataNascimento} placeholder='XX/XX/XXXX' />
         <TextInput style={styles.input}  value={email} onChangeText={setEmail} placeholder='seunome@gmail.com' />
@@ -369,22 +366,7 @@ const ConfigPerfil = ({ route, navigation }) => {
         <TextInput  style={styles.input} value={ocupacao} onChangeText={setOcupacao} />
 
         <Text style={styles.title}>Número de pessoas que moram com você</Text>
-        <TextInput  style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
-        
-        <View>
-          <Text style={styles.title}>Possui Instagram?</Text>
-          <Text style={styles.subtitle}>Se sim, insira seu nome (após o @) abaixo para facilitar o contato com você</Text>
-
-          <View style={{ flexDirection: 'row',
-      alignItems: 'center',
-      padding: 8,
-      margin: 5,}}>
-          <Entypo name="instagram" size={24} color="black" />
-          <TextInput  style={styles.input} value={instagram} onChangeText={setInstagram} placeholder='@SeuInsta' />
-          </View>
-        
-        
-        </View>
+        <TextInput keyboardType='numeric' style={styles.input} value={numPessoas} onChangeText={setNumPessoas} />
 
         <View>
           <Text style={styles.title}>Whatsapp</Text>
@@ -426,13 +408,13 @@ const ConfigPerfil = ({ route, navigation }) => {
 
         <Pressable  onPress={() => {
                 handleSaveProfile();
-                navigation.goBack();
               }} style={{ alignItems: 'center',
               alignSelf:'center',
               backgroundColor: '#FFAE2E',
               padding: 10,
               borderRadius: 5,
               marginTop: 10,
+              marginBottom:30,
               width:120,}}>
           <Text style={{ color: 'white' }}>Salvar Perfil</Text>
         </Pressable>
@@ -479,7 +461,12 @@ const styles = {
   title:{
     fontSize: 15,
     fontWeight: 'bold',
-    margin:8,
+    margin:5,
+  },
+  title2:{
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginTop:45,
   },
   subtitle:{
     marginLeft:20,
