@@ -150,49 +150,42 @@ function Tabs({ navigation }) {
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
        <Drawer.Screen name="Home" component={Tabs} options={{
      title: "ADOTE SEM RÓTULOS",
-      headerStyle: {
-        backgroundColor: "#2163D3",
-      },
-      headerTitleStyle:{
-        fontWeight: 'bold',
-        color: '#FFAE2E',
-        marginLeft:'10%'
-      },
-      headerTitleAlign:'center',
-      headerRight: () => (
-     <Image
-     source={logo2}
-     style={{height:40, width:40,borderRadius:10, marginRight:15}}
-     />
-      ),
-    }}  />
+     headerStyle: {
+       backgroundColor: "#2163D3",
+     },
+     headerTitleStyle:{
+       fontWeight: 'bold',
+       color: '#FFAE2E',
+     },
+     headerTitleAlign:'center',
+     headerRight: () => (
+    <Image
+    source={logo2}
+    style={{height:30, width:30, marginRight:10}}
+    />
+     ),
+   }}   />
        <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
       headerShown: false
 
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
-       title: "ADOTE SEM RÓTULOS",
-       headerStyle: {
-         backgroundColor: "#2163D3",
-       },
-       headerTitleStyle:{
-         fontWeight: 'bold',
-         color: '#FFAE2E',
-         marginLeft:'10%'
-       },
-       headerTitleAlign:'center',
-       headerRight: () => (
-      <Image
-      source={logo2}
-      style={{height:40, width:40,borderRadius:10, marginRight:15}}
-      />
-       ),
-     }} />
-      <Drawer.Screen name='Login' component={Login} options={{
-      title: null,
-      headerShown: false
-
+      title: "ADOTE SEM RÓTULOS",
+      headerStyle: {
+        backgroundColor: "#2163D3",
+      },
+      headerTitleStyle:{
+        fontWeight: 'bold',
+        color: '#FFAE2E',
+      },
+      headerTitleAlign:'center',
+      headerRight: () => (
+     <Image
+     source={logo2}
+     style={{height:30, width:30, marginRight:10}}
+     />
+      ),
     }} /> 
     <Drawer.Screen name='Inicio' component={Inicio} options={{
       title: null,

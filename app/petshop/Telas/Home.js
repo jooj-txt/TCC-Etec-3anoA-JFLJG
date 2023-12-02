@@ -174,13 +174,12 @@ return (
       headerTitleStyle:{
         fontWeight: 'bold',
         color: '#FFAE2E',
-        marginLeft:'10%'
       },
       headerTitleAlign:'center',
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40,borderRadius:10, marginRight:15}}
+     style={{height:30, width:30, marginRight:10}}
      />
       ),
     }} />
@@ -204,13 +203,12 @@ return (
       headerTitleStyle:{
         fontWeight: 'bold',
         color: '#FFAE2E',
-        marginLeft:'10%'
       },
       headerTitleAlign:'center',
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40,borderRadius:10, marginRight:15}}
+     style={{height:30, width:30, marginRight:10}}
      />
       ),
     }} />
