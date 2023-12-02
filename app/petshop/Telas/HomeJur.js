@@ -149,7 +149,7 @@ function Tabs({ navigation }) {
   return (
     <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
        <Drawer.Screen name="Home" component={Tabs} options={{
-      title: "ADOTE SEM RÓTULOS",
+     title: "ADOTE SEM RÓTULOS",
       headerStyle: {
         backgroundColor: "#2163D3",
       },
@@ -158,35 +158,37 @@ function Tabs({ navigation }) {
         color: '#FFAE2E',
         marginLeft:'10%'
       },
+      headerTitleAlign:'center',
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40, marginRight:80, borderRadius:10}}
+     style={{height:40, width:40,borderRadius:10, marginRight:15}}
      />
       ),
-    }} />
+    }}  />
        <Drawer.Screen name='PosAdd' component={PosAdd} options={{
       title: null,
       headerShown: false
 
     }} /> 
     <Drawer.Screen name='AnimalDesc' component={AnimalDesc} options={{
-      title: "ADOTE SEM RÓTULOS",
-      headerStyle: {
-        backgroundColor: "#2163D3",
-      },
-      headerTitleStyle:{
-        fontWeight: 'bold',
-        color: '#FFAE2E',
-        marginLeft:'10%'
-      },
-      headerRight: () => (
-     <Image
-     source={logo2}
-     style={{height:40, width:40, marginRight:'76%', borderRadius:10}}
-     />
-      ),
-    }} />
+       title: "ADOTE SEM RÓTULOS",
+       headerStyle: {
+         backgroundColor: "#2163D3",
+       },
+       headerTitleStyle:{
+         fontWeight: 'bold',
+         color: '#FFAE2E',
+         marginLeft:'10%'
+       },
+       headerTitleAlign:'center',
+       headerRight: () => (
+      <Image
+      source={logo2}
+      style={{height:40, width:40,borderRadius:10, marginRight:15}}
+      />
+       ),
+     }} />
       <Drawer.Screen name='Login' component={Login} options={{
       title: null,
       headerShown: false
@@ -625,6 +627,8 @@ const styles = StyleSheet.create({
     borderColor: 'blue',
     borderBottomWidth: 4,
     borderRadius: 2,
+    width:200
+
   },
   user:{
     height: 60,

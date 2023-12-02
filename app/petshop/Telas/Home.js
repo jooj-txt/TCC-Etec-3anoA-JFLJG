@@ -176,10 +176,11 @@ return (
         color: '#FFAE2E',
         marginLeft:'10%'
       },
+      headerTitleAlign:'center',
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40, marginRight:80, borderRadius:10}}
+     style={{height:40, width:40,borderRadius:10, marginRight:15}}
      />
       ),
     }} />
@@ -205,10 +206,11 @@ return (
         color: '#FFAE2E',
         marginLeft:'10%'
       },
+      headerTitleAlign:'center',
       headerRight: () => (
      <Image
      source={logo2}
-     style={{height:40, width:40, marginRight:'70%', borderRadius:10}}
+     style={{height:40, width:40,borderRadius:10, marginRight:15}}
      />
       ),
     }} />
@@ -700,6 +702,7 @@ const styles = StyleSheet.create({
     borderColor: 'blue',
     borderBottomWidth: 4,
     borderRadius: 2,
+    width:200
   },
   user:{
     height: 60,
