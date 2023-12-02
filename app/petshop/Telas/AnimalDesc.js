@@ -48,7 +48,7 @@ const AnimalDesc = ({ route, navigation }) => {
       </View>
       
 
-          <Swiper style={styles.swiper} showsButtons>
+          <Swiper style={styles.swiper} showsButtons={false}>
             {animalInfo.images.map((image, index) => (
               <View key={index} style={styles.slide}>
                 <Image style={styles.image} source={{ uri: image }} />
