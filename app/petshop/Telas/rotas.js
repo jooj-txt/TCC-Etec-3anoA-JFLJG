@@ -1,6 +1,6 @@
 import Inicio from './Inicio';
-import PessoaFisicaCadastro from './Cad_Pessoa_Fisica';
 import Login from './Login';
+import PessoaFisicaCadastro from './Cad_Pessoa_Fisica';
 import HomeScreen from './Home';
 import HomeScreenJur from './HomeJur';
 import PessoaJuridicaCadastro from './Cad_Pessoas_Jur';
