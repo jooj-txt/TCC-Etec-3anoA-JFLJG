@@ -5,13 +5,14 @@
   "build": {
       "preview": {
         "android": {
-          "image": "latest"
           "buildType": "apk"
         }
       },
       
         
-    "production": {}
+    "production": { "android": {
+        "image": "latest"
+      },}
   },
   "submit": {
     "production": {}
